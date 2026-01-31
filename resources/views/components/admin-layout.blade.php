@@ -47,6 +47,7 @@
                 </div>
             </div>
 
+
             {{-- Menu Items --}}
             <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto h-[calc(100vh-10rem)]">
                 
@@ -70,6 +71,11 @@
                         <i class="fas fa-building w-5 text-center {{ request()->routeIs('admin.projects.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Data Proyek</span>
                     </a>
+
+                    <a href="{{ route('admin.locations.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.locations.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+    <i class="fas fa-map-marked-alt w-5 text-center {{ request()->routeIs('admin.locations.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
+    <span class="ml-3 font-medium">Kelola Data Cabang</span>
+</a>
 
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
 

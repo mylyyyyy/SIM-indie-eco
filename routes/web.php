@@ -104,7 +104,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', AdminUser::class);
     Route::resource('projects', AdminProject::class);
     Route::get('/reports/export', [AdminReport::class, 'exportAll'])->name('reports.export');
-    
+    Route::resource('locations', App\Http\Controllers\Admin\EcoLocationController::class);
     // Berita & Portofolio Admin (Warna Biru)
     Route::resource('news', AdminNews::class);
     Route::resource('portfolios', AdminPortfolio::class);

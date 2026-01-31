@@ -97,8 +97,8 @@
                     {{-- Widget: Kontak Cepat --}}
                     <div class="bg-blue-600 rounded-3xl shadow-lg p-8 text-white text-center relative overflow-hidden">
                         <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                        <h3 class="text-xl font-black mb-2 relative z-10">Butuh Kontraktor?</h3>
-                        <p class="text-blue-100 text-sm mb-6 relative z-10">Hubungi kami untuk konsultasi proyek Anda.</p>
+                        <h3 class="text-xl font-black mb-2 relative z-10">Butuh Informasi Proyek?</h3>
+                        <p class="text-blue-100 text-sm mb-6 relative z-10">Hubungi kami untuk konsultasi dan detil lengkap.</p>
                         <a href="#" class="inline-block w-full bg-white text-blue-600 font-bold py-3 rounded-xl hover:bg-blue-50 transition-colors relative z-10">
                             <i class="fab fa-whatsapp mr-1"></i> Chat WhatsApp
                         </a>

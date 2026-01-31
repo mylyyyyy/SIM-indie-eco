@@ -7,7 +7,7 @@
             </a>
             <div>
                 <h2 class="text-2xl font-black text-slate-800">Edit Portofolio</h2>
-                <p class="text-sm text-slate-500">Perbarui data proyek yang sudah ada.</p>
+                <p class="text-sm text-slate-500">Perbarui data Kegiatan yang sudah ada.</p>
             </div>
         </div>
 
@@ -24,27 +24,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     {{-- Judul --}}
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Judul Proyek <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Judul Kegiatan <span class="text-red-500">*</span></label>
                         <input type="text" name="title" value="{{ $portfolio->title }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm font-semibold" required>
                     </div>
 
                     {{-- Kategori & Tanggal --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Kategori <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Jenis Penjualan <span class="text-red-500">*</span></label>
                         <input type="text" name="category" value="{{ $portfolio->category }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm" required>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tanggal Selesai <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tanggal Distribusi <span class="text-red-500">*</span></label>
                         <input type="date" name="completion_date" value="{{ $portfolio->completion_date ? $portfolio->completion_date->format('Y-m-d') : '' }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm" required>
                     </div>
 
                     {{-- Lokasi & Klien --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Lokasi</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tujuan Distribusi</label>
                         <input type="text" name="location" value="{{ $portfolio->location }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Klien</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Pelanggan</label>
                         <input type="text" name="client_name" value="{{ $portfolio->client_name }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
 

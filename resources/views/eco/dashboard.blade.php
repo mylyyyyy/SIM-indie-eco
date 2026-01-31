@@ -107,13 +107,13 @@
                             <label class="cursor-pointer">
                                 <input type="radio" name="type" value="in" class="peer sr-only" checked>
                                 <div class="p-3 text-center border border-slate-200 rounded-xl peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 transition-all hover:bg-slate-50">
-                                    <i class="fas fa-arrow-down mb-1 block"></i> Masuk (Panen)
+                                    <i class="fas fa-arrow-down mb-1 block"></i> Masuk 
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="type" value="out" class="peer sr-only">
                                 <div class="p-3 text-center border border-slate-200 rounded-xl peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 transition-all hover:bg-slate-50">
-                                    <i class="fas fa-arrow-up mb-1 block"></i> Keluar (Jual)
+                                    <i class="fas fa-arrow-up mb-1 block"></i> Keluar 
                                 </div>
                             </label>
                         </div>

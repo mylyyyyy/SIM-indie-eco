@@ -36,8 +36,8 @@
             <table class="w-full text-left text-sm text-slate-600" id="portfolioTable">
                 <thead class="bg-emerald-50 border-b border-emerald-100 text-xs uppercase font-bold text-emerald-700 tracking-wider">
                     <tr>
-                        <th class="px-6 py-4">Proyek & Kategori</th>
-                        <th class="px-6 py-4">Klien & Tanggal</th>
+                        <th class="px-6 py-4">Kegiatan & Jenis Penjualan</th>
+                        <th class="px-6 py-4">Pelanggan & Tanggal</th>
                         <th class="px-6 py-4">Deskripsi Singkat</th>
                         <th class="px-6 py-4 text-center">Gambar</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
@@ -112,29 +112,29 @@
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Judul Proyek</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Judul Kegiatan</label>
                         <input type="text" name="title" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Contoh: Pembangunan Gudang A" required>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kategori</label>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Jenis Penjualan</label>
                             <input type="text" name="category" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500" placeholder="Contoh: Konstruksi" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal Selesai</label>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal Distribusi</label>
                             <input type="date" name="completion_date" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500" required>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Klien</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Pelanggan</label>
                         <input type="text" name="client_name" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500" placeholder="Nama PT / Perorangan">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Lokasi</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tujuan Distribusi</label>
                         <input type="text" name="location" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500" placeholder="Nama Desa / Lahan">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Deskripsi</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ketetangan Penjualan (jenis beras, volume, catatan tambahan)</label>
                         <textarea name="description" rows="3" class="w-full border-slate-200 rounded-xl text-sm focus:ring-emerald-500" placeholder="Detail pekerjaan..."></textarea>
                     </div>
                     <div>
