@@ -6,23 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Portfolio;
 use Illuminate\Http\Request;
 
-// PENTING: Pastikan nama class ini SAMA PERSIS dengan nama file Anda
 class PortofolioController extends Controller
 {
     public function index()
     {
-        $portfolios = Portfolio::latest()->get();
+        // Hanya ambil data milik divisi ECO
+        $portfolios = Portfolio::where('division', 'eco')->latest()->get();
         return view('eco.portfolios.index', compact('portfolios'));
     }
 
-    // === TAMBAHKAN FUNGSI INI (PENTING) ===
     public function edit($id)
     {
         $portfolio = Portfolio::findOrFail($id);
-        // Pastikan Anda membuat file view di: resources/views/eco/portfolios/edit.blade.php
         return view('eco.portfolios.edit', compact('portfolio'));
     }
-    // ======================================
 
     public function store(Request $request)
     {
@@ -43,15 +40,16 @@ class PortofolioController extends Controller
 
         Portfolio::create([
             'title' => $request->title,
-            'category' => $request->category,
-            'client_name' => $request->client_name,
-            'completion_date' => $request->completion_date,
-            'description' => $request->description,
-            'location' => $request->location,
+            'division' => 'eco', // Otomatis set divisi ECO
+            'category' => $request->category, // Jenis Penjualan
+            'client_name' => $request->client_name, // Nama Pelanggan
+            'completion_date' => $request->completion_date, // Tanggal Distribusi
+            'description' => $request->description, // Keterangan
+            'location' => $request->location, // Tujuan Distribusi
             'image_path' => $imageBase64,
         ]);
 
-        return redirect()->route('eco.portfolios.index')->with('success', 'Portofolio berhasil ditambahkan!');
+        return redirect()->route('eco.portfolios.index')->with('success', 'Data kegiatan berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
@@ -82,14 +80,13 @@ class PortofolioController extends Controller
 
         $portfolio->update($data);
 
-        // Redirect kembali ke halaman index
-        return redirect()->route('eco.portfolios.index')->with('success', 'Portofolio berhasil diperbarui!');
+        return redirect()->route('eco.portfolios.index')->with('success', 'Data kegiatan diperbarui!');
     }
 
     public function destroy($id)
     {
         $portfolio = Portfolio::findOrFail($id);
         $portfolio->delete();
-        return redirect()->back()->with('success', 'Portofolio dihapus.');
+        return redirect()->back()->with('success', 'Data dihapus.');
     }
 }

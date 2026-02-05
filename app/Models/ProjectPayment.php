@@ -9,16 +9,20 @@ class ProjectPayment extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    // Izinkan semua kolom diisi (atau gunakan $fillable jika mau spesifik)
+    protected $guarded = ['id']; 
 
-    // Relasi: Setiap pembayaran milik 1 Laporan Kerja
-    public function report()
+    public function project()
     {
-        return $this->belongsTo(ProjectReport::class, 'report_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
-    // Relasi: Siapa staff keuangan yang memproses
-    public function financeStaff()
+    public function requestor() // Relasi ke Subkon
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function finance() // Relasi ke Keuangan
     {
         return $this->belongsTo(User::class, 'finance_user_id');
     }

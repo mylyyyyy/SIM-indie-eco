@@ -21,6 +21,9 @@
             <form action="{{ route('admin.locations.update', $location->id) }}" method="POST" class="p-8">
                 @csrf @method('PUT')
 
+                {{-- Default Value Tipe = Shop (Hidden) --}}
+                <input type="hidden" name="type" value="shop">
+
                 <div class="space-y-6">
                     {{-- Nama Cabang --}}
                     <div>
@@ -28,25 +31,10 @@
                         <input type="text" name="name" value="{{ $location->name }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 transition-all font-semibold text-slate-700" required>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{-- Tipe --}}
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tipe Lokasi</label>
-                            <div class="relative">
-                                <select name="type" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 appearance-none bg-white">
-                                    <option value="shop" {{ $location->type == 'shop' ? 'selected' : '' }}>Toko (Shop)</option>
-                                    <option value="warehouse" {{ $location->type == 'warehouse' ? 'selected' : '' }}>Gudang</option>
-                                    <option value="mill" {{ $location->type == 'mill' ? 'selected' : '' }}>Pabrik (Mill)</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-4 top-4 text-slate-400 text-xs pointer-events-none"></i>
-                            </div>
-                        </div>
-
-                        {{-- Stok --}}
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Saat Ini (Kg)</label>
-                            <input type="number" name="current_stock" value="{{ $location->current_stock }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 font-mono" required>
-                        </div>
+                    {{-- Stok (Grid dihapus agar full width) --}}
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Saat Ini (Kg)</label>
+                        <input type="number" name="current_stock" value="{{ $location->current_stock }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 font-mono" required>
                     </div>
 
                     {{-- Status --}}

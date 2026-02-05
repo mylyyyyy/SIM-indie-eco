@@ -13,7 +13,7 @@ class Portfolio extends Model
 
     protected $fillable = [
         'title', 'category', 'client_name', 'location', // Tambah location
-        'completion_date', 'description', 'image_path', 
+        'completion_date', 'description', 'image_path', 'division',
         'specs', // Tambah specs
     ];
 

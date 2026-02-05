@@ -60,6 +60,7 @@
                         <span class="ml-3 font-medium">Dashboard</span>
                     </a>
 
+
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Master Data</div>
                     
                     <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
@@ -83,10 +84,10 @@
                         <i class="fas fa-newspaper w-5 text-center {{ request()->routeIs('admin.news.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Berita & Artikel</span>
                     </a>
-                    <a href="{{ route('admin.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.portfolios.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    {{-- <a href="{{ route('admin.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.portfolios.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
     <i class="fas fa-briefcase w-5 text-center {{ request()->routeIs('admin.portfolios.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
     <span class="ml-3 font-medium">Portofolio</span>
-</a>
+</a> --}}
 
                     {{-- MENU RIWAYAT LOGIN --}}
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Log Sistem</div>
@@ -115,6 +116,31 @@
         <span class="ml-3 font-medium">Verifikasi Laporan</span>
     </a>
 @endif
+
+
+{{-- KHUSUS INDIE (DIVISI INFRASTRUKTUR & GEDUNG) --}}
+                @if(Auth::user()->role == 'indie')
+                    <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</div>
+                    
+                    <a href="{{ route('indie.dashboard') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('indie.dashboard') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-city w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Dashboard Proyek</span>
+                    </a>
+
+                    <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
+
+                    {{-- Menu Kelola Berita --}}
+                    <a href="{{ route('indie.news.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('indie.news.*') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-newspaper w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Portal Berita</span>
+                    </a>
+
+                    {{-- Menu Kelola Portofolio --}}
+                    <a href="{{ route('indie.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('indie.portfolios.*') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-images w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Portofolio Indie</span>
+                    </a>
+                @endif
 
 {{-- KHUSUS ECO (DIVISI BERAS & LINGKUNGAN) --}}
 @if(Auth::user()->role == 'eco')

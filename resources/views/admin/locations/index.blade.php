@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-black text-slate-800 tracking-tight">Kelola Data Cabang</h2>
             <p class="text-slate-500 font-medium">Daftar lokasi gudang, pabrik, dan toko mitra.</p>
         </div>
-        {{-- Tombol Tambah Tetap Pakai Modal --}}
+        {{-- Tombol Tambah --}}
         <button x-data @click="$dispatch('open-modal', 'add-location-modal')" 
             class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
             <i class="fas fa-plus-circle"></i> <span>Tambah Cabang</span>
@@ -30,7 +30,7 @@
                 <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
                     <tr>
                         <th class="px-6 py-4">Nama Cabang</th>
-                        <th class="px-6 py-4">Tipe</th>
+                        <th class="px-6 py-4">Tipe</th> {{-- Kolom Tipe Tetap Ada --}}
                         <th class="px-6 py-4">Stok Saat Ini</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
@@ -43,6 +43,7 @@
                             <span class="font-bold text-slate-800 text-base">{{ $item->name }}</span>
                         </td>
                         <td class="px-6 py-4">
+                            {{-- Menampilkan Badge Tipe --}}
                             @if($item->type == 'mill') 
                                 <span class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-purple-200"><i class="fas fa-industry"></i> Pabrik</span>
                             @elseif($item->type == 'warehouse') 
@@ -61,7 +62,6 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center gap-2">
-                                {{-- BUTTON EDIT (LINK KE HALAMAN BARU) --}}
                                 <a href="{{ route('admin.locations.edit', $item->id) }}" 
                                     class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm flex items-center justify-center">
                                     <i class="fas fa-pen text-xs"></i>
@@ -77,7 +77,6 @@
                             </div>
                         </td>
                     </tr>
-                    {{-- HAPUS MODAL EDIT DARI SINI --}}
                     @empty
                     <tr><td colspan="5" class="px-6 py-12 text-center text-slate-400 font-medium">Belum ada data cabang.</td></tr>
                     @endforelse
@@ -86,10 +85,11 @@
         </div>
     </div>
 
-    {{-- MODAL TAMBAH (Tetap ada di sini) --}}
+    {{-- MODAL TAMBAH --}}
     <x-modal name="add-location-modal" focusable>
         <form action="{{ route('admin.locations.store') }}" method="POST" class="bg-white rounded-2xl flex flex-col max-h-[90vh]">
             @csrf
+            
             {{-- Modal Header --}}
             <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4 flex justify-between items-center rounded-t-2xl shrink-0">
                 <h3 class="text-white font-bold text-lg flex items-center gap-2">
@@ -103,27 +103,22 @@
             {{-- Modal Body --}}
             <div class="p-6 overflow-y-auto custom-scrollbar">
                 <div class="space-y-5">
+                    {{-- Input Nama --}}
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Cabang <span class="text-red-500">*</span></label>
                         <input type="text" name="name" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 transition-all placeholder:text-slate-300" placeholder="Contoh: Toko Berkah Jaya Pusat" required>
                     </div>
-                    <div class="grid grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tipe</label>
-                            <div class="relative">
-                                <select name="type" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 appearance-none">
-                                    <option value="shop">Toko (Shop)</option>
-                                    <option value="warehouse">Gudang</option>
-                                    <option value="mill">Pabrik (Mill)</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-3 text-slate-400 text-xs pointer-events-none"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Awal (Kg)</label>
-                            <input type="number" name="current_stock" value="0" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500" required>
-                        </div>
+
+                    {{-- Default Value Tipe = Shop (Hidden) --}}
+                    <input type="hidden" name="type" value="shop">
+
+                    {{-- Input Stok (Full Width karena tipe dihapus) --}}
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Awal (Kg)</label>
+                        <input type="number" name="current_stock" value="0" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500" required>
                     </div>
+
+                    {{-- Input Status --}}
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Status</label>
                         <div class="relative">

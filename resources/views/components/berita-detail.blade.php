@@ -100,7 +100,7 @@
                         <h3 class="text-xl font-black mb-2 relative z-10">Butuh Informasi Proyek?</h3>
                         <p class="text-blue-100 text-sm mb-6 relative z-10">Hubungi kami untuk konsultasi dan detil lengkap.</p>
                         <a href="#" class="inline-block w-full bg-white text-blue-600 font-bold py-3 rounded-xl hover:bg-blue-50 transition-colors relative z-10">
-                            <i class="fab fa-whatsapp mr-1"></i> Chat WhatsApp
+                            <i class="fab fa-whatsapp mr-1"></i> 089515425734
                         </a>
                     </div>
 

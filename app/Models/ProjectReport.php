@@ -9,23 +9,34 @@ class ProjectReport extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id']; // Izinkan mass assignment kecuali ID
+    // Tambahkan ini agar data bisa disimpan
+    protected $guarded = ['id']; 
+    
+    // ATAU gunakan fillable (pilih satu):
+    // protected $fillable = [
+    //     'user_id',
+    //     'project_id',
+    //     'report_date',
+    //     'progress_percentage',
+    //     'work_description',
+    //     'documentation_path',
+    //     'status',
+    //     'admin_note'
+    // ];
 
-    // Relasi ke User
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    // Relasi ke Project
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-        
-    }
+    
+    // Relasi ke payment (opsional, untuk nanti)
     public function payment()
-{
-    // Relasi 1 Laporan punya 1 Data Pembayaran
-    return $this->hasOne(ProjectPayment::class, 'report_id');
-}
+    {
+        return $this->hasOne(ProjectPayment::class, 'report_id');
+    }
 }

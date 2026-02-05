@@ -98,7 +98,7 @@
                         <i class="fas fa-leaf"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-slate-800">Syafa Eco</h4>
+                        <h4 class="font-bold text-slate-800"> Eco</h4>
                         <p class="text-xs text-slate-500">Pangan & Lingkungan</p>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                         <i class="fas fa-city"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-slate-800">Syafa Indie</h4>
+                        <h4 class="font-bold text-slate-800"> Indie</h4>
                         <p class="text-xs text-slate-500">Infrastruktur & Gedung</p>
                     </div>
                 </div>

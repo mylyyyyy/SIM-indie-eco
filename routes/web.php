@@ -36,6 +36,11 @@ use App\Http\Controllers\SubkonEks\ReportController as SubkonEksReport;
 use App\Http\Controllers\Keuangan\DashboardController as KeuanganController;
 use App\Http\Controllers\SubkonEks\ReportPaymentController as ReportPayment;
 
+// indie
+use App\Http\Controllers\Indie\DashboardController as IndieDashboard;
+use App\Http\Controllers\Indie\NewsController as IndieNews;
+use App\Http\Controllers\Indie\PortfolioController as IndiePortfolio;
+
 // Umum
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -118,6 +123,18 @@ Route::middleware(['auth', 'role:eco'])->prefix('eco')->name('eco.')->group(func
     // Berita & Portofolio Eco (Warna Hijau)
     Route::resource('news', EcoNews::class);
     Route::resource('portfolios', EcoPortfolio::class);
+});
+
+//indie
+Route::middleware(['auth', 'role:indie'])->prefix('indie')->name('indie.')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [IndieDashboard::class, 'index'])->name('dashboard');
+
+    // Berita & Portofolio (Resource)
+    Route::resource('news', IndieNews::class);
+    Route::resource('portfolios', IndiePortfolio::class);
+
 });
 
 // C. GROUP SUBKON & KEUANGAN

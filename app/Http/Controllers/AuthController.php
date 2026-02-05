@@ -43,6 +43,8 @@ class AuthController extends Controller
                     return redirect()->intended(route('keuangan.dashboard'));
                     case 'eco':
                     return redirect()->intended(route('eco.dashboard'));
+                    case 'indie':
+                    return redirect()->intended(route('indie.dashboard'));
                 default:
                     Auth::logout();
                     return back()->withErrors(['email' => 'Role akun tidak dikenali.']);

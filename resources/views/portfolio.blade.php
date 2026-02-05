@@ -27,18 +27,21 @@
 <body class="antialiased text-slate-600 bg-slate-50">
 
     {{-- NAVBAR --}}
-    <nav class="fixed w-full z-50 bg-blue-900 shadow-xl border-b border-blue-800">
+    <nav class="fixed w-full z-50 bg-blue-900 shadow-xl border-b border-blue-800 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-10 w-auto bg-white p-1 rounded-lg shadow-md transition-transform group-hover:scale-110">
+                    {{-- Logo Placeholder --}}
+                    <div class="h-10 w-10 bg-white rounded-lg flex items-center justify-center text-blue-900 font-black text-xl shadow-md group-hover:scale-110 transition-transform">S</div>
                     <div class="flex flex-col">
                         <span class="font-black text-xl tracking-tight leading-none text-white">SYAFA <span class="text-blue-300">GROUP</span></span>
                         <span class="text-[10px] font-bold tracking-widest uppercase mt-0.5 text-blue-200/80">Integrated Solution</span>
                     </div>
                 </a>
                 <div class="flex items-center gap-4">
-                    <a href="{{ url('/') }}" class="text-blue-200 hover:text-white font-bold text-sm transition-colors"><i class="fas fa-arrow-left mr-2"></i> Kembali</a>
+                    <a href="{{ url('/') }}" class="text-blue-200 hover:text-white font-bold text-sm transition-colors flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
                 </div>
             </div>
         </div>
@@ -57,7 +60,7 @@
 
     {{-- PORTFOLIO SECTION (WITH TABS) --}}
     {{-- Inisialisasi Alpine Data: Default aktif tab 'eco' --}}
-    <section class="py-20 bg-slate-50" x-data="{ activeTab: 'eco' }">
+    <section class="py-20 bg-slate-50 min-h-screen" x-data="{ activeTab: 'eco' }">
         <div class="container mx-auto px-6">
             
             {{-- TAB BUTTONS --}}
@@ -67,27 +70,25 @@
                     <button @click="activeTab = 'eco'" 
                         :class="activeTab === 'eco' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 hover:text-emerald-600'"
                         class="px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2">
-                        <i class="fas fa-leaf"></i>  Eco
+                        <i class="fas fa-leaf"></i> Syafa Eco
                     </button>
 
                     {{-- Tombol INDIE --}}
                     <button @click="activeTab = 'indie'" 
                         :class="activeTab === 'indie' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:text-blue-600'"
                         class="px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2">
-                        <i class="fas fa-city"></i>  Indie
+                        <i class="fas fa-city"></i> Syafa Indie
                     </button>
                 </div>
             </div>
 
             {{-- GRID LOOP --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($portfolios as $index => $project)
                     @php
-                        // LOGIKA PEMISAH (MAPPING OTOMATIS)
-                        // Jika Judul/Kategori mengandung kata-kata alam/rumah -> Masuk ECO
-                        // Sisanya -> Masuk INDIE
-                        $text = strtolower($project->title . ' ' . $project->category);
-                        $type = (str_contains($text, 'eco') || str_contains($text, 'hunian') || str_contains($text, 'rumah') || str_contains($text, 'subsidi')) ? 'eco' : 'indie';
+                        // PERBAIKAN: Gunakan kolom 'division' langsung dari database
+                        // Pastikan model Portfolio sudah memiliki kolom 'division'
+                        $type = $project->division ?? 'indie'; 
                     @endphp
 
                     {{-- CARD ITEM --}}
@@ -96,91 +97,93 @@
                          x-transition:enter="transition ease-out duration-500"
                          x-transition:enter-start="opacity-0 transform scale-95"
                          x-transition:enter-end="opacity-100 transform scale-100"
-                         class="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                         class="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full">
                         
                         {{-- IMAGE SECTION --}}
-                        <div class="relative h-64 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-60 z-10"></div>
+                        <div class="relative h-64 overflow-hidden shrink-0">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 z-10"></div>
                             
                             {{-- Badge Kategori --}}
                             <div class="absolute top-4 right-4 z-20">
-                                <span class="text-white text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider {{ $type == 'eco' ? 'bg-emerald-500' : 'bg-blue-600' }}">
+                                <span class="text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider {{ $type == 'eco' ? 'bg-emerald-500' : 'bg-blue-600' }}">
                                     {{ $project->category }}
                                 </span>
                             </div>
 
+                            {{-- Gambar --}}
                             @php
-                                $imageSrc = str_starts_with($project->image_path, 'data:') 
+                                $imageSrc = filter_var($project->image_path, FILTER_VALIDATE_URL) 
                                             ? $project->image_path 
-                                            : asset('img/porto/' . $project->image_path);
+                                            : ($project->image_path ? $project->image_path : 'https://via.placeholder.com/600x400/f1f5f9/94a3b8?text=No+Image');
                             @endphp
 
                             <img src="{{ $imageSrc }}" 
                                  alt="{{ $project->title }}" 
-                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/600x400/1e3a8a/ffffff?text=No+Image';">
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                             
                             @if($project->location)
-                            <div class="absolute bottom-4 left-4 z-20 flex items-center text-white text-sm font-medium">
-                                <i class="fa-solid fa-location-dot text-cyan-400 mr-2"></i>
+                            <div class="absolute bottom-4 left-4 z-20 flex items-center text-white text-xs font-bold drop-shadow-md">
+                                <i class="fa-solid fa-location-dot text-white mr-1.5"></i>
                                 {{ $project->location }}
                             </div>
                             @endif
                         </div>
 
                         {{-- CONTENT SECTION --}}
-                        <div class="p-6">
-                            <h3 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">{{ $project->title }}</h3>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-lg font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                {{ $project->title }}
+                            </h3>
                             
-                            <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                            <div class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
                                 {{ $project->description }}
-                            </p>
+                            </div>
 
+                            {{-- Spesifikasi (Jika Ada) --}}
                             @if(!empty($project->specs) && is_array($project->specs))
-                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                                <h4 class="text-xs font-bold text-slate-700 uppercase mb-3 flex items-center gap-2">
-                                    <i class="fa-solid fa-list-check"></i> Spesifikasi
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-4">
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                    <i class="fa-solid fa-list-check"></i> Highlight
                                 </h4>
                                 <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
-                                    @foreach($project->specs as $key => $value)
+                                    @foreach(array_slice($project->specs, 0, 4) as $key => $value)
                                         <div>
-                                            <span class="block text-slate-400 font-medium">{{ $key }}</span>
-                                            <span class="block text-slate-700 font-bold">{{ $value }}</span>
+                                            <span class="block text-slate-400 font-medium text-[10px]">{{ $key }}</span>
+                                            <span class="block text-slate-700 font-bold truncate">{{ $value }}</span>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
                             @endif
 
-                            <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
-                                <span><i class="fas fa-user-tie mr-1"></i> {{ $project->client_name ?? '-' }}</span>
-                                <span><i class="fas fa-calendar-check mr-1"></i> {{ $project->completion_date ? $project->completion_date->format('Y') : '-' }}</span>
+                            <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400 font-medium">
+                                <span class="flex items-center gap-1"><i class="fas fa-user-tie text-slate-300"></i> {{ $project->client_name ?? 'Klien Privat' }}</span>
+                                <span class="flex items-center gap-1"><i class="fas fa-calendar-check text-slate-300"></i> {{ $project->completion_date ? \Carbon\Carbon::parse($project->completion_date)->format('Y') : '-' }}</span>
                             </div>
                         </div>
                     </div>
                 @empty
                     <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-20">
-                        <div class="inline-block p-6 rounded-full bg-slate-100 mb-4 text-slate-400">
+                        <div class="inline-block p-6 rounded-full bg-slate-100 mb-4 text-slate-400 animate-pulse">
                             <i class="fas fa-folder-open text-4xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-slate-600">Belum Ada Portofolio</h3>
-                        <p class="text-slate-400 text-sm">Data proyek akan segera ditambahkan.</p>
+                        <p class="text-slate-400 text-sm">Data proyek akan segera ditambahkan oleh tim kami.</p>
                     </div>
                 @endforelse
             </div>
-
         </div>
     </section>
 
     {{-- FOOTER SIMPLE --}}
-    <footer class="bg-blue-950 text-white py-8 border-t-4 border-blue-600 text-center">
-        <p class="text-sm text-blue-200">© {{ date('Y') }} Syafa Group. All Rights Reserved.</p>
+    <footer class="bg-blue-950 text-white py-8 border-t-4 border-blue-600 text-center relative z-10">
+        <p class="text-sm text-blue-200 font-medium">© {{ date('Y') }} Syafa Group. All Rights Reserved.</p>
     </footer>
 
     {{-- SCRIPTS --}}
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, duration: 800 });
+        AOS.init({ once: true, duration: 800, offset: 50 });
     </script>
 </body>
 </html>

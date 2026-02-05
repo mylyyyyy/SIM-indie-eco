@@ -12,6 +12,7 @@ class NewsController extends Controller
     // Menampilkan Daftar Berita
     public function index()
     {
+        
         $berita = DB::table('berita')->orderBy('tanggal_publish', 'desc')->get();
         return view('eco.news.index', compact('berita'));
     }
