@@ -45,16 +45,38 @@
                             {!! nl2br(e($item->isi)) !!} 
                         </div>
 
-                        {{-- Footer Artikel --}}
+                       {{-- Footer Artikel --}}
                         <div class="mt-10 pt-8 border-t border-slate-100 flex justify-between items-center">
                             <a href="{{ route('components.berita') }}" class="inline-flex items-center gap-2 font-bold text-slate-500 hover:text-blue-600 transition-colors">
                                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar
                             </a>
+                            
                             <div class="flex gap-2">
-                                {{-- Tombol Share Dummy --}}
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-blue-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors"><i class="fab fa-whatsapp"></i></button>
+                                <span class="text-xs font-bold text-slate-400 self-center mr-2 hidden md:block"></span>
+
+                                {{-- 1. FACEBOOK (Share Link) --}}
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
+                                   target="_blank"
+                                   class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1"
+                                   title="Kunjungi Facebook Kami">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+
+                                {{-- 2. INSTAGRAM (Link ke Profil - Karena IG tidak support share link web langsung) --}}
+                                <a href="https://www.instagram.com/syafagroup_official/" 
+                                   target="_blank"
+                                   class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-[#E4405F] hover:text-white transition-all transform hover:-translate-y-1"
+                                   title="Kunjungi Instagram Kami">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+
+                                {{-- 3. WHATSAPP (Share Link & Judul) --}}
+                                <a href="https://wa.me/?text={{ urlencode($item->judul . ' - ' . url()->current()) }}" 
+                                   target="_blank"
+                                   class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all transform hover:-translate-y-1"
+                                   title="Hubungi Via WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
                             </div>
                         </div>
                     </article>

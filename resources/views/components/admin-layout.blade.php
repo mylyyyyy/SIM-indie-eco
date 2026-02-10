@@ -59,7 +59,7 @@
                         <i class="fas fa-home w-5 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Dashboard</span>
                     </a>
-
+                    
 
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Master Data</div>
                     
@@ -67,16 +67,20 @@
                         <i class="fas fa-users w-5 text-center {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Data Pengguna</span>
                     </a>
-
+{{-- MENU BARU: MANAJEMEN TIM --}}
+                    <a href="{{ route('admin.teams.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.teams.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-user-tie w-5 text-center {{ request()->routeIs('admin.teams.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
+                        <span class="ml-3 font-medium">Manajemen Tim</span>
+                    </a>
                     <a href="{{ route('admin.projects.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.projects.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-building w-5 text-center {{ request()->routeIs('admin.projects.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Data Proyek</span>
                     </a>
 
                     <a href="{{ route('admin.locations.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.locations.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-    <i class="fas fa-map-marked-alt w-5 text-center {{ request()->routeIs('admin.locations.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
-    <span class="ml-3 font-medium">Kelola Data Cabang</span>
-</a>
+                        <i class="fas fa-map-marked-alt w-5 text-center {{ request()->routeIs('admin.locations.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
+                        <span class="ml-3 font-medium">Kelola Data Cabang</span>
+                    </a>
 
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
 
@@ -84,10 +88,6 @@
                         <i class="fas fa-newspaper w-5 text-center {{ request()->routeIs('admin.news.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
                         <span class="ml-3 font-medium">Berita & Artikel</span>
                     </a>
-                    {{-- <a href="{{ route('admin.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.portfolios.*') ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-    <i class="fas fa-briefcase w-5 text-center {{ request()->routeIs('admin.portfolios.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"></i>
-    <span class="ml-3 font-medium">Portofolio</span>
-</a> --}}
 
                     {{-- MENU RIWAYAT LOGIN --}}
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Log Sistem</div>
@@ -107,18 +107,17 @@
                     </a>
                 @endif
 
-{{-- KHUSUS KEUANGAN --}}
-@if(Auth::user()->role == 'keuangan')
-    <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Verifikasi</div>
-    
-    <a href="{{ route('keuangan.dashboard') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('keuangan.dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-        <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
-        <span class="ml-3 font-medium">Verifikasi Laporan</span>
-    </a>
-@endif
+                {{-- KHUSUS KEUANGAN --}}
+                @if(Auth::user()->role == 'keuangan')
+                    <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Verifikasi</div>
+                    
+                    <a href="{{ route('keuangan.dashboard') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('keuangan.dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Verifikasi Laporan</span>
+                    </a>
+                @endif
 
-
-{{-- KHUSUS INDIE (DIVISI INFRASTRUKTUR & GEDUNG) --}}
+                {{-- KHUSUS INDIE (DIVISI INFRASTRUKTUR & GEDUNG) --}}
                 @if(Auth::user()->role == 'indie')
                     <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</div>
                     
@@ -142,28 +141,28 @@
                     </a>
                 @endif
 
-{{-- KHUSUS ECO (DIVISI BERAS & LINGKUNGAN) --}}
-@if(Auth::user()->role == 'eco')
-    <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</div>
-    
-    <a href="{{ route('eco.dashboard') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.dashboard') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-        <i class="fas fa-warehouse w-5 text-center"></i>
-        <span class="ml-3 font-medium">Dashboard Stok</span>
-    </a>
+                {{-- KHUSUS ECO (DIVISI BERAS & LINGKUNGAN) --}}
+                @if(Auth::user()->role == 'eco')
+                    <div class="mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</div>
+                    
+                    <a href="{{ route('eco.dashboard') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.dashboard') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-warehouse w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Dashboard Stok</span>
+                    </a>
 
-    {{-- Menu Konten (Reuse route admin jika controller-nya sama, atau buat khusus) --}}
-    <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
+                    {{-- Menu Konten (Reuse route admin jika controller-nya sama, atau buat khusus) --}}
+                    <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
 
-    <a href="{{ route('eco.news.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.news.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-        <i class="fas fa-newspaper w-5 text-center"></i>
-        <span class="ml-3 font-medium">Portal Berita</span>
-    </a>
+                    <a href="{{ route('eco.news.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.news.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-newspaper w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Portal Berita</span>
+                    </a>
 
-    <a href="{{ route('eco.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.portfolios.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-        <i class="fas fa-images w-5 text-center"></i>
-        <span class="ml-3 font-medium">Portofolio Eco</span>
-    </a>
-@endif
+                    <a href="{{ route('eco.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.portfolios.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-images w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Portofolio Eco</span>
+                    </a>
+                @endif
 
                 {{-- KHUSUS SUBKON EKS (VENDOR) --}}
                 @if(Auth::user()->role == 'subkon_eks')
@@ -178,10 +177,10 @@
                         <span class="ml-3 font-medium">Input Laporan</span>
                     </a>
                     {{-- MENU : Report Payment --}}
-    <a href="{{ route('subkon-eks.report-payments.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('subkon-eks.report-payments.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-        <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
-        <span class="ml-3 font-medium">Klaim Pembayaran</span>
-    </a>
+                    <a href="{{ route('subkon-eks.report-payments.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('subkon-eks.report-payments.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
+                        <span class="ml-3 font-medium">Klaim Pembayaran</span>
+                    </a>
                 @endif
 
                 {{-- ================= MENU PENGATURAN AKUN (SEMUA USER) ================= --}}
@@ -208,9 +207,9 @@
             {{-- Sidebar Footer (User Profile) --}}
             <div class="border-t border-slate-800 p-4 bg-slate-950 absolute bottom-0 w-full">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
+                    {{-- GANTI DIV INISIAL DENGAN IMG LOGO --}}
+                    <img src="{{ asset('img/logo.png') }}" alt="User" class="w-10 h-10 rounded-full object-contain bg-white p-1 shadow-md">
+                    
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-bold text-white truncate">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-slate-400 truncate capitalize">{{ str_replace('_', ' ', Auth::user()->role) }}</p>
@@ -249,9 +248,8 @@
                         <p class="text-sm font-bold text-slate-700">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-slate-500">{{ Auth::user()->email }}</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
+                    {{-- GANTI DIV INISIAL DENGAN IMG LOGO --}}
+                    <img src="{{ asset('img/logo.png') }}" alt="User" class="w-10 h-10 rounded-full object-contain bg-white p-1 shadow-lg shadow-blue-500/20 border border-blue-100">
                 </div>
             </header>
 

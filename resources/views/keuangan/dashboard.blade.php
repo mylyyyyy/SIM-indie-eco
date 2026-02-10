@@ -10,7 +10,7 @@
 
     {{-- STATS CARDS --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {{-- Pending --}}
+        {{-- Card Pending --}}
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase mb-1">Perlu Verifikasi</p>
@@ -18,7 +18,7 @@
             </div>
             <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-clock"></i></div>
         </div>
-        {{-- Paid Today --}}
+        {{-- Card Paid Today --}}
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase mb-1">Keluar Hari Ini</p>
@@ -26,7 +26,7 @@
             </div>
             <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-wallet"></i></div>
         </div>
-        {{-- Total --}}
+        {{-- Card Total --}}
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase mb-1">Total Disbursed</p>
@@ -102,7 +102,7 @@
                 <div class="w-full md:w-48 flex flex-col justify-center gap-2 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
                     <button x-data @click="$dispatch('open-modal', 'verify-modal-{{ $item->id }}')" 
                         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg text-sm shadow-lg shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5">
-                        <i class="fas fa-money-bill-wave mr-1"></i> Bayar
+                        <i class="fas fa-money-bill-wave mr-1"></i> Proses Bayar
                     </button>
                 </div>
             </div>
@@ -134,19 +134,22 @@
                             </label>
                         </div>
 
-                        {{-- Field Jika Approve --}}
+                        {{-- Field Jika Approve (Wajib diisi hanya jika action == approve) --}}
                         <div x-show="action === 'approve'" class="space-y-4 animate__animated animate__fadeIn">
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nominal Transfer (Rp)</label>
-                                <input type="number" name="amount" value="{{ $item->amount }}" class="w-full border-slate-200 rounded-xl font-mono font-bold text-slate-700 bg-slate-50" required>
+                                <input type="number" name="amount" value="{{ $item->amount }}" 
+                                       class="w-full border-slate-200 rounded-xl font-mono font-bold text-slate-700 bg-slate-50" 
+                                       :required="action === 'approve'">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Metode</label>
-                                    <select name="payment_method" class="w-full border-slate-200 rounded-xl text-sm">
+                                    <select name="payment_method" class="w-full border-slate-200 rounded-xl text-sm" :required="action === 'approve'">
                                         <option value="Transfer BCA">Transfer BCA</option>
                                         <option value="Transfer Mandiri">Transfer Mandiri</option>
                                         <option value="Tunai">Tunai</option>
+                                        <option value="Cek/Giro">Cek / Giro</option>
                                     </select>
                                 </div>
                                 <div>
@@ -156,14 +159,19 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Bukti Transfer <span class="text-red-500">*</span></label>
-                                <input type="file" name="payment_proof" class="w-full text-sm text-slate-500 file:py-2 file:px-4 file:rounded-full file:bg-emerald-50 file:text-emerald-700 file:border-0 hover:file:bg-emerald-100" required>
+                                <input type="file" name="payment_proof" 
+                                       class="w-full text-sm text-slate-500 file:py-2 file:px-4 file:rounded-full file:bg-emerald-50 file:text-emerald-700 file:border-0 hover:file:bg-emerald-100" 
+                                       :required="action === 'approve'">
                             </div>
                         </div>
 
-                        {{-- Field Jika Reject --}}
+                        {{-- Field Jika Reject (Wajib diisi hanya jika action == reject) --}}
                         <div x-show="action === 'reject'" class="animate__animated animate__fadeIn" style="display: none;">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Alasan Penolakan</label>
-                            <textarea name="admin_note" rows="3" class="w-full border-red-200 rounded-xl text-sm focus:border-red-500 focus:ring-red-500" placeholder="Contoh: Nominal tidak sesuai progress..."></textarea>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Alasan Penolakan <span class="text-red-500">*</span></label>
+                            <textarea name="admin_note" rows="3" 
+                                      class="w-full border-red-200 rounded-xl text-sm focus:border-red-500 focus:ring-red-500" 
+                                      placeholder="Jelaskan alasan penolakan agar subkon dapat merevisi..."
+                                      :required="action === 'reject'"></textarea>
                         </div>
 
                         {{-- Footer Modal --}}
@@ -239,7 +247,7 @@
         </div>
     </div>
 
-    {{-- Script Modal Image --}}
+    {{-- Script Modal Image & Alert --}}
     <script>
         function showImage(src) {
             Swal.fire({
@@ -253,12 +261,30 @@
             });
         }
 
-        // Alert Handler
         @if(session('success'))
             Swal.fire({ icon: 'success', title: 'Berhasil', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
         @endif
         @if(session('error'))
             Swal.fire({ icon: 'error', title: 'Gagal', text: "{{ session('error') }}" });
+        @endif
+        
+        // Alert Error Validasi
+        @if($errors->any())
+            Swal.fire({
+                icon: 'warning',
+                title: 'Gagal Memproses!',
+                html: `
+                    <div class="text-left text-sm">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                `,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#d33'
+            });
         @endif
     </script>
 </x-admin-layout>

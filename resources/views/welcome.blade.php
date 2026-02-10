@@ -1,512 +1,588 @@
-@extends('layouts.main')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
-@section('content')
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Syafa Group - Integrated Business Solution</title>
+    <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 
-{{-- ======================================================================= --}}
-{{-- 1. HERO SECTION (RE-DESIGNED)                                           --}}
-{{-- ======================================================================= --}}
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-12">
+    {{-- 1. FONTS --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    {{-- A. BACKGROUND DINAMIS (PENGGANTI PUTIH POLOS) --}}
-    <div class="absolute inset-0 z-0 bg-slate-50">
-        {{-- 1. Pola Grid (Memberi tekstur teknis) --}}
-        <div class="absolute inset-0" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px; opacity: 0.4;"></div>
+    {{-- 2. CSS LIBRARIES --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    {{-- 3. TAILWIND & SCRIPTS --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
         
-        {{-- 2. Mesh Gradient (Warna-warni blur yang bergerak) --}}
-        {{-- Biru Kiri Atas --}}
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/30 rounded-full blur-[100px] animate-blob mix-blend-multiply filter"></div>
-        {{-- Cyan Kanan Atas --}}
-        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-300/30 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply filter"></div>
-        {{-- Ungu Bawah Kiri --}}
-        <div class="absolute bottom-[-20%] left-[20%] w-[500px] h-[500px] bg-indigo-300/30 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply filter"></div>
-    </div>
+        /* Animasi Background Blob */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
 
-    {{-- B. KONTEN HERO --}}
-    <div class="container mx-auto px-6 text-center relative z-10">
-        
-        {{-- Badge Kecil di Atas --}}
-        <div class="inline-flex items-center px-3 py-1 rounded-full border border-blue-200 bg-white/60 backdrop-blur-sm text-blue-600 text-xs font-bold uppercase tracking-wider mb-8 shadow-sm animate-fade-in-up">
-            <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
-            Integrated Business Solution
-        </div>
+        /* Scrollbar Biru */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #eff6ff; }
+        ::-webkit-scrollbar-thumb { background: #1e40af; border-radius: 5px; } 
+        ::-webkit-scrollbar-thumb:hover { background: #1e3a8a; }
 
-        {{-- Logo (Tanpa Kotak Putih, Langsung Float) --}}
-        <div class="mb-6 flex justify-center animate-fade-in-up">
-            {{-- Efek Glow di belakang logo --}}
-            <div class="relative">
-                <div class="absolute inset-0 bg-white/50 blur-xl rounded-full scale-150"></div>
-                <img src="{{ asset('img/logo.png') }}" alt="Logo Syafa Group" 
-                     class="relative w-40 h-auto md:w-48 drop-shadow-2xl transform hover:scale-105 transition-transform duration-500">
-            </div>
-        </div>
+        /* Line Clamp untuk Berita */
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
 
-        {{-- Main Heading --}}
-        <h1 class="text-5xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-slate-800 animate-fade-in-up" style="animation-delay: 0.1s;">
-            SYAFA <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">GROUP</span>
-        </h1>
+<body class="antialiased text-slate-600 bg-white" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
 
-        {{-- Subtitle --}}
-        <p class="text-lg sm:text-xl md:text-2xl text-slate-600 mb-10 max-w-3xl mx-auto font-medium leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
-            Mitra strategis terpercaya. Melayani <span class="text-blue-600 font-bold bg-blue-50 px-1 rounded">Properti</span>, 
-            <span class="text-blue-600 font-bold bg-blue-50 px-1 rounded">Konstruksi</span>, & 
-            <span class="text-blue-600 font-bold bg-blue-50 px-1 rounded">Perdagangan</span> 
-            dengan standar mutu terbaik.
-        </p>
-
-        {{-- CTA Buttons --}}
-        <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-            <a href="#perusahaan" class="group relative px-8 py-4 bg-slate-900 rounded-full text-white text-lg font-bold shadow-xl overflow-hidden transition-all hover:shadow-2xl hover:bg-slate-800 hover:-translate-y-1">
-                <span class="relative z-10 flex items-center gap-2">
-                    Anak Perusahaan <i class="fa-solid fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
-                </span>
-            </a>
-            
-            <a href="#kontak" class="group relative px-8 py-4 bg-white rounded-full text-slate-700 border border-slate-200 text-lg font-bold shadow-lg overflow-hidden transition-all hover:shadow-xl hover:border-blue-300 hover:text-blue-600 hover:-translate-y-1">
-                <span class="relative z-10 flex items-center gap-2">
-                    Hubungi Kami <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                </span>
-            </a>
-        </div>
-
-        {{-- Stats / Trust Indicators --}}
-        <div class="mt-16 pt-8 border-t border-slate-200/60 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto animate-fade-in-up" style="animation-delay: 0.5s;">
-            <div>
-                <div class="text-3xl font-black text-slate-800">2022</div>
-                <div class="text-sm text-slate-500 font-semibold uppercase tracking-wide">Didirikan</div>
-            </div>
-            <div>
-                <div class="text-3xl font-black text-slate-800">3+</div>
-                <div class="text-sm text-slate-500 font-semibold uppercase tracking-wide">Anak Perusahaan</div>
-            </div>
-            <div>
-                <div class="text-3xl font-black text-slate-800">100%</div>
-                <div class="text-sm text-slate-500 font-semibold uppercase tracking-wide">Legalitas</div>
-            </div>
-            <div>
-                <div class="text-3xl font-black text-slate-800">Jatim-Jateng</div>
-                <div class="text-sm text-slate-500 font-semibold uppercase tracking-wide">Cakupan Area</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ======================================================================= --}}
-{{-- 2. TENTANG SYAFA GROUP (Glass Card)                                     --}}
-{{-- ======================================================================= --}}
-<section class="py-20 relative">
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[2.5rem] p-8 md:p-16 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] text-center max-w-5xl mx-auto">
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-bold mb-6">
-                <i class="fas fa-building mr-2"></i> Tentang Kami
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-6 leading-tight">
-                Membangun Ekosistem Bisnis <br>yang <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Berkelanjutan</span>
-            </h2>
-            <p class="text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
-                Didirikan pada tahun 2022, <strong>SYAFA Group</strong> adalah holding company yang menaungi unit bisnis strategis yang terintegrasi. Kami berkomitmen untuk memberikan kontribusi nyata dalam pembangunan ekonomi melalui sektor properti, perdagangan, dan konstruksi.
-            </p>
-        </div>
-    </div>
-</section>
-
-{{-- ======================================================================= --}}
-{{-- 3. ANAK PERUSAHAAN (Subsidiaries)                                       --}}
-{{-- ======================================================================= --}}
-<section id="perusahaan" class="py-24 bg-slate-50 relative overflow-hidden">
-    {{-- Background Pattern Halus --}}
-    <div class="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-    {{-- Aksen Blur di Background --}}
-    <div class="absolute top-1/2 left-0 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl -translate-x-1/2"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-sky-200/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-    
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="text-center mb-16">
-            <div class="inline-block bg-sky-100 text-sky-600 font-bold px-4 py-1 rounded-full text-xs uppercase tracking-widest mb-4">Holding Company</div>
-            <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">
-                Anak <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-700">Perusahaan</span>
-            </h2>
-            <div class="h-1.5 w-24 bg-gradient-to-r from-sky-400 to-blue-600 mx-auto rounded-full mb-6"></div>
-            <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Sinergi unit bisnis strategis yang bergerak di bidang Properti, Perdagangan, dan Konstruksi untuk mendukung pertumbuhan ekonomi.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            
-            {{-- A. PT. INDIE SYAFA TRANSFORMA --}}
-            <div class="group bg-white rounded-[2rem] shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 flex flex-col h-full overflow-hidden relative">
-                {{-- Decorative Header --}}
-                <div class="h-24 bg-gradient-to-br from-blue-500 to-blue-700 relative">
-                    <div class="absolute -bottom-10 left-8 p-4 bg-white rounded-2xl shadow-lg">
-                        <i class="fa-solid fa-house-chimney text-3xl text-blue-600"></i>
-                    </div>
-                    <div class="absolute right-0 top-0 p-4 opacity-10">
-                        <i class="fa-solid fa-building text-6xl text-white"></i>
-                    </div>
-                </div>
-
-                <div class="px-8 pt-14 pb-8 flex-grow">
-                    <h3 class="text-xl font-extrabold text-slate-800 mb-1">PT. Indie Syafa Transforma</h3>
-                    <p class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-4 border-b border-blue-100 pb-4">Property Developer</p>
-                    
-                    <div class="prose prose-sm text-slate-600 text-justify mb-6">
-                        <p class="mb-2">
-                            Berdiri pertengahan 2022 atas saran <strong>Bapak Dr. Wahju Prijo Djatmiko, S.H., M.Hum., M.Sc., G.Dipl.IfSc., S.S. </strong>. Perusahaan berbasis properti ini didukung pengalaman owner yang telah berkecimpung sejak tahun 2012.
-                        </p>
-                        <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                            <strong>Fokus Proyek:</strong><br>
-                            Jawa Timur, Jawa Tengah, dan Jawa Barat (Sedang Dikembangkan).
-                        </p>
-                    </div>
-
-                    <div class="text-xs text-slate-500 flex items-start gap-2 mb-2">
-                        <i class="fa-solid fa-location-dot text-blue-500 mt-0.5"></i> 
-                        <span>Gedung PRAXIS, Jl. Sono Kembang No. 4-6, Surabaya (Pusat)</span>
-                    </div>
-                </div>
+    {{-- ======================================================================= --}}
+    {{-- NAVBAR (BIRU SOLID & STICKY)                                            --}}
+    {{-- ======================================================================= --}}
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-blue-900 shadow-xl border-b border-blue-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
                 
-                {{-- Direksi Section --}}
-                <div class="bg-slate-50/80 px-8 py-5 border-t border-slate-100 backdrop-blur-sm">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-wider">Susunan Direksi</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur Utama</span>
-                            <span class="font-bold text-slate-800 bg-white px-2 py-1 rounded shadow-sm border border-slate-100">Sa’diah, S.Pd.I, M.Pd.I</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur</span>
-                            <span class="font-bold text-slate-800">Puspi, SE</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Komisaris</span>
-                            <span class="font-bold text-slate-800">A. P. Mustiko, SH</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                {{-- LOGO --}}
+                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-10 w-auto bg-white p-1 rounded-lg shadow-md transition-transform group-hover:scale-110">
+                    <div class="flex flex-col">
+                        <span class="font-black text-xl tracking-tight leading-none text-white">
+                            SYAFA <span class="text-blue-300">GROUP</span>
+                        </span>
+                        <span class="text-[10px] font-bold tracking-widest uppercase mt-0.5 text-blue-200/80">
+                            Integrated Solution
+                        </span>
+                    </div>
+                </a>
 
-            {{-- B. PT. ECO SYAFA HARVEST --}}
-            <div class="group bg-white rounded-[2rem] shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 flex flex-col h-full overflow-hidden relative">
-                {{-- Badge EST --}}
-                <div class="absolute top-4 right-4 z-20 bg-white/20 backdrop-blur text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/30 shadow-sm">EST 2023</div>
-                
-                {{-- Decorative Header --}}
-                <div class="h-24 bg-gradient-to-br from-green-500 to-emerald-600 relative">
-                    <div class="absolute -bottom-10 left-8 p-4 bg-white rounded-2xl shadow-lg">
-                        <i class="fa-solid fa-wheat-awn text-3xl text-green-600"></i>
-                    </div>
-                    <div class="absolute right-0 top-0 p-4 opacity-10">
-                        <i class="fa-solid fa-boxes-stacked text-6xl text-white"></i>
-                    </div>
+                {{-- DESKTOP MENU --}}
+                <div class="hidden md:flex items-center space-x-1 bg-blue-950/40 p-1 rounded-full border border-blue-700/50 backdrop-blur-sm">
+                    @foreach([
+                        ['url' => '#home', 'label' => 'Beranda'],
+                        ['url' => '#perusahaan', 'label' => 'Unit Bisnis'],
+                        ['url' => '#tim', 'label' => 'Manajemen'],
+                        ['url' => '#berita', 'label' => 'Berita'],
+                        ['url' => '#kontak', 'label' => 'Kontak'],
+                    ] as $item)
+                        <a href="{{ $item['url'] }}" class="px-5 py-2 rounded-full text-sm font-bold text-blue-100 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
                 </div>
 
-                <div class="px-8 pt-14 pb-8 flex-grow">
-                    <h3 class="text-xl font-extrabold text-slate-800 mb-1">PT. Eco Syafa Harvest</h3>
-                    <p class="text-xs font-bold text-green-500 uppercase tracking-widest mb-4 border-b border-green-100 pb-4">Industry & Trade</p>
-                    
-                    <div class="prose prose-sm text-slate-600 text-justify mb-6">
-                        <p class="mb-2">
-                            Bergerak di bidang industri dan perdagangan dengan fokus utama saat ini pada <strong>Pendistribusian Beras</strong>.
-                        </p>
-                        <p class="mb-2 text-xs">
-                            <em>Izin usaha juga mencakup: Air kemasan, buku, tekstil, dan pakaian.</em>
-                        </p>
-                        <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                            <strong>Kantor Cabang:</strong><br>
-                            Kab. Malang, Kota & Kab. Probolinggo, Lumajang, Jember.
-                        </p>
-                    </div>
+                {{-- LOGIN BUTTON --}}
+                {{-- RIGHT ACTION BUTTONS --}}
+                <div class="hidden md:flex items-center gap-3">
+                    {{-- Button Portofolio (Baru) --}}
+                    <a href="{{ route('portfolio') }}" class="px-5 py-2.5 rounded-xl border border-blue-300 text-blue-100 font-bold text-sm hover:bg-white hover:text-blue-900 transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-briefcase"></i> Portofolio
+                    </a>
 
-                    <div class="text-xs text-slate-500 flex items-start gap-2 mb-2">
-                        <i class="fa-solid fa-location-dot text-green-500 mt-0.5"></i> 
-                        <span>Gedung PRAXIS, Jl. Sono Kembang No. 4-6, Surabaya (Pusat)</span>
-                    </div>
-                </div>
-
-                {{-- Direksi Section --}}
-                <div class="bg-slate-50/80 px-8 py-5 border-t border-slate-100 backdrop-blur-sm">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-wider">Susunan Direksi</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur Utama</span>
-                            <span class="font-bold text-slate-800 bg-white px-2 py-1 rounded shadow-sm border border-slate-100">Sa’diah, S.Pd.I, M.Pd.I</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur</span>
-                            <span class="font-bold text-slate-800">Puspi, SE</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Komisaris</span>
-                            <span class="font-bold text-slate-800">M. Adhiek</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            {{-- C. PT. ATHENA SYAFA PANCA --}}
-            <div class="group bg-white rounded-[2rem] shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 flex flex-col h-full overflow-hidden relative">
-                 {{-- Badge EST --}}
-                 <div class="absolute top-4 right-4 z-20 bg-white/20 backdrop-blur text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/30 shadow-sm">EST 2025</div>
-
-                {{-- Decorative Header --}}
-                <div class="h-24 bg-gradient-to-br from-orange-500 to-red-500 relative">
-                    <div class="absolute -bottom-10 left-8 p-4 bg-white rounded-2xl shadow-lg">
-                        <i class="fa-solid fa-helmet-safety text-3xl text-orange-600"></i>
-                    </div>
-                    <div class="absolute right-0 top-0 p-4 opacity-10">
-                        <i class="fa-solid fa-trowel-bricks text-6xl text-white"></i>
-                    </div>
-                </div>
-
-                <div class="px-8 pt-14 pb-8 flex-grow">
-                    <h3 class="text-xl font-extrabold text-slate-800 mb-1">PT. Athena Syafa Panca</h3>
-                    <p class="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4 border-b border-orange-100 pb-4">Construction & Mining</p>
-                    
-                    <div class="prose prose-sm text-slate-600 text-justify mb-6">
-                        <p class="mb-2">
-                            Perusahaan termuda yang bergerak strategis di bidang <strong>Konstruksi</strong>. Memiliki cakupan izin usaha di bidang pertambangan dan perdagangan material.
-                        </p>
-                        <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                            <strong>Fokus Proyek Saat Ini:</strong><br>
-                            Berbagai Kota & Kabupaten di Provinsi Jawa Tengah.
-                        </p>
-                    </div>
-
-                    <div class="text-xs text-slate-500 flex items-start gap-2 mb-2">
-                        <i class="fa-solid fa-map-location-dot text-orange-500 mt-0.5"></i> 
-                        <span>Operasional: Jawa Tengah</span>
-                    </div>
-                </div>
-
-                {{-- Direksi Section --}}
-                <div class="bg-slate-50/80 px-8 py-5 border-t border-slate-100 backdrop-blur-sm">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-wider">Susunan Direksi</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur Utama</span>
-                            <span class="font-bold text-slate-800 bg-white px-2 py-1 rounded shadow-sm border border-slate-100">Eliza Putri S, SH</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Direktur</span>
-                            <span class="font-bold text-slate-800">Linda Adelia, SE</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Komisaris</span>
-                            <span class="font-bold text-slate-800">Puguh P.W., Amd</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- ======================================================================= --}}
-{{-- 4. VISI & MISI (Side by Side)                                           --}}
-{{-- ======================================================================= --}}
-<section class="py-24 bg-white relative overflow-hidden">
-    {{-- Background Circle Decoration --}}
-    <div class="absolute -left-20 top-1/2 -translate-y-1/2 w-96 h-96 bg-slate-50 rounded-full blur-3xl -z-10"></div>
-
-    <div class="container mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-center gap-16">
-            
-            {{-- Visual / Image Placeholder --}}
-            <div class="w-full md:w-1/2 relative">
-                <div class="relative z-10 bg-slate-900 rounded-[2.5rem] p-12 text-white shadow-2xl transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                    <div class="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center text-4xl mb-8">
-                        <i class="fa-solid fa-rocket"></i>
-                    </div>
-                    <h3 class="text-3xl font-black mb-6">Komitmen <br>Pertumbuhan</h3>
-                    <p class="text-slate-300 text-lg leading-relaxed">
-                        "Menjadi pilihan nyata bagi masyarakat sekitar dan relasi yang berujung kepada pertumbuhan ekonomi Tanah Air."
-                    </p>
-                </div>
-                {{-- Decor --}}
-                <div class="absolute -bottom-10 -right-10 w-full h-full border-2 border-slate-200 rounded-[2.5rem] -z-10"></div>
-            </div>
-
-            {{-- Text Content --}}
-            <div class="w-full md:w-1/2">
-                <div class="mb-12">
-                    <h3 class="text-2xl font-black text-slate-800 mb-4 flex items-center gap-3">
-                        <span class="text-blue-600">01.</span> VISI
-                    </h3>
-                    <p class="text-slate-600 text-lg leading-relaxed">
-                        Mengembangkan group bisnis dengan semangat inovasi, menciptakan lapangan kerja, serta meningkatkan kesejahteraan masyarakat melalui pertumbuhan ekonomi.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-4 flex items-center gap-3">
-                        <span class="text-blue-600">02.</span> MISI
-                    </h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <i class="fa-solid fa-check-circle text-blue-500 text-xl mt-0.5"></i>
-                            <span class="text-slate-700 font-medium">Menjadi mitra bisnis yang memberikan keuntungan bagi semua pihak.</span>
-                        </li>
-                        <li class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <i class="fa-solid fa-check-circle text-blue-500 text-xl mt-0.5"></i>
-                            <span class="text-slate-700 font-medium">Menjadi pilihan utama konsumen melalui pelayanan prima.</span>
-                        </li>
-                        <li class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <i class="fa-solid fa-check-circle text-blue-500 text-xl mt-0.5"></i>
-                            <span class="text-slate-700 font-medium">Menciptakan lingkungan kerja yang mensejahterakan karyawan.</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- ======================================================================= --}}
-{{-- 5. OUR TEAM (Tim Manajemen)                                             --}}
-{{-- ======================================================================= --}}
-<section id="tim" class="py-24 bg-white relative overflow-hidden">
-    {{-- Background Decoration --}}
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-    <div class="absolute right-0 top-1/3 w-72 h-72 bg-blue-100/30 rounded-full blur-3xl mix-blend-multiply"></div>
-    <div class="absolute left-0 bottom-1/3 w-72 h-72 bg-cyan-100/30 rounded-full blur-3xl mix-blend-multiply"></div>
-
-    <div class="container mx-auto px-6 relative z-10">
-        
-        {{-- Section Header --}}
-        <div class="text-center mb-16">
-            <div class="inline-block bg-blue-50 text-blue-600 font-bold px-4 py-1 rounded-full text-xs uppercase tracking-widest mb-4">Profesional & Berpengalaman</div>
-            <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-4">
-                Tim <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Manajemen</span>
-            </h2>
-            <div class="h-1.5 w-24 bg-gradient-to-r from-blue-600 to-cyan-400 mx-auto rounded-full mb-6"></div>
-            <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Dibalik kesuksesan Syafa Group, terdapat individu-individu berdedikasi tinggi yang berkomitmen memberikan solusi terbaik.
-            </p>
-        </div>
-        
-
-        {{-- Team Grid --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            {{-- Loop Data Team (1-9) --}}
-            @php
-                // Data Dummy untuk Jabatan (Bisa disesuaikan nanti)
-                $roles = [
-                    1 => ['role' => 'Founder & CEO', 'color' => 'text-blue-600'],
-                    2 => ['role' => 'Direktur Keuangan', 'color' => 'text-slate-600'],
-                    3 => ['role' => 'MANAGER SUMBER DAYA MANUSIA', 'color' => 'text-slate-600'],
-                    4 => ['role' => 'ASISTEN DIREKSI', 'color' => 'text-slate-500'],
-                    5 => ['role' => 'Manager IT', 'color' => 'text-slate-500'],
-                    6 => ['role' => 'STAFF LEGAL', 'color' => 'text-slate-500'],
-                    7 => ['role' => 'Manager KEAGAMAAN', 'color' => 'text-slate-500'],
-                    8 => ['role' => 'Manager OPERASIONAL', 'color' => 'text-slate-500'],
-                    9 => ['role' => 'ASISTEN MANAGER SUMBER DAYA MANUSIA', 'color' => 'text-slate-500'],
-                ];
-            @endphp
-
-            @for ($i = 1; $i <= 9; $i++)
-                <div class="group relative bg-white rounded-3xl p-4 shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-2">
-                    
-                    {{-- Image Container --}}
-                    <div class="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 mb-6">
-                        {{-- Background Gradient saat Hover --}}
-                        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                        
-                        {{-- Image --}}
-                        {{-- Menggunakan asset path sesuai request: public/img/team/1.png dst --}}
-                        <img src="{{ asset('img/team/' . $i . '.png') }}" 
-                             alt="Team Member {{ $i }}" 
-                             class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Team+{{ $i }}&background=cbd5e1&color=fff&size=500';"> {{-- Fallback jika gambar tidak ada --}}
-                        
-                        {{-- Social Icons (Muncul saat Hover) --}}
-                        <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                            <a href="#" class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white hover:text-blue-600 transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white hover:text-blue-600 transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white hover:text-blue-600 transition-colors"><i class="fa-regular fa-envelope"></i></a>
-                        </div>
-                    </div>
-
-                    {{-- Text Content --}}
-                    <div class="text-center px-2 pb-4">
-                        <h4 class="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">
-                            {{-- Nama Dummy (Ganti sesuai kebutuhan) --}}
-                            @if($i == 1)  @else Nama Lengkap {{ $i }} @endif
-                        </h4>
-                        <p class="text-sm font-bold uppercase tracking-wider {{ $roles[$i]['color'] }}">
-                            {{ $roles[$i]['role'] }}
-                        </p>
-                        
-                        {{-- Garis Hiasan Kecil --}}
-                        <div class="w-8 h-1 bg-slate-200 mx-auto mt-4 rounded-full group-hover:bg-blue-500 group-hover:w-16 transition-all duration-300"></div>
-                    </div>
-
-                    {{-- Corner Accent (Opsional) --}}
-                    @if($i == 1)
-                        <div class="absolute top-6 right-6 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 z-20" title="Founder">
-                            <i class="fa-solid fa-star text-xs"></i>
-                        </div>
+                    {{-- Button Login --}}
+                    @if (Route::has('login'))
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-900/50 hover:bg-blue-400 hover:-translate-y-0.5 transition-all flex items-center gap-2 border border-blue-400">
+                                <i class="fa-solid fa-gauge"></i> Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 rounded-xl bg-white text-blue-900 text-sm font-bold shadow-lg hover:bg-blue-50 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-lock text-blue-600"></i> Login Staff
+                            </a>
+                        @endauth
                     @endif
                 </div>
-            @endfor
 
-        </div>
-    </div>
-</section>
-
-
-{{-- ======================================================================= --}}
-{{-- 5. CONTACT SECTION                                                      --}}
-{{-- ======================================================================= --}}
-<section id="kontak" class="py-24 bg-slate-900 text-white relative overflow-hidden">
-    {{-- Decorative Blobs --}}
-    <div class="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full blur-[120px] opacity-20"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] opacity-20"></div>
-
-    <div class="container mx-auto px-6 relative z-10 text-center">
-        <h2 class="text-3xl sm:text-4xl font-black mb-6">Hubungi Kami</h2>
-        <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
-            Kami siap berdiskusi mengenai kebutuhan bisnis dan kerjasama strategis dengan Anda.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
-            <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition-colors">
-                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-xl mb-6">
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-                <h4 class="font-bold text-lg mb-2">Kantor Pusat</h4>
-                <p class="text-slate-300 leading-relaxed">Gedung PRAXIS,<br>Jl. Sono Kembang No. 4-6,<br>Surabaya, Jawa Timur</p>
+                {{-- MOBILE MENU BUTTON --}}
+                <button class="md:hidden text-white text-2xl focus:outline-none" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
             </div>
+        </div>
+
+        {{-- MOBILE MENU --}}
+        <div id="mobileMenu" class="hidden md:hidden bg-blue-900 border-t border-blue-800 absolute w-full shadow-xl">
+            <div class="p-4 space-y-2">
+                <a href="#home" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Beranda</a>
+                <a href="#perusahaan" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Unit Bisnis</a>
+                <a href="#tim" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Tim Kami</a>
+                <a href="#berita" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Berita</a>
+                <a href="#kontak" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Kontak</a>
+                <a href="{{ route('login') }}" class="block px-4 py-3 text-blue-900 bg-white font-bold rounded-lg mt-4 text-center">Login Staff</a>
+            </div>
+        </div>
+    </nav>
+
+    {{-- ======================================================================= --}}
+    {{-- 1. HERO SECTION (Blue Theme)                                            --}}
+    {{-- ======================================================================= --}}
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-blue-50/30">
+        {{-- Background Blobs --}}
+        <div class="absolute top-0 -left-4 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
             
-            <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition-colors">
-                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-xl mb-6">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </div>
-                <h4 class="font-bold text-lg mb-2">Kontak & WhatsApp</h4>
-                <p class="text-slate-300 leading-relaxed mb-4">(0321) 123456</p>
-                <a href="#" class="text-green-400 font-bold hover:text-green-300 inline-flex items-center gap-2">
-                    Chat Sekarang <i class="fa-solid fa-arrow-right"></i>
+            <div data-aos="fade-down" data-aos-duration="1000">
+                <span class="inline-block py-2 px-5 rounded-full bg-blue-100 text-blue-800 text-xs font-extrabold uppercase tracking-widest mb-6 border border-blue-200 shadow-sm">
+                    <i class="fas fa-certificate mr-1.5 text-blue-600"></i> Mitra Terpercaya Sejak 2022
+                </span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-black text-blue-950 mb-6 leading-tight drop-shadow-sm" data-aos="fade-up" data-aos-duration="1000">
+                Membangun Masa Depan <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Bisnis yang Solid</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                Syafa Group menghadirkan solusi terintegrasi di bidang <b class="text-blue-700">Properti, Konstruksi,</b> dan <b class="text-blue-700">Perdagangan</b> untuk mendukung pertumbuhan ekonomi Indonesia.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="400">
+                <button onclick="showSwingAlert()" class="group px-8 py-4 bg-blue-800 text-white rounded-full font-bold shadow-xl shadow-blue-800/30 hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1">
+                    <span>Pelajari Lebih Lanjut</span>
+                    <i class="fa-solid fa-arrow-down group-hover:animate-bounce"></i>
+                </button>
+                <a href="#kontak" class="px-8 py-4 bg-white text-blue-900 border-2 border-blue-100 rounded-full font-bold shadow-md hover:border-blue-500 hover:text-blue-700 transition-all duration-300 hover:-translate-y-1">
+                    Hubungi Kami
                 </a>
             </div>
 
-            <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition-colors">
-                <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-xl mb-6">
-                    <i class="fa-regular fa-clock"></i>
+            {{-- Stats Bar --}}
+            <div class="mt-20 bg-gradient-to-r from-blue-900 to-blue-800 rounded-3xl p-10 shadow-2xl text-white max-w-5xl mx-auto transform hover:scale-[1.01] transition-transform duration-500 relative overflow-hidden" data-aos="zoom-in-up" data-aos-delay="600">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fas fa-chart-line text-9xl"></i></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-700/50 relative z-10">
+                    <div><h3 class="text-4xl font-black mb-1">3+</h3><p class="text-xs font-bold text-blue-200 uppercase tracking-wider">Anak Perusahaan</p></div>
+                    <div><h3 class="text-4xl font-black mb-1">100%</h3><p class="text-xs font-bold text-blue-200 uppercase tracking-wider">Legalitas Resmi</p></div>
+                    <div><h3 class="text-4xl font-black mb-1">Jatim</h3><p class="text-xs font-bold text-blue-200 uppercase tracking-wider">Kantor Pusat</p></div>
+                    <div><h3 class="text-4xl font-black mb-1">24/7</h3><p class="text-xs font-bold text-blue-200 uppercase tracking-wider">Dukungan</p></div>
                 </div>
-                <h4 class="font-bold text-lg mb-2">Jam Operasional</h4>
-                <p class="text-slate-300 leading-relaxed">
-                    Senin - Jumat<br>
-                    08.00 - 16.00 WIB
-                </p>
             </div>
         </div>
-        
-        <div class="mt-16 pt-8 border-t border-white/10 text-slate-500 text-sm">
-            &copy; {{ date('Y') }} Syafa Group. All Rights Reserved.
-        </div>
-    </div>
-</section>
+    </section>
 
-@endsection
+    {{-- ======================================================================= --}}
+    {{-- 2. ANAK PERUSAHAAN (Cards with Blue Accents & Full Data)                --}}
+    {{-- ======================================================================= --}}
+    <section id="perusahaan" class="py-24 bg-white relative">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-blue-50/50 -skew-x-12 -z-10"></div>
+        <div class="absolute top-1/4 left-0 w-64 h-64 bg-cyan-50 rounded-full blur-3xl -z-10"></div>
+        
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase bg-blue-50 px-3 py-1 rounded-full">Holding Company</span>
+                <h2 class="text-3xl md:text-4xl font-black text-blue-950 mt-3 mb-4">Unit Bisnis <span class="text-blue-600">Strategis</span></h2>
+                <div class="h-1.5 w-24 bg-gradient-to-r from-blue-600 to-cyan-400 mx-auto rounded-full"></div>
+                <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Kami mengelola portofolio bisnis yang beragam dengan standar kualitas tertinggi dan legalitas terjamin.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                
+                {{-- A. PT. INDIE SYAFA TRANSFORMA --}}
+                <div class="group bg-white rounded-[2.5rem] border border-blue-100 shadow-xl shadow-blue-100/50 hover:shadow-2xl hover:border-blue-300 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col h-full" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-6 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><i class="fa-solid fa-city text-8xl text-white"></i></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-2xl mb-4 border border-white/20"><i class="fa-solid fa-house-chimney"></i></div>
+                            <h3 class="text-xl font-black text-white leading-tight">PT. INDIE Syafa Transforma</h3>
+                            <p class="text-blue-200 text-xs font-bold uppercase mt-1 tracking-wider">Property Developer</p>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <div class="mb-6 flex-grow">
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4 text-justify">
+                                Berdiri pertengahan 2022 atas saran <strong>Bapak Dr. Wahju Prijo Djatmiko</strong>. Didukung pengalaman owner di bidang properti sejak 2012.
+                            </p>
+                            <ul class="text-sm space-y-3 text-slate-600">
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-map-location-dot text-blue-500 mt-1"></i><span><strong>Kantor:</strong> Gedung PRAXIS, Jl. Sono Kembang No. 4-6, Surabaya.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-building-circle-check text-blue-500 mt-1"></i><span><strong>Proyek:</strong> Jawa Timur, Jawa Tengah, Jawa Barat.</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50/50 rounded-xl p-5 border border-blue-100">
+                            <h4 class="text-xs font-black text-blue-800 uppercase mb-3 border-b border-blue-200 pb-2">Susunan Direksi</h4>
+                            <ul class="space-y-2 text-xs">
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur Utama</span> <span class="font-bold text-blue-900">Sa’diah, S.Pd.I, M.Pd.I</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur</span> <span class="font-bold text-blue-900">Puspi, SE</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Komisaris</span> <span class="font-bold text-blue-900">A. P. Mustiko, SH</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- B. PT. ECO SYAFA HARVEST --}}
+                <div class="group bg-white rounded-[2.5rem] border border-cyan-100 shadow-xl shadow-cyan-100/50 hover:shadow-2xl hover:border-cyan-300 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col h-full" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-gradient-to-br from-cyan-600 to-blue-700 p-6 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><i class="fa-solid fa-boxes-stacked text-8xl text-white"></i></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-2xl mb-4 border border-white/20"><i class="fa-solid fa-wheat-awn"></i></div>
+                            <h3 class="text-xl font-black text-white leading-tight">PT. Eco Syafa Harvest</h3>
+                            <p class="text-cyan-100 text-xs font-bold uppercase mt-1 tracking-wider">Industry & Trade</p>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <div class="mb-6 flex-grow">
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4 text-justify">
+                                Didirikan pertengahan 2023. Fokus utama pada <strong>pendistribusian beras</strong>, serta izin usaha air kemasan, tekstil, dan pakaian.
+                            </p>
+                            <ul class="text-sm space-y-3 text-slate-600">
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-map-location-dot text-cyan-600 mt-1"></i><span><strong>Kantor:</strong> Gedung PRAXIS, Surabaya.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-network-wired text-cyan-600 mt-1"></i><span><strong>Cabang:</strong> Kab. Malang, Probolinggo, Lumajang, Jember.</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-cyan-50/50 rounded-xl p-5 border border-cyan-100">
+                            <h4 class="text-xs font-black text-cyan-800 uppercase mb-3 border-b border-cyan-200 pb-2">Susunan Direksi</h4>
+                            <ul class="space-y-2 text-xs">
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur Utama</span> <span class="font-bold text-blue-900">Sa’diah, S.Pd.I, M.Pd.I</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur</span> <span class="font-bold text-blue-900">Puspi, SE</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Komisaris</span> <span class="font-bold text-blue-900">D Oki</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- C. PT. ATHENA SYAFA PANCA --}}
+                <div class="group bg-white rounded-[2.5rem] border border-indigo-100 shadow-xl shadow-indigo-100/50 hover:shadow-2xl hover:border-indigo-300 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col h-full" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-gradient-to-br from-indigo-600 to-blue-800 p-6 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><i class="fa-solid fa-trowel-bricks text-8xl text-white"></i></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-2xl mb-4 border border-white/20"><i class="fa-solid fa-helmet-safety"></i></div>
+                            <h3 class="text-xl font-black text-white leading-tight">PT. Athena Syafa Panca</h3>
+                            <p class="text-indigo-200 text-xs font-bold uppercase mt-1 tracking-wider">Construction & Mining</p>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <div class="mb-6 flex-grow">
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4 text-justify">
+                                Perusahaan ketiga (Est. 2025). Fokus di bidang <strong>konstruksi</strong>, pertambangan, dan perdagangan material.
+                            </p>
+                            <ul class="text-sm space-y-3 text-slate-600">
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-map-location-dot text-indigo-500 mt-1"></i><span><strong>Kantor:</strong> Nganjuk, Jawa Timur.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-briefcase text-indigo-500 mt-1"></i><span><strong>Legalitas:</strong> Izin Pertambangan & Konstruksi.</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-indigo-50/50 rounded-xl p-5 border border-indigo-100">
+                            <h4 class="text-xs font-black text-indigo-800 uppercase mb-3 border-b border-indigo-200 pb-2">Susunan Direksi</h4>
+                            <ul class="space-y-2 text-xs">
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur Utama</span> <span class="font-bold text-blue-900">Eliza Putri S, SH</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Direktur</span> <span class="font-bold text-blue-900">Linda Adelia, SE</span></li>
+                                <li class="flex justify-between"><span class="text-slate-500">Komisaris</span> <span class="font-bold text-blue-900">Puguh P.W., Amd</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    {{-- ======================================================================= --}}
+    {{-- 3. VISI & MISI (Blue Modern)                                            --}}
+    {{-- ======================================================================= --}}
+    <section class="py-24 bg-blue-50/30 relative overflow-hidden">
+        <div class="absolute -left-20 top-20 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl -z-10"></div>
+        <div class="container mx-auto px-6">
+            <div class="bg-white rounded-[3rem] p-8 md:p-16 shadow-2xl border border-blue-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                
+                <div class="flex flex-col md:flex-row gap-12 items-center">
+                    <div class="w-full md:w-1/2" data-aos="fade-right">
+                        <div class="inline-block bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 tracking-wide">Core Values</div>
+                        <h2 class="text-3xl md:text-4xl font-black text-blue-950 mb-6">Komitmen Pertumbuhan Berkelanjutan</h2>
+                        <p class="text-lg text-slate-600 mb-6 leading-relaxed italic">
+                            "Menjadi pilihan nyata bagi masyarakat sekitar dan relasi yang berujung kepada pertumbuhan ekonomi Tanah Air."
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="fas fa-check"></i></div>
+                                <span class="font-medium text-slate-700">Inovasi tiada henti</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="fas fa-check"></i></div>
+                                <span class="font-medium text-slate-700">Integritas dalam bisnis</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="w-full md:w-1/2 grid gap-6" data-aos="fade-left">
+                        <div class="bg-blue-50 p-8 rounded-3xl border-l-8 border-blue-600 hover:shadow-lg transition-all">
+                            <h4 class="font-bold text-2xl text-blue-900 mb-3"><i class="fas fa-eye text-blue-500 mr-2"></i> Visi</h4>
+                            <p class="text-slate-600">Mengembangkan group bisnis dengan semangat inovasi, menciptakan lapangan kerja, serta meningkatkan kesejahteraan masyarakat melalui pertumbuhan ekonomi.</p>
+                        </div>
+                        <div class="bg-cyan-50 p-8 rounded-3xl border-l-8 border-cyan-500 hover:shadow-lg transition-all">
+                            <h4 class="font-bold text-2xl text-cyan-900 mb-3"><i class="fas fa-bullseye text-cyan-500 mr-2"></i> Misi</h4>
+                            <ul class="space-y-2 text-slate-600 text-sm">
+                                <li>• Mitra bisnis yang menguntungkan semua pihak.</li>
+                                <li>• Pilihan utama konsumen melalui pelayanan prima.</li>
+                                <li>• Lingkungan kerja yang mensejahterakan karyawan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   {{-- ======================================================================= --}}
+    {{-- 4. OUR TEAM (Dynamic from Database)                                     --}}
+    {{-- ======================================================================= --}}
+    <section id="tim" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6 relative z-10">
+            
+            {{-- Header Section --}}
+            <div class="text-center mb-16" data-aos="fade-down">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase bg-blue-50 px-3 py-1 rounded-full">Struktur Organisasi</span>
+                <h2 class="text-3xl md:text-4xl font-black text-blue-950 mt-3 mb-4">Tim Manajemen Profesional</h2>
+                <p class="mt-2 text-sm text-slate-500 max-w-2xl mx-auto">
+                    Diluar orang-orang terkait, informasi kontak atau alamat email yang tercantum
+                    <span class="font-medium">bukan merupakan milik pribadi masing-masing individu</span>.
+                </p><br>
+                <div class="h-1.5 w-24 bg-gradient-to-r from-blue-700 to-blue-400 mx-auto rounded-full"></div>
+            </div>
+
+            {{-- Grid Team --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                {{-- MULAI LOOPING DATABASE --}}
+                @foreach($teams as $team)
+                    <div class="group bg-white rounded-[2rem] p-4 shadow-lg border border-slate-100 hover:shadow-blue-200/50 hover:border-blue-300 transition-all duration-500 hover:-translate-y-2" 
+                         data-aos="zoom-in" 
+                         data-aos-delay="{{ ($loop->index + 1) * 100 }}">
+                        
+                        {{-- FOTO --}}
+                        <div class="relative w-full aspect-[4/5] rounded-3xl overflow-hidden bg-slate-100 mb-6 border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                            
+                            {{-- Cek apakah ada foto di database (Base64) --}}
+                            @if($team->photo)
+                                <img src="{{ $team->photo }}" 
+                                     alt="{{ $team->name }}" 
+                                     class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110">
+                            @else
+                                {{-- Fallback jika tidak ada foto (Pakai Inisial Nama) --}}
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($team->name) }}&background=bfdbfe&color=1e3a8a&size=500" 
+                                     alt="{{ $team->name }}" 
+                                     class="w-full h-full object-cover object-top">
+                            @endif
+
+                            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20">
+                                <span class="text-white font-bold text-sm tracking-widest bg-blue-600/80 px-3 py-1 rounded-full backdrop-blur-sm">SYAFA GROUP</span>
+                            </div>
+                        </div>
+
+                        {{-- INFO DETAIL --}}
+                        <div class="text-center px-2 pb-4">
+                            <h4 class="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">
+                                {{ $team->name }}
+                            </h4>
+
+                            {{-- Highlight Warna Biru untuk urutan pertama (Biasanya CEO) --}}
+                            <p class="text-xs font-bold uppercase tracking-wider {{ $loop->first ? 'text-blue-600' : 'text-slate-400' }}">
+                                {{ $team->role }}
+                            </p>
+
+                            <div class="mt-4 space-y-2 text-sm text-slate-600">
+                                
+                                {{-- Tampilkan WA hanya jika ada --}}
+                                @if($team->phone)
+                                <div class="flex items-center justify-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-emerald-500"></i>
+                                    {{-- Format nomor WA (hapus 0 depan, tambah 62) --}}
+                                    <a href="https://wa.me/62{{ ltrim($team->phone, '0') }}" target="_blank" class="hover:text-emerald-600 transition">
+                                        {{ $team->phone }}
+                                    </a>
+                                </div>
+                                @endif
+
+                                {{-- Tampilkan Email hanya jika ada --}}
+                                @if($team->email)
+                                <div class="flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-envelope text-blue-500"></i>
+                                    <a href="mailto:{{ $team->email }}" class="hover:text-blue-600 transition">
+                                        {{ $team->email }}
+                                    </a>
+                                </div>
+                                @endif
+
+                                {{-- Tampilkan Alamat hanya jika ada --}}
+                                @if($team->address)
+                                <div class="flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-location-dot text-red-500"></i>
+                                    <span class="text-center">{{ $team->address }}</span>
+                                </div>
+                                @endif
+
+                            </div>
+
+                            {{-- Garis Bawah Dekoratif --}}
+                            @if($loop->first)
+                                <div class="w-full h-1 bg-blue-600 mt-4 rounded-full shadow-sm"></div>
+                            @else
+                                <div class="w-8 h-1 bg-slate-200 mx-auto mt-4 rounded-full group-hover:bg-blue-400 group-hover:w-16 transition-all duration-300"></div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+                {{-- SELESAI LOOPING --}}
+
+            </div>
+        </div>
+    </section>
+
+   {{-- ======================================================================= --}}
+    {{-- 5. NEW: BERITA & ARTIKEL (Dynamic from DB)                              --}}
+    {{-- ======================================================================= --}}
+    <section id="berita" class="py-24 bg-slate-50 relative">
+        <div class="absolute inset-0 bg-slate-100/50 -skew-y-3 origin-top-left -z-10 h-full w-full"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12" data-aos="fade-right">
+                <div class="mb-4 md:mb-0">
+                    <span class="text-blue-600 font-bold text-sm tracking-widest uppercase bg-blue-50 px-3 py-1 rounded-full">Informasi Terkini</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-blue-950 mt-3">Berita & Artikel</h2>
+                </div>
+                {{-- PERBAIKAN 1: Button Lihat Semua --}}
+                <a href="{{ route('components.berita') }}" class="text-blue-600 font-bold hover:text-blue-800 transition-colors flex items-center gap-2">
+                    Lihat Semua <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @forelse($berita as $item)
+                    <div class="group bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 hover:-translate-y-2" data-aos="fade-up">
+                        <div class="relative h-56 overflow-hidden">
+                            {{-- Handle gambar (Base64 atau URL) --}}
+                            @if($item->gambar)
+                                <img src="{{ $item->gambar }}" alt="{{ $item->judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            @else
+                                <div class="w-full h-full bg-blue-100 flex items-center justify-center text-blue-300">
+                                    <i class="fas fa-image text-5xl"></i>
+                                </div>
+                            @endif
+                            <div class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                {{ \Carbon\Carbon::parse($item->tanggal_publish)->format('d M Y') }}
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
+                                <i class="fas fa-user-circle"></i>
+                                <span>{{ $item->penulis }}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                <a href="{{ route('components.berita.detail', $item->id_berita) }}">
+                                    {{ $item->judul }}
+                                </a>
+                            </h3>
+                            <p class="text-slate-500 text-sm mb-6 line-clamp-3 leading-relaxed">
+                                {{ Str::limit(strip_tags($item->isi), 100) }}
+                            </p>
+                            
+                            {{-- PERBAIKAN 2: Button Baca Selengkapnya --}}
+                            <a href="{{ route('components.berita.detail', $item->id_berita) }}" class="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                                Baca Selengkapnya <i class="fas fa-long-arrow-alt-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-3 text-center py-12">
+                        <div class="bg-blue-50 rounded-3xl p-8 inline-block">
+                            <i class="fas fa-newspaper text-4xl text-blue-300 mb-4"></i>
+                            <p class="text-slate-500 font-medium">Belum ada berita yang dipublish.</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+    {{-- ======================================================================= --}}
+    {{-- 6. FOOTER (Dark Blue & Fixed Map)                                       --}}
+    {{-- ======================================================================= --}}
+    <footer id="kontak" class="bg-blue-950 text-white pt-20 pb-10 relative overflow-hidden border-t-8 border-blue-700">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-700 rounded-full blur-[150px] opacity-30"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-800 rounded-full blur-[150px] opacity-30"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:gap-20 gap-10 mb-16">
+                
+                <div data-aos="fade-right">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="{{ asset('img/logo.png') }}" class="h-14 w-auto bg-white p-2 rounded-xl shadow-lg" alt="Logo">
+                        <div>
+                            <span class="block text-2xl font-black tracking-tight">SYAFA GROUP</span>
+                            <span class="text-blue-300 text-xs font-bold tracking-widest uppercase">Integrated Solution</span>
+                        </div>
+                    </div>
+                    <p class="text-blue-200/80 leading-relaxed mb-8 border-l-4 border-blue-600 pl-4">
+                        Kami siap menjadi mitra strategis Anda untuk mencapai pertumbuhan bisnis yang berkelanjutan. Hubungi kami untuk konsultasi lebih lanjut.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-blue-900/50 p-4 rounded-xl border border-blue-800 hover:border-blue-600 transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+                            <div><h5 class="font-bold text-white">Kantor Pusat</h5><p class="text-blue-200 text-sm">Gedung PRAXIS, Jl. Sono Kembang No. 4-6, Surabaya</p></div>
+                        </div>
+                       <div class="flex items-center gap-4 bg-blue-900/50 p-4 rounded-xl border border-blue-800 hover:border-blue-600 transition-colors">
+    <div class="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0">
+        <i class="fa-solid fa-headset"></i>
+    </div>
+    <div>
+        <h5 class="font-bold text-white">Hubungi Kami</h5>
+        <p class="text-blue-200 text-sm">Email: indiesyafa@gmail.com</p>
+        <p class="text-blue-200 text-sm">Kontak: 0895-1542-5734</p>
+    </div>
+</div>
+
+                    </div>
+                </div>
+
+                {{-- PETA GEDUNG PRAXIS SURABAYA --}}
+                <div class="h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-800 relative group" data-aos="fade-left">
+                    <div class="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-all z-10 pointer-events-none"></div>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.735756360877!2d112.74233737575027!3d-7.270908671440939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f9627793bdfb%3A0x536b7b2527233732!2sGedung%20Praxis!5e0!3m2!1sen!2sid!4v1705000000000!5m2!1sen!2sid" 
+                            class="w-full h-full border-0 filter grayscale hover:grayscale-0 transition-all duration-700" 
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="border-t border-blue-900 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-blue-400">
+                <p>© {{ date('Y') }} PT. Syafa Group. All Rights Reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors font-semibold">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors font-semibold">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {{-- SCRIPTS --}}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800 });
+
+        // Fungsi Swing Alert
+        function showSwingAlert() {
+            Swal.fire({
+                title: 'Halo!',
+                text: 'Selamat datang di Syafa Group. Mari berkolaborasi!',
+                icon: 'info',
+                confirmButtonText: 'Siap!',
+                confirmButtonColor: '#1e40af', // Blue-800
+                showClass: { popup: 'animate__animated animate__swing' },
+                hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+                customClass: { popup: 'rounded-3xl border-4 border-blue-100' }
+            });
+        }
+    </script>
+</body>
+</html>

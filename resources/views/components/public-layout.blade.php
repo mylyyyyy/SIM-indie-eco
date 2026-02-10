@@ -22,13 +22,19 @@
     <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             {{-- Logo --}}
-            <a href="{{ url('img/logo.png') }}" class="flex items-center gap-2 group">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">S</div>
+            {{-- Logo --}}
+            <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                {{-- GANTI DIV DENGAN IMG --}}
+                <img src="{{ asset('img/logo.png') }}" 
+                     alt="Logo Syafa Group" 
+                     class="h-12 w-auto object-contain transition-transform group-hover:scale-110">
+                
                 <div class="leading-tight">
                     <h1 class="font-bold text-slate-800 text-lg tracking-tight">SYAFA GROUP</h1>
                     <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Contractor & Supplier</p>
                 </div>
             </a>
+
 
             {{-- Menu Desktop --}}
             <div class="hidden md:flex items-center gap-8">
