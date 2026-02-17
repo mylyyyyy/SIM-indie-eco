@@ -10,9 +10,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+
 class DashboardController extends Controller
 {
-    public function index()
+public function exportPdf()
+    {
+        // Ambil semua data proyek khusus Indie
+        $projects = Project::where(function($q) {
+            $q->where('project_name', 'NOT LIKE', '%Eco%')
+              ->where('project_name', 'NOT LIKE', '%Residence%');
+        })->latest()->get();
+
+        // Panggil view cetak (print preview browser)
+        return view('indie.pdf.projects-report', compact('projects'));
+    }
+public function index()
     {
         // 1. DEFINE FILTER LOGIC (INDIE = NOT ECO)
         // Kita simpan query dasar ini agar bisa di-reuse

@@ -146,8 +146,8 @@
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Metode</label>
                                     <select name="payment_method" class="w-full border-slate-200 rounded-xl text-sm" :required="action === 'approve'">
-                                        <option value="Transfer BCA">Transfer BCA</option>
-                                        <option value="Transfer Mandiri">Transfer Mandiri</option>
+                                        <option value="Transfer BTN">Transfer BTN</option>
+                                        <option value="Transfer BRI">Transfer BRI</option>
                                         <option value="Tunai">Tunai</option>
                                         <option value="Cek/Giro">Cek / Giro</option>
                                     </select>

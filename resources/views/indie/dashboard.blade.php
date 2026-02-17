@@ -9,14 +9,20 @@
             <p class="text-slate-500 font-medium">Divisi Infrastruktur, Gedung & Komersial.</p>
         </div>
         
-        <div class="flex gap-3">
+        {{-- TOMBOL-TOMBOL HEADER --}}
+        <div class="flex flex-wrap gap-3">
             <a href="{{ route('indie.portfolios.index') }}" class="bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-200 px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-images"></i> Portofolio
             </a>
             <a href="{{ route('indie.news.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
                 <i class="fas fa-newspaper"></i> Tulis Berita
             </a>
+            {{-- TOMBOL BARU: CETAK LAPORAN PROYEK --}}
+            <a href="{{ route('indie.projects.export') }}" target="_blank" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
+                <i class="fas fa-print"></i> Cetak Laporan
+            </a>
         </div>
+        
     </div>
 
     {{-- ==================== STATISTIK UTAMA (4 CARDS) ==================== --}}
@@ -86,10 +92,10 @@
         </div>
 
         {{-- KOLOM KANAN: PROJECT LIST (1/3 Lebar) --}}
-        <div class="lg:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+        <div class="lg:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col">
             <h3 class="font-bold text-slate-800 text-lg mb-4">Proyek Terbaru</h3>
             
-            <div class="space-y-4">
+            <div class="space-y-4 flex-1">
                 @forelse($recentProjects as $project)
                     <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                         <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 font-bold text-sm">
@@ -114,9 +120,7 @@
                 @endforelse
             </div>
 
-            <a href="#" class="block mt-6 text-center text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
-                Lihat Semua Proyek <i class="fas fa-arrow-right ml-1"></i>
-            </a>
+            {{-- FUNGSI LIHAT SEMUA PROYEK SUDAH DIHAPUS DARI SINI --}}
         </div>
 
     </div>

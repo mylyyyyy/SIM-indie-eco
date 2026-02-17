@@ -7,9 +7,56 @@ use App\Models\EcoLocation;
 use App\Models\EcoStockLog;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Response;
 
 class DashboardController extends Controller
 {
+    public function exportLog()
+    {
+        $fileName = 'Laporan_Stok_Beras_Eco_' . date('Y-m-d_H-i') . '.csv';
+        $logs = EcoStockLog::with('location')->latest()->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = ['Tanggal', 'Waktu', 'Lokasi', 'Tipe Aktivitas', 'Jumlah (Kg)', 'Keterangan'];
+
+        $callback = function() use($logs, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($logs as $log) {
+                $row['Tanggal'] = $log->created_at->format('Y-m-d');
+                $row['Waktu'] = $log->created_at->format('H:i:s');
+                $row['Lokasi'] = $log->location->name ?? 'Tidak diketahui';
+                $row['Tipe Aktivitas'] = $log->type == 'in' ? 'Barang Masuk' : 'Barang Keluar';
+                $row['Jumlah (Kg)'] = $log->amount;
+                $row['Keterangan'] = $log->description;
+
+                fputcsv($file, array($row['Tanggal'], $row['Waktu'], $row['Lokasi'], $row['Tipe Aktivitas'], $row['Jumlah (Kg)'], $row['Keterangan']));
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+public function exportReport()
+    {
+        // Ambil data lokasi (gudang/toko/selep) beserta log riwayatnya
+        $locations = EcoLocation::with(['stockLogs' => function($query) {
+            $query->latest()->limit(10); // Batasi 10 riwayat terakhir per lokasi agar tidak terlalu panjang
+        }])->get();
+
+        return view('eco.reports-print', compact('locations'));
+    }
+
     public function index()
     {
         // 1. Ambil Data Lokasi dari Database

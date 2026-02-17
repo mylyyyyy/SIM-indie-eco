@@ -1,19 +1,31 @@
 <x-admin-layout>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    {{-- HEADER --}}
+ {{-- HEADER --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 animate__animated animate__fadeInDown">
         <div>
             <h2 class="text-3xl font-black text-slate-800 tracking-tight">Operasional Eco</h2>
             <p class="text-slate-500 font-medium">Manajemen Stok Beras, Selep, dan Distribusi Toko.</p>
         </div>
-        <div class="flex gap-2">
+        
+        {{-- TOMBOL-TOMBOL HEADER --}}
+        <div class="flex flex-wrap gap-2">
             <a href="{{ route('eco.news.index') }}" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2">
                 <i class="fas fa-pen-nib text-emerald-500"></i> Tulis Berita
             </a>
             <a href="{{ route('eco.portfolios.index') }}" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2">
                 <i class="fas fa-camera text-blue-500"></i> Update Portofolio
             </a>
+            
+            {{-- TOMBOL UNDUH LAPORAN (PILIHAN CSV & PDF) --}}
+            <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-sm ml-2">
+                <a href="{{ route('eco.stock.export', 'csv') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2" title="Unduh format Excel/CSV">
+                    <i class="fas fa-file-csv"></i> CSV
+                </a>
+                <a href="{{ route('eco.reports.export') }}" target="_blank" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ml-1" title="Buka format PDF/Print">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </a>
+            </div>
         </div>
     </div>
 
@@ -128,7 +140,7 @@
                     {{-- Keterangan --}}
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Catatan</label>
-                        <input type="text" name="note" class="w-full px-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Contoh: Kirim ke Toko A">
+                        <input type="text" name="note" class="w-full px-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="...">
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform hover:-translate-y-0.5">
@@ -137,9 +149,15 @@
                 </form>
             </div>
 
-            {{-- Riwayat Singkat --}}
+           {{-- Riwayat Singkat --}}
             <div class="mt-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h4 class="text-xs font-bold text-slate-400 uppercase mb-4">Riwayat Terakhir</h4>
+                
+                {{-- PERUBAHAN DI SINI: Flexbox untuk Judul dan Tombol Download --}}
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase">Riwayat Terakhir</h4>
+                    
+                    
+                </div>
                 <div class="space-y-4">
                     @forelse($history as $log)
                     <div class="flex items-center justify-between pb-3 border-b border-slate-50 last:border-0 last:pb-0">

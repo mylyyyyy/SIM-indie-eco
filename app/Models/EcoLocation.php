@@ -15,4 +15,10 @@ class EcoLocation extends Model
     {
         return $this->hasMany(EcoStockLog::class, 'location_id');
     }
+    public function stockLogs()
+    {
+        // EcoLocation (Lokasi) memiliki banyak (hasMany) EcoStockLog (Riwayat)
+        // 'location_id' adalah foreign key yang ada di tabel eco_stock_logs
+        return $this->hasMany(EcoStockLog::class, 'location_id');
+    }
 }

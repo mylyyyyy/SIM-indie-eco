@@ -153,10 +153,10 @@
                     {{-- Menu Konten (Reuse route admin jika controller-nya sama, atau buat khusus) --}}
                     <div class="mt-6 mb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Publikasi</div>
 
-                    <a href="{{ route('eco.news.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.news.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    {{-- <a href="{{ route('eco.news.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.news.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-newspaper w-5 text-center"></i>
                         <span class="ml-3 font-medium">Portal Berita</span>
-                    </a>
+                    </a> --}}
 
                     <a href="{{ route('eco.portfolios.index') }}" class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('eco.portfolios.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-images w-5 text-center"></i>

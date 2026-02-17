@@ -39,7 +39,7 @@ use App\Http\Controllers\SubkonEks\ReportPaymentController as ReportPayment;
 // Indie
 use App\Http\Controllers\Indie\DashboardController as IndieDashboard;
 use App\Http\Controllers\Indie\NewsController as IndieNews;
-use App\Http\Controllers\Indie\PortfolioController as IndiePortfolio;
+use App\Http\Controllers\Indie\PortofolioController as IndiePortfolio;
 
 // Umum
 use App\Http\Controllers\ProfileController;
@@ -110,6 +110,8 @@ Route::middleware(['auth', 'role:eco'])->prefix('eco')->name('eco.')->group(func
     Route::get('/dashboard', [EcoDashboard::class, 'index'])->name('dashboard');
     Route::post('/update-stock', [EcoDashboard::class, 'updateStock'])->name('stock.update');
     Route::resource('news', EcoNews::class);
+   Route::get('/reports/export', [EcoDashboard::class, 'exportReport'])->name('reports.export');
+    Route::get('/export-log', [EcoDashboard::class, 'exportLog'])->name('stock.export');
     Route::resource('portfolios', EcoPortfolio::class);
 });
 
@@ -117,6 +119,7 @@ Route::middleware(['auth', 'role:eco'])->prefix('eco')->name('eco.')->group(func
 Route::middleware(['auth', 'role:indie'])->prefix('indie')->name('indie.')->group(function () {
     Route::get('/dashboard', [IndieDashboard::class, 'index'])->name('dashboard');
     Route::resource('news', IndieNews::class);
+    Route::get('/export-projects', [IndieDashboard::class, 'exportPdf'])->name('projects.export');
     Route::resource('portfolios', IndiePortfolio::class);
 });
 
