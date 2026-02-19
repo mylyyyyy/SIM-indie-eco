@@ -33,7 +33,7 @@
             $base64Logo = 'data:image/png;base64,' . base64_encode(file_get_contents($pathLogo));
         }
 
-        $pathStempel = public_path('img/stempel_indie.png');
+        $pathStempel = public_path('img/stempel.png');
         $base64Stempel = '';
         if(file_exists($pathStempel)) {
             $base64Stempel = 'data:image/png;base64,' . base64_encode(file_get_contents($pathStempel));

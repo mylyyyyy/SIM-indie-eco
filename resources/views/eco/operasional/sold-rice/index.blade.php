@@ -36,14 +36,28 @@
                         <input type="text" name="tempat" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Contoh: Cabang Lumajang" required>
                     </div>
 
-                    <div>
+                    {{-- LOGIKA PILIHAN GANDA / MANUAL --}}
+                    <div x-data="{ isManual: false }">
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Toko</label>
-                        <select name="nama_toko" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 bg-white" required>
+                        
+                        {{-- 1. Dropdown Utama --}}
+                        <select name="nama_toko_select" 
+                                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 bg-white mb-2" 
+                                @change="isManual = $event.target.value === 'Lainnya'"
+                                required>
                             <option value="" disabled selected>-- Pilih Toko Mitra --</option>
                             @foreach($stores as $store)
                                 <option value="{{ $store->nama_toko }}">{{ $store->nama_toko }} ({{ $store->kantor_cabang }})</option>
                             @endforeach
+                            <option value="Lainnya" class="font-bold text-blue-600 bg-slate-100">+ Lainnya / Input Manual</option>
                         </select>
+
+                        {{-- 2. Input Manual (Muncul jika pilih Lainnya) --}}
+                        <div x-show="isManual" x-transition class="mt-2">
+                            <input type="text" name="nama_toko_manual" 
+                                   class="w-full px-3 py-2 border border-blue-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-blue-50" 
+                                   placeholder="Ketik nama toko baru di sini...">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">

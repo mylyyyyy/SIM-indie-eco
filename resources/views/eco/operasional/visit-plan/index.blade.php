@@ -23,22 +23,16 @@
         
         {{-- KOLOM KIRI: Form Input (1/3 Lebar) --}}
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-24">
                 <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Tambah Plan Kunjungan</h3>
                 
                 <form action="{{ route('eco.visit-plans.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    {{-- DROPDOWN NAMA TOKO --}}
+                    
+                    {{-- INPUT MANUAL NAMA TOKO (PERUBAHAN DI SINI) --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mitra Toko</label>
-                        <select name="nama_toko" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 bg-white" required>
-                            <option value="" disabled selected>-- Pilih Mitra Toko --</option>
-                            @foreach($stores as $store)
-                                <option value="{{ $store->nama_toko }}">
-                                    {{ $store->nama_toko }} ({{ $store->kode_toko }})
-                                </option>
-                            @endforeach
-                        </select>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Toko</label>
+                        <input type="text" name="nama_toko" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Ketik nama toko..." required>
                     </div>
 
                     {{-- ALAMAT --}}
@@ -72,7 +66,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow transition-all mt-2">
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow transition-all mt-2 transform hover:-translate-y-0.5">
                         Simpan Data
                     </button>
                 </form>

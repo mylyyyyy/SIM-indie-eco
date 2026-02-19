@@ -14,7 +14,7 @@ class SoldRiceController extends Controller
     {
         $soldRices = SoldRice::latest()->get();
         
-        // Ambil data toko aktif untuk dropdown
+        // Tetap ambil data toko untuk mengisi dropdown
         $stores = StorePartner::where('catatan_status', 'aktif')
                               ->orderBy('nama_toko', 'asc')
                               ->get();
@@ -24,15 +24,32 @@ class SoldRiceController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi dasar
         $request->validate([
             'tempat' => 'required|string|max:255',
             'tanggal' => 'required|date',
-            'nama_toko' => 'required|string|max:255',
+            'nama_toko_select' => 'required', // Dropdown wajib dipilih
             'kunjungan_ke' => 'required|in:1,2,3,4,5,6',
             'ukuran' => 'required|in:2.5kg,5kg',
         ]);
 
-        SoldRice::create($request->all());
+        $data = $request->all();
+
+        // 2. Logika Penentuan Nama Toko
+        if ($request->nama_toko_select == 'Lainnya') {
+            // Jika pilih "Lainnya", wajib isi manual
+            $request->validate([
+                'nama_toko_manual' => 'required|string|max:255',
+            ]);
+            $data['nama_toko'] = $request->nama_toko_manual;
+        } else {
+            // Jika pilih dari list, gunakan value dropdown
+            $data['nama_toko'] = $request->nama_toko_select;
+        }
+
+        // 3. Simpan ke database
+        SoldRice::create($data);
+
         return redirect()->back()->with('success', 'Data beras terjual berhasil disimpan!');
     }
 

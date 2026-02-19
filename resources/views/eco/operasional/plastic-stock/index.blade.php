@@ -21,31 +21,46 @@
         
         {{-- Form Input --}}
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-24">
                 <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Input Pemakaian</h3>
                 
-                <form action="{{ route('eco.plastic-stocks.store') }}" method="POST" class="space-y-4">
+                {{-- ALPINE.JS: State untuk Dropdown Tempat --}}
+                <form action="{{ route('eco.plastic-stocks.store') }}" method="POST" class="space-y-4" x-data="{ isManualTempat: false }">
                     @csrf
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal</label>
                         <input type="date" name="tanggal" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500" required>
                     </div>
-                   {{-- DROPDOWN TEMPAT (Dari Store Partner) --}}
+
+                    {{-- DROPDOWN TEMPAT (Dengan Opsi Lainnya) --}}
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tempat / Toko</label>
-                        <select name="tempat" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 bg-white" required>
+                        <select name="tempat_select" 
+                                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500 bg-white mb-2" 
+                                @change="isManualTempat = $event.target.value === 'Lainnya'"
+                                required>
                             <option value="" disabled selected>-- Pilih Tempat / Toko --</option>
                             @foreach($stores as $store)
                                 <option value="{{ $store->nama_toko }}">
                                     {{ $store->nama_toko }} ({{ $store->kantor_cabang }})
                                 </option>
                             @endforeach
+                            <option value="Lainnya" class="font-bold text-blue-600 bg-slate-100">+ Lainnya / Input Manual</option>
                         </select>
+
+                        {{-- Input Manual (Muncul jika pilih Lainnya) --}}
+                        <div x-show="isManualTempat" x-transition class="mt-2">
+                            <input type="text" name="tempat_manual" 
+                                   class="w-full px-3 py-2 border border-blue-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-blue-50" 
+                                   placeholder="Ketik tempat baru di sini...">
+                        </div>
                     </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Jenis Plastik / Packing</label>
                         <input type="text" name="jenis_plastik" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Contoh: Karung 5kg / Plastik 2.5kg" required>
                     </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Stok Awal</label>
@@ -57,7 +72,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow transition-all mt-2">
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow transition-all mt-2 transform hover:-translate-y-0.5">
                         Simpan Data
                     </button>
                 </form>

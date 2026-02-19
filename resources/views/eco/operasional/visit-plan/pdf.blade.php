@@ -111,7 +111,7 @@
         }
 
         // 2. Proses Stempel
-        $pathStempel = public_path('img/stempel_indie.png');
+        $pathStempel = public_path('img/stempel.png');
         $base64Stempel = '';
         if(file_exists($pathStempel)) {
             $typeS = pathinfo($pathStempel, PATHINFO_EXTENSION);

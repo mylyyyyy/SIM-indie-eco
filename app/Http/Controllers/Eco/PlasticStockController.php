@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Eco;
 
 use App\Http\Controllers\Controller;
 use App\Models\PlasticStock;
-use App\Models\StorePartner; // <--- 1. IMPORT MODEL INI
+use App\Models\StorePartner;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -14,26 +14,42 @@ class PlasticStockController extends Controller
     {
         $stocks = PlasticStock::latest()->get();
         
-        // 2. AMBIL DATA TOKO AKTIF DARI STORE PARTNER
+        // Ambil data toko aktif untuk dropdown
         $stores = StorePartner::where('catatan_status', 'aktif')
                               ->orderBy('nama_toko', 'asc')
                               ->get();
 
-        // 3. KIRIM VARIABEL $stores KE VIEW
         return view('eco.operasional.plastic-stock.index', compact('stocks', 'stores'));
     }
 
     public function store(Request $request)
     {
+        // 1. Validasi dasar
         $request->validate([
-            'tempat' => 'required|string|max:255',
+            'tempat_select' => 'required', // Dropdown wajib dipilih
             'tanggal' => 'required|date',
             'jenis_plastik' => 'required|string|max:255',
             'stok_awal' => 'required|numeric|min:0',
             'stok_sisa' => 'required|numeric|min:0',
         ]);
 
-        PlasticStock::create($request->all());
+        $data = $request->except(['tempat_select', 'tempat_manual']);
+
+        // 2. Logika Penentuan Tempat / Toko
+        if ($request->tempat_select == 'Lainnya') {
+            // Jika pilih "Lainnya", input manual wajib diisi
+            $request->validate([
+                'tempat_manual' => 'required|string|max:255',
+            ]);
+            $data['tempat'] = $request->tempat_manual;
+        } else {
+            // Jika pilih dari list, gunakan value dropdown
+            $data['tempat'] = $request->tempat_select;
+        }
+
+        // 3. Simpan ke database
+        PlasticStock::create($data);
+
         return redirect()->back()->with('success', 'Laporan stok plastik berhasil ditambahkan!');
     }
 

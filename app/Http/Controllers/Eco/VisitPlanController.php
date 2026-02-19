@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Eco;
+
 use App\Http\Controllers\Controller;
 use App\Models\VisitPlan;
-use App\Models\StorePartner; // <--- 1. IMPORT MODEL INI
+// use App\Models\StorePartner; // <-- Baris ini bisa dihapus/komentar karena tidak dipakai lagi untuk dropdown
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -13,20 +14,15 @@ class VisitPlanController extends Controller
     {
         $plans = VisitPlan::latest()->get();
         
-        // 2. AMBIL DATA TOKO YANG AKTIF SAJA
-        $stores = StorePartner::where('catatan_status', 'aktif')
-                              ->orderBy('nama_toko', 'asc')
-                              ->get();
-
-        // 3. KIRIM VARIABEL $stores KE VIEW
-        return view('eco.operasional.visit-plan.index', compact('plans', 'stores'));
+        // Kita tidak perlu lagi mengambil data $stores karena inputnya manual
+        return view('eco.operasional.visit-plan.index', compact('plans'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama_toko' => 'required',
-            'alamat' => 'required',
+            'nama_toko' => 'required|string|max:255', // Validasi string biasa
+            'alamat' => 'required|string',
             'stok_awal' => 'required|numeric',
             'harga' => 'required|numeric',
             'laku_pack' => 'required|numeric',
@@ -44,7 +40,7 @@ class VisitPlanController extends Controller
         return redirect()->back()->with('success', 'Data dihapus!');
     }
 
-    // Fungsi Download PDF (Sesuai role yang diminta: mengetahui Manager & Admin)
+    // Fungsi Download PDF
     public function exportPdf()
     {
         $plans = VisitPlan::latest()->get();

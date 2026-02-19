@@ -18,17 +18,30 @@
         /* Area Tanda Tangan dibagi 2 */
         table.signature-area { width: 100%; margin-top: 50px; border: none; }
         table.signature-area td { border: none; text-align: center; width: 50%; padding: 10px; vertical-align: bottom;}
-        .stempel-wrapper { position: relative; height: 80px; width: 100%; }
-        .sign-name { font-weight: bold; text-decoration: underline; margin-top: 10px; }
+        
+        .stempel-wrapper { position: relative; height: 80px; width: 100%; text-align: center; }
+        
+        /* Stempel img diletakkan absolut agar menumpuk tanda tangan jika perlu */
+        .stempel-img { height: 80px; width: auto; opacity: 0.8; margin: 0 auto; display: block; }
+        
+        .sign-name { font-weight: bold; text-decoration: underline; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     @php
+        // LOGO PERUSAHAAN (Kiri Atas)
         $pathLogo = public_path('img/logo.png');
         $base64Logo = '';
         if(file_exists($pathLogo)) {
             $base64Logo = 'data:image/png;base64,' . base64_encode(file_get_contents($pathLogo));
+        }
+
+        // STEMPEL (Untuk Tanda Tangan)
+        $pathStempel = public_path('img/stempel.png');
+        $base64Stempel = '';
+        if(file_exists($pathStempel)) {
+            $base64Stempel = 'data:image/png;base64,' . base64_encode(file_get_contents($pathStempel));
         }
     @endphp
 
@@ -85,20 +98,27 @@
         </tbody>
     </table>
 
-    {{-- DUA TANDA TANGAN (Kiri: Admin Lapangan, Kanan: Kepala Kantor) --}}
+    {{-- DUA TANDA TANGAN (Kiri: Admin Lapangan, Kanan: Kepala Kantor/Manager Unit + STEMPEL) --}}
     <table class="signature-area">
         <tr>
             <td>
                 <p style="margin-bottom: 5px;">Dibuat Oleh,</p>
                 <p style="margin-top: 0; color: #64748b; font-size: 10px;">Admin Lapangan</p>
-                <div class="stempel-wrapper"></div>
-                <div class="sign-name">_______________________</div>
+                <div class="stempel-wrapper">
+                    </div>
+                <div class="sign-name">( ................................... )</div>
             </td>
             <td>
                 <p style="margin-bottom: 5px;">Mengetahui,</p>
-                <p style="margin-top: 0; color: #64748b; font-size: 10px;">Kepala Kantor</p>
-                <div class="stempel-wrapper"></div>
-                <div class="sign-name">_______________________</div>
+                <p style="margin-top: 0; color: #64748b; font-size: 10px;">Manager Unit</p>
+                <div class="stempel-wrapper">
+                    {{-- MEMUNCULKAN STEMPEL JIKA FILE ADA --}}
+                    @if($base64Stempel)
+                        <img src="{{ $base64Stempel }}" class="stempel-img" alt="Stempel">
+                    @else
+                        @endif
+                </div>
+                <div class="sign-name">( ................................... )</div>
             </td>
         </tr>
     </table>

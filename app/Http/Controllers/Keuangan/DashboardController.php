@@ -55,6 +55,7 @@ class DashboardController extends Controller
 
         DB::beginTransaction(); // Mulai Transaksi Database
 
+        
         try {
             // A. JIKA DITOLAK
             if ($request->action == 'reject') {

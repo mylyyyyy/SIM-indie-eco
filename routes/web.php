@@ -138,9 +138,9 @@ Route::resource('milling-reports', MillingReportController::class)->except(['cre
 Route::resource('store-rice-stocks', StoreRiceStockController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('store-rice-stocks/export/pdf', [StoreRiceStockController::class, 'exportPdf'])->name('store-rice-stocks.export');
 Route::resource('visit-results', VisitResultController::class)->except(['create', 'edit', 'update', 'show']);
-
-
-
+// LHKP
+    Route::resource('lhkp', \App\Http\Controllers\Eco\LhkpController::class)->except(['create', 'edit', 'show']);
+Route::get('visit-results/export/excel', [VisitResultController::class, 'exportExcel'])->name('visit-results.export');
 });
 
 // C. GROUP INDIE
@@ -168,7 +168,7 @@ Route::middleware(['auth', 'role:subkon_eks'])->prefix('vendor')->name('subkon-e
     Route::get('/laporan/{id}/cetak', [SubkonEksReport::class, 'print'])->name('reports.print');
 });
 
-Route::middleware(['auth', 'role:keuangan'])->prefix('finance')->name('keuangan.')->group(function () {
+Route::middleware(['auth', 'role:keuangan_indie'])->prefix('finance')->name('keuangan.')->group(function () {
     Route::get('/dashboard', [KeuanganController::class, 'index'])->name('dashboard');
     Route::put('/laporan/{id}/verifikasi', [KeuanganController::class, 'verifyReport'])->name('reports.verify');
 });
@@ -219,3 +219,25 @@ Route::get('/portal-masuk', function () {
     return view('auth.login'); 
 
 })->name('portal.masuk');
+
+
+// ====================================================
+// 2. GRUP KEPALA KANTOR (Baru)
+// ====================================================
+Route::middleware(['auth', 'role:kepala_kantor'])->prefix('kepala-kantor')->name('kepala_kantor.')->group(function () {
+    // Dashboard sekaligus halaman input LH
+    Route::get('/dashboard', [App\Http\Controllers\KepalaKantor\LhController::class, 'index'])->name('dashboard');
+    Route::post('/lh', [App\Http\Controllers\KepalaKantor\LhController::class, 'store'])->name('lh.store');
+});
+
+
+// ====================================================
+// 3. GRUP MANAGER UNIT (Baru - Download Center)
+// ====================================================
+Route::middleware(['auth', 'role:manager_unit'])->prefix('manager-unit')->name('manager_unit.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'dashboard'])->name('dashboard');
+    
+    // Route Download
+    Route::get('/lhkp/{id}/pdf', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLhkp'])->name('lhkp.pdf');
+    Route::get('/lh/{id}/pdf', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLh'])->name('lh.pdf');
+});

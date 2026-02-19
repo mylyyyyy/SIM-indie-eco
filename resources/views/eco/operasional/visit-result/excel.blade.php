@@ -4,74 +4,116 @@
     <meta charset="utf-8">
 </head>
 <body>
+    {{-- JUDUL LAPORAN --}}
     <table>
         <tr>
-            <td colspan="11" style="text-align: center; font-size: 16px; font-weight: bold;">HASIL KUNJUNGAN TOKO</td>
+            <td colspan="12" style="text-align: center; font-size: 16px; font-weight: bold; height: 30px;">
+                LAPORAN HASIL KUNJUNGAN TOKO
+            </td>
         </tr>
         <tr>
-            <td colspan="11" style="text-align: center; font-size: 12px;">Divisi Operasional & Distribusi - SYAFA GROUP</td>
+            <td colspan="12" style="text-align: center; font-size: 12px;">
+                Divisi Operasional & Distribusi - SYAFA GROUP
+            </td>
         </tr>
         <tr>
-            <td colspan="11" style="text-align: center; font-size: 10px;">Diekspor pada: {{ \Carbon\Carbon::now()->format('d M Y H:i') }}</td>
+            <td colspan="12" style="text-align: center; font-size: 10px; font-style: italic;">
+                Periode Data: 
+                {{ request('start_date') ? \Carbon\Carbon::parse(request('start_date'))->format('d M Y') : 'Awal' }} 
+                s/d 
+                {{ request('end_date') ? \Carbon\Carbon::parse(request('end_date'))->format('d M Y') : 'Sekarang' }}
+            </td>
         </tr>
-        <tr><td colspan="11"></td></tr>
+        <tr><td colspan="12"></td></tr> {{-- Spasi Kosong --}}
+    </table>
 
-        <tr>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">NO</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">HARI</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">TANGGAL</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">NAMA TOKO</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">ALAMAT</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">TITIP / SISA AWAL</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">HARGA (Rp)</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">LAKU (Pack)</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">SISA (Pack)</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">TAMBAH (Pack)</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">TOTAL (Pack)</th>
-            <th style="border: 1px solid #000; background-color: #f2f2f2; font-weight: bold;">KETERANGAN / BAYAR</th>
-        </tr>
+    {{-- TABEL DATA --}}
+    <table border="1">
+        <thead>
+            <tr>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 50px;">No</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 80px;">Hari</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 100px;">Tanggal</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 200px;">Nama Toko</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 250px;">Alamat</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center;">Sisa Awal</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 120px;">Setoran (Rp)</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center;">Laku</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center;">Sisa</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center;">Tambah</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center;">Total</th>
+                <th style="background-color: #eeeeee; font-weight: bold; text-align: center; width: 200px;">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($results as $index => $item)
+            <tr>
+                <td style="text-align: center;">{{ $index + 1 }}</td>
+                <td style="text-align: center;">{{ $item->hari }}</td>
+                <td style="text-align: center;">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                <td>{{ $item->nama_toko }}</td>
+                <td>{{ $item->alamat }}</td>
+                <td style="text-align: center;">{{ $item->titip_sisa_awal_pack }}</td>
+                <td style="text-align: right;">{{ $item->harga_rp }}</td>
+                <td style="text-align: center;">{{ $item->laku_pack }}</td>
+                <td style="text-align: center;">{{ $item->sisa_pack }}</td>
+                <td style="text-align: center;">{{ $item->tambah_pack }}</td>
+                <td style="text-align: center; font-weight: bold;">{{ $item->total_pack }}</td>
+                <td>{{ $item->keterangan_bayar }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    {{-- AREA TANDA TANGAN --}}
+    <table>
+        <tr><td colspan="12" height="30"></td></tr> {{-- Spasi --}}
         
-        @foreach($results as $index => $item)
         <tr>
-            <td style="border: 1px solid #000;">{{ $index + 1 }}</td>
-            <td style="border: 1px solid #000;">{{ $item->hari }}</td>
-            <td style="border: 1px solid #000;">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
-            <td style="border: 1px solid #000;">{{ $item->nama_toko }}</td>
-            <td style="border: 1px solid #000;">{{ $item->alamat }}</td>
-            <td style="border: 1px solid #000;">{{ $item->titip_sisa_awal_pack }}</td>
-            <td style="border: 1px solid #000;">{{ $item->harga_rp }}</td>
-            <td style="border: 1px solid #000;">{{ $item->laku_pack }}</td>
-            <td style="border: 1px solid #000;">{{ $item->sisa_pack }}</td>
-            <td style="border: 1px solid #000;">{{ $item->tambah_pack }}</td>
-            <td style="border: 1px solid #000; font-weight: bold;">{{ $item->total_pack }}</td>
-            <td style="border: 1px solid #000;">{{ $item->keterangan_bayar }}</td>
-        </tr>
-        @endforeach
+            {{-- KIRI: KEPALA KANTOR --}}
+            <td colspan="4" style="text-align: center;">
+                Mengetahui,
+            </td>
+            
+            <td colspan="4"></td> {{-- Spasi Tengah --}}
 
-        <tr><td colspan="11"></td></tr>
-        <tr><td colspan="11"></td></tr>
+            {{-- KANAN: MANAGER UNIT --}}
+            <td colspan="4" style="text-align: center;">
+                Menyetujui & Memeriksa,
+            </td>
+        </tr>
 
-        {{-- KOLOM TANDA TANGAN DI EXCEL --}}
         <tr>
-            <td colspan="2"></td>
-            <td colspan="3" style="text-align: center;">Mengetahui,</td>
-            <td colspan="3"></td>
-            <td colspan="3" style="text-align: center;">Mengetahui,</td>
+            <td colspan="4" style="text-align: center; font-weight: bold;">
+                Kepala Kantor
+            </td>
+            
+            <td colspan="4"></td>
+
+            <td colspan="4" style="text-align: center; font-weight: bold;">
+                Manager Unit
+            </td>
         </tr>
+
+        {{-- Spasi untuk Tanda Tangan & Stempel --}}
         <tr>
-            <td colspan="2"></td>
-            <td colspan="3" style="text-align: center;"><b>Kepala Kantor</b></td>
-            <td colspan="3"></td>
-            <td colspan="3" style="text-align: center;"><b>Manager Unit</b></td>
+            <td colspan="4" height="80"></td>
+            <td colspan="4"></td>
+            <td colspan="4" height="80" style="text-align: center; vertical-align: middle; color: #999999;">
+                [TEMPAT STEMPEL]
+            </td>
         </tr>
-        <tr><td colspan="11"></td></tr>
-        <tr><td colspan="11"></td></tr>
-        <tr><td colspan="11"></td></tr>
+
         <tr>
-            <td colspan="2"></td>
-            <td colspan="3" style="text-align: center; text-decoration: underline;">_______________________</td>
-            <td colspan="3"></td>
-            <td colspan="3" style="text-align: center; text-decoration: underline;">_______________________</td>
+            <td colspan="4" style="text-align: center; font-weight: bold; text-decoration: underline;">
+                ( ..................................... )
+            </td>
+            
+            <td colspan="4"></td>
+
+            <td colspan="4" style="text-align: center; font-weight: bold; text-decoration: underline;">
+                ( ..................................... )
+            </td>
         </tr>
     </table>
 </body>
