@@ -62,10 +62,18 @@
                 {{-- Kiri: Bukti Tagihan Subkon --}}
                 <div class="w-full md:w-48 shrink-0">
                     <p class="text-xs font-bold text-slate-400 mb-2 uppercase">Dokumen Tagihan</p>
-                    <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden border border-slate-200 relative group cursor-pointer"
-                         onclick="showImage('{{ $item->claim_document }}')">
+                    {{-- DIUBAH: Gunakan onclick showDocument() yang mendeteksi PDF/Image --}}
+                    <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden border border-slate-200 relative group cursor-pointer flex flex-col items-center justify-center text-slate-400"
+                         onclick="showDocument('{{ $item->claim_document }}')">
                         @if($item->claim_document)
-                            <img src="{{ $item->claim_document }}" class="w-full h-full object-cover">
+                            {{-- Jika PDF, tampilkan ikon PDF --}}
+                            @if(Str::startsWith($item->claim_document, 'data:application/pdf'))
+                                <i class="fas fa-file-pdf text-4xl text-red-500 mb-1"></i>
+                                <span class="text-[10px] font-bold">PDF FILE</span>
+                            @else
+                                {{-- Jika Gambar --}}
+                                <img src="{{ $item->claim_document }}" class="w-full h-full object-cover">
+                            @endif
                             <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="text-white text-xs font-bold"><i class="fas fa-search-plus"></i> Lihat</span>
                             </div>
@@ -159,7 +167,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Bukti Transfer <span class="text-red-500">*</span></label>
-                                <input type="file" name="payment_proof" 
+                                <input type="file" name="payment_proof" accept="image/*"
                                        class="w-full text-sm text-slate-500 file:py-2 file:px-4 file:rounded-full file:bg-emerald-50 file:text-emerald-700 file:border-0 hover:file:bg-emerald-100" 
                                        :required="action === 'approve'">
                             </div>
@@ -203,7 +211,7 @@
                             <th class="px-6 py-4">Penerima</th>
                             <th class="px-6 py-4">Status</th>
                             <th class="px-6 py-4">Nominal</th>
-                            <th class="px-6 py-4 text-center">Bukti</th>
+                            <th class="px-6 py-4 text-center">Dokumen</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -230,13 +238,21 @@
                             <td class="px-6 py-4 font-mono font-bold text-slate-700">
                                 Rp {{ number_format($history->amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                @if($history->payment_proof)
-                                    <button onclick="showImage('{{ $history->payment_proof }}')" class="text-blue-600 hover:text-blue-800 text-xs font-bold bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 transition-colors">
-                                        Lihat
+                            <td class="px-6 py-4 text-center space-y-2">
+                                {{-- Tombol Bukti Tagihan (Bisa PDF/Image) --}}
+                                @if($history->claim_document)
+                                    <button onclick="showDocument('{{ $history->claim_document }}')" class="block w-full text-blue-600 hover:text-blue-800 text-xs font-bold bg-blue-50 px-3 py-1.5 rounded border border-blue-100 transition-colors">
+                                        <i class="fas fa-file-invoice"></i> Tagihan
                                     </button>
                                 @else
-                                    <span class="text-slate-300">-</span>
+                                    <span class="block text-slate-300 text-xs">-</span>
+                                @endif
+
+                                {{-- Tombol Bukti Transfer (Dari Keuangan - Biasanya Gambar) --}}
+                                @if($history->payment_proof)
+                                    <button onclick="showDocument('{{ $history->payment_proof }}')" class="block w-full text-emerald-600 hover:text-emerald-800 text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded border border-emerald-100 transition-colors">
+                                        <i class="fas fa-receipt"></i> Trf / Lunas
+                                    </button>
                                 @endif
                             </td>
                         </tr>
@@ -247,18 +263,36 @@
         </div>
     </div>
 
-    {{-- Script Modal Image & Alert --}}
+    {{-- Script Modal Dinamis (Mendeteksi PDF atau Gambar) --}}
     <script>
-        function showImage(src) {
-            Swal.fire({
-                imageUrl: src,
-                imageAlt: 'Preview',
-                width: 600,
-                showConfirmButton: false,
-                showCloseButton: true,
-                background: '#fff',
-                customClass: { popup: 'rounded-2xl overflow-hidden' }
-            });
+        function showDocument(src) {
+            if(!src) { 
+                Swal.fire({ icon: 'info', title: 'Tidak Ada File', text: 'Dokumen belum dilampirkan.', confirmButtonColor: '#3b82f6' }); 
+                return; 
+            }
+            
+            // CEK APAKAH FILE ADALAH PDF
+            if (src.startsWith('data:application/pdf')) {
+                Swal.fire({
+                    title: 'Dokumen PDF',
+                    html: '<iframe src="' + src + '" width="100%" height="500px" style="border:none; border-radius: 10px;"></iframe>',
+                    width: 800,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'rounded-2xl' }
+                });
+            } 
+            // JIKA BUKAN PDF, BERARTI GAMBAR
+            else {
+                Swal.fire({
+                    imageUrl: src,
+                    imageAlt: 'Bukti',
+                    width: 600,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'rounded-2xl overflow-hidden' }
+                });
+            }
         }
 
         @if(session('success'))

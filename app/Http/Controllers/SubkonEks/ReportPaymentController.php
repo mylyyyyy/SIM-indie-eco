@@ -13,9 +13,9 @@ class ReportPaymentController extends Controller
     // Menampilkan daftar klaim
     public function index()
     {
-        $payments = ProjectPayment::where('user_id', Auth::id()) // Hanya punya user yang login
-                    ->with('project') // Eager load relasi proyek
-                    ->latest() // Urutkan dari yang terbaru
+        $payments = ProjectPayment::where('user_id', Auth::id()) 
+                    ->with('project') 
+                    ->latest() 
                     ->get();
                     
         return view('subkon-eks.report-payments.index', compact('payments'));
@@ -24,41 +24,39 @@ class ReportPaymentController extends Controller
     // Menampilkan form tambah
     public function create()
     {
-        $projects = Project::all(); // Ambil semua proyek untuk dropdown
+        $projects = Project::all(); 
         return view('subkon-eks.report-payments.create', compact('projects'));
     }
 
     // Menyimpan data ke database
     public function store(Request $request)
     {
-        // 1. Validasi Input (Nama harus sama dengan 'name' di form HTML)
+        // 1. Validasi Input (Ubah validasi document menjadi PDF)
         $request->validate([
             'project_id'   => 'required|exists:projects,id',
             'payment_date' => 'required|date',
             'amount'       => 'required|numeric|min:0', 
             'description'  => 'required|string',
-            'document'     => 'required|image|max:5120', // Max 5MB
+            'document'     => 'required|mimes:pdf|max:5120', // Hanya menerima PDF
         ]);
 
-        // 2. Proses Konversi Gambar ke Base64
+        // 2. Proses Konversi PDF ke Base64
         $docBase64 = null;
         if ($request->hasFile('document')) {
             $file = $request->file('document');
-            // Mengubah file jadi string base64 agar bisa disimpan di kolom tipe LONGTEXT
+            // Mengubah file jadi string base64
             $docBase64 = "data:" . $file->getMimeType() . ";base64," . base64_encode(file_get_contents($file));
         }
 
-        // 3. Simpan ke Database project_payments
+        // 3. Simpan ke Database
         ProjectPayment::create([
             'user_id'         => Auth::id(),
             'project_id'      => $request->project_id,
             'amount'          => $request->amount,
             'payment_date'    => $request->payment_date,
-            'notes'           => $request->description, // Deskripsi masuk ke kolom notes
-            'claim_document'  => $docBase64,            // Gambar bukti tagihan
-            'status'          => 'pending',             // Default status
-            
-            // Kolom ini biarkan null, nanti diisi orang keuangan
+            'notes'           => $request->description,
+            'claim_document'  => $docBase64, // Menyimpan Base64 PDF
+            'status'          => 'pending',
             'finance_user_id' => null,
             'payment_proof'   => null,
             'payment_method'  => null,

@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="max-w-3xl mx-auto">
         
-        {{-- AREA PESAN ERROR (PENTING AGAR TAU KALAU GAGAL) --}}
+        {{-- AREA PESAN ERROR --}}
         @if ($errors->any())
             <div class="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl shadow-sm animate__animated animate__shakeX">
                 <div class="flex items-center gap-2 font-bold mb-2">
@@ -49,24 +49,25 @@
                         <input type="date" name="payment_date" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500" required>
                     </div>
                     
-                    {{-- Input Nominal (PENTING: name="amount") --}}
+                    {{-- Input Nominal --}}
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nominal Pengajuan (Rp) <span class="text-red-500">*</span></label>
                         <input type="number" name="amount" min="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: 5000000" required>
                     </div>
                 </div>
-
-                {{-- Input Keterangan (PENTING: name="description") --}}
+                
+                {{-- Input Keterangan --}}
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Uraian Tagihan / Keterangan <span class="text-red-500">*</span></label>
                     <textarea name="description" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: Pembayaran Termin 1 Pengecoran..." required></textarea>
                 </div>
 
-                {{-- Input File --}}
+                {{-- Input File (Diubah menjadi PDF) --}}
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Upload Invoice / Bukti Tagihan <span class="text-red-500">*</span></label>
-                    <input type="file" name="document" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" required>
-                    <p class="text-[10px] text-slate-400 mt-2">*Format: JPG, PNG. Max Ukuran: 5MB</p>
+                    {{-- Tambahkan accept=".pdf" --}}
+                    <input type="file" name="document" accept=".pdf" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" required>
+                    <p class="text-[10px] text-slate-400 mt-2">*Format wajib: PDF. Max Ukuran: 5MB</p>
                 </div>
 
                 {{-- Tombol Submit --}}

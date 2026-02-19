@@ -5,6 +5,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        /* MENCEGAH KEBOCORAN TAMPILAN ALPINE.JS SEBELUM LOAD SELESAI */
+        [x-cloak] { display: none !important; }
+
         /* Background Animation */
         .bg-pattern {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
@@ -161,7 +164,8 @@
                             MASUK SISTEM <i class="fa-solid fa-arrow-right-long"></i>
                         </span>
 
-                        <span x-show="loading" x-cloak class="flex items-center gap-2">
+                        {{-- PERBAIKAN DI SINI: style="display: none;" Mencegah Tampil di Awal --}}
+                        <span x-show="loading" x-cloak style="display: none;" class="flex items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin"></i> Memproses...
                         </span>
                     </button>

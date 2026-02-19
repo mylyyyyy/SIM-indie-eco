@@ -66,12 +66,13 @@
 
             {{-- Card Footer --}}
             <div class="px-5 py-3 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
-                <button onclick="showImage('{{ $payment->claim_document }}')" class="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors">
-                    <i class="fas fa-file-invoice"></i> Lihat Dokumen
+                {{-- UBAH: Panggil fungsi showDocument --}}
+                <button onclick="showDocument('{{ $payment->claim_document }}')" class="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors">
+                    <i class="fas fa-file-pdf"></i> Lihat Dokumen
                 </button>
 
                 @if($payment->status == 'paid' && $payment->payment_proof)
-                    <button onclick="showImage('{{ $payment->payment_proof }}')" class="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-1 transition-colors">
+                    <button onclick="showDocument('{{ $payment->payment_proof }}')" class="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-1 transition-colors">
                         <i class="fas fa-receipt"></i> Bukti Transfer
                     </button>
                 @endif
@@ -87,29 +88,36 @@
         @endforelse
     </div>
 
-    {{-- Script Modal Gambar --}}
+    {{-- Script Modal Dinamis (Mendeteksi PDF atau Gambar) --}}
     <script>
-        function showImage(src) {
+        function showDocument(src) {
             if(!src) { 
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Tidak Ada File',
-                    text: 'Dokumen belum dilampirkan.',
-                    confirmButtonColor: '#3b82f6'
-                }); 
+                Swal.fire({ icon: 'info', title: 'Tidak Ada File', text: 'Dokumen belum dilampirkan.', confirmButtonColor: '#3b82f6' }); 
                 return; 
             }
             
-            Swal.fire({
-                imageUrl: src,
-                imageAlt: 'Bukti Dokumen',
-                width: 600,
-                showConfirmButton: false,
-                showCloseButton: true,
-                customClass: {
-                    popup: 'rounded-2xl overflow-hidden'
-                }
-            });
+            // CEK APAKAH FILE ADALAH PDF
+            if (src.startsWith('data:application/pdf')) {
+                Swal.fire({
+                    title: 'Dokumen PDF',
+                    html: '<iframe src="' + src + '" width="100%" height="500px" style="border:none; border-radius: 10px;"></iframe>',
+                    width: 800,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'rounded-2xl' }
+                });
+            } 
+            // JIKA BUKAN PDF, BERARTI GAMBAR
+            else {
+                Swal.fire({
+                    imageUrl: src,
+                    imageAlt: 'Bukti',
+                    width: 600,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'rounded-2xl overflow-hidden' }
+                });
+            }
         }
     </script>
 </x-admin-layout>

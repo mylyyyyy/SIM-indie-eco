@@ -73,7 +73,7 @@
                                         'indie'          => 'from-pink-500 to-rose-600',
                                         'keuangan_eco'   => 'from-teal-400 to-cyan-600',
                                         'keuangan_indie' => 'from-blue-400 to-sky-600',
-                                        'keuangan'       => 'from-yellow-500 to-amber-600', 
+                                       
                                         'subkon_pt'      => 'from-blue-500 to-blue-600',
                                         default          => 'from-orange-400 to-orange-500', // subkon_eks
                                     };
