@@ -93,17 +93,10 @@
                     </a>
 
                     {{-- Button Login --}}
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-900/50 hover:bg-blue-400 hover:-translate-y-0.5 transition-all flex items-center gap-2 border border-blue-400">
-                                <i class="fa-solid fa-gauge"></i> Dashboard
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="px-6 py-2.5 rounded-xl bg-white text-blue-900 text-sm font-bold shadow-lg hover:bg-blue-50 hover:-translate-y-0.5 transition-all flex items-center gap-2">
-                                <i class="fa-solid fa-lock text-blue-600"></i> Login Staff
-                            </a>
-                        @endauth
-                    @endif
+                   {{-- Button Login --}}
+                    <a href="{{ route('login') }}" class="px-6 py-2.5 rounded-xl bg-white text-blue-900 text-sm font-bold shadow-lg hover:bg-blue-50 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-lock text-blue-600"></i> Login Staff
+                    </a>
                 </div>
 
                 {{-- MOBILE MENU BUTTON --}}

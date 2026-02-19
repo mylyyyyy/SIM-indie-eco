@@ -84,26 +84,17 @@
                     @endforeach
                 </div>
 
-                {{-- LOGIN BUTTON --}}
                 {{-- RIGHT ACTION BUTTONS --}}
                 <div class="hidden md:flex items-center gap-3">
-                    {{-- Button Portofolio (Baru) --}}
+                    {{-- Button Portofolio --}}
                     <a href="{{ route('portfolio') }}" class="px-5 py-2.5 rounded-xl border border-blue-300 text-blue-100 font-bold text-sm hover:bg-white hover:text-blue-900 transition-all duration-300 flex items-center gap-2">
                         <i class="fa-solid fa-briefcase"></i> Portofolio
                     </a>
 
                     {{-- Button Login --}}
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-900/50 hover:bg-blue-400 hover:-translate-y-0.5 transition-all flex items-center gap-2 border border-blue-400">
-                                <i class="fa-solid fa-gauge"></i> Dashboard
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="px-6 py-2.5 rounded-xl bg-white text-blue-900 text-sm font-bold shadow-lg hover:bg-blue-50 hover:-translate-y-0.5 transition-all flex items-center gap-2">
-                                <i class="fa-solid fa-lock text-blue-600"></i> Login Staff
-                            </a>
-                        @endauth
-                    @endif
+<a href="{{ route('portal.masuk') }}" class="px-6 py-2.5 rounded-xl bg-white text-blue-900 text-sm font-bold shadow-lg hover:bg-blue-50 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+    <i class="fa-solid fa-lock text-blue-600"></i> Login Staff
+</a>
                 </div>
 
                 {{-- MOBILE MENU BUTTON --}}
@@ -121,7 +112,7 @@
                 <a href="#tim" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Tim Kami</a>
                 <a href="#berita" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Berita</a>
                 <a href="#kontak" class="block px-4 py-3 text-white font-bold hover:bg-blue-800 rounded-lg">Kontak</a>
-                <a href="{{ route('login') }}" class="block px-4 py-3 text-blue-900 bg-white font-bold rounded-lg mt-4 text-center">Login Staff</a>
+               <a href="{{ route('portal.masuk') }}" class="block px-4 py-3 text-blue-900 bg-white font-bold rounded-lg mt-4 text-center">Login Staff</a>
             </div>
         </div>
     </nav>
@@ -455,7 +446,7 @@
                 </div>
                 {{-- PERBAIKAN 1: Button Lihat Semua --}}
                 <a href="{{ route('components.berita') }}" class="text-blue-600 font-bold hover:text-blue-800 transition-colors flex items-center gap-2">
-                    Lihat Semua <i class="fas fa-arrow-right"></i>
+                    Likat Semua <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 

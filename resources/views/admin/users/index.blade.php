@@ -12,7 +12,7 @@
         <div class="flex gap-3 w-full md:w-auto">
             {{-- Search Bar --}}
             <div class="relative w-full md:w-64 group">
-                <input type="text" id="searchInput" placeholder="Cari nama atau email..." 
+                <input type="text" id="searchInput" placeholder="Cari nama atau NIP..." 
                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-blue-500 text-sm shadow-sm transition-all group-hover:border-blue-300">
                 <i class="fas fa-search absolute left-3 top-3 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
             </div>
@@ -63,15 +63,19 @@
                         {{-- Kolom 1: Avatar & Nama --}}
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                {{-- UPDATE: Logika Warna Avatar untuk Role Baru --}}
+                                {{-- UPDATE: Logika Warna Avatar untuk Semua Role --}}
                                 @php
                                     $bgClass = match($user->role) {
-                                        'admin' => 'from-purple-500 to-indigo-600',
-                                        'subkon_pt' => 'from-blue-500 to-blue-600',
-                                        'eco' => 'from-emerald-500 to-teal-600',      // Hijau untuk Eco
-                                        'indie' => 'from-pink-500 to-rose-600',       // Pink untuk Indie
-                                        'keuangan' => 'from-yellow-500 to-amber-600', // Kuning Emas untuk Keuangan
-                                        default => 'from-orange-400 to-orange-500',   // Orange untuk Subkon Eks
+                                        'admin'          => 'from-purple-500 to-indigo-600',
+                                        'kepala_kantor'  => 'from-amber-500 to-red-500',
+                                        'manager_unit'   => 'from-indigo-400 to-purple-600',
+                                        'eco'            => 'from-emerald-500 to-teal-600',
+                                        'indie'          => 'from-pink-500 to-rose-600',
+                                        'keuangan_eco'   => 'from-teal-400 to-cyan-600',
+                                        'keuangan_indie' => 'from-blue-400 to-sky-600',
+                                        'keuangan'       => 'from-yellow-500 to-amber-600', 
+                                        'subkon_pt'      => 'from-blue-500 to-blue-600',
+                                        default          => 'from-orange-400 to-orange-500', // subkon_eks
                                     };
                                 @endphp
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $bgClass }} text-white flex items-center justify-center font-bold text-lg shadow-md ring-2 ring-white">
@@ -87,31 +91,25 @@
                         {{-- Kolom 2: Role --}}
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
-                                {{-- UPDATE: Badge Role Baru --}}
+                                {{-- UPDATE: Badge Role Lengkap --}}
                                 @if($user->role == 'admin')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 uppercase tracking-wide">
-                                        Administrator
-                                    </span>
-                                @elseif($user->role == 'subkon_pt')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">
-                                        Manager Proyek
-                                    </span>
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 uppercase tracking-wide">Administrator</span>
+                                @elseif($user->role == 'kepala_kantor')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 uppercase tracking-wide">Kepala Kantor</span>
+                                @elseif($user->role == 'manager_unit')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wide">Manager Unit</span>
                                 @elseif($user->role == 'eco')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">
-                                        Tim Syafa Eco
-                                    </span>
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">Admin Kantor (Eco)</span>
                                 @elseif($user->role == 'indie')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-pink-100 text-pink-700 border border-pink-200 uppercase tracking-wide">
-                                        Tim Syafa Indie
-                                    </span>
-                                @elseif($user->role == 'keuangan')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 uppercase tracking-wide">
-                                        Divisi Keuangan
-                                    </span>
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-pink-100 text-pink-700 border border-pink-200 uppercase tracking-wide">Syafa Indie</span>
+                                @elseif($user->role == 'keuangan_eco')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-700 border border-teal-200 uppercase tracking-wide">Keuangan Eco</span>
+                                @elseif($user->role == 'keuangan_indie' || $user->role == 'keuangan')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">Keuangan Indie</span>
+                                @elseif($user->role == 'subkon_pt')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase tracking-wide">Manager Proyek</span>
                                 @else
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wide">
-                                        Subkon (EKS)
-                                    </span>
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wide">Subkon (EKS)</span>
                                 @endif
 
                                 <span class="text-xs font-medium text-slate-500 mt-1 flex items-center gap-1">
@@ -208,12 +206,14 @@
                                             <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
                                             <select name="role" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Administrator</option>
+                                                <option value="kepala_kantor" {{ $user->role == 'kepala_kantor' ? 'selected' : '' }}>Kepala Kantor</option>
+                                                <option value="manager_unit" {{ $user->role == 'manager_unit' ? 'selected' : '' }}>Manager Unit</option>
+                                                <option value="eco" {{ $user->role == 'eco' ? 'selected' : '' }}>Admin Kantor (Eco)</option>
+                                                <option value="keuangan_eco" {{ $user->role == 'keuangan_eco' ? 'selected' : '' }}>Keuangan Eco</option>
+                                                <option value="indie" {{ $user->role == 'indie' ? 'selected' : '' }}>Tim Syafa Indie</option>
+                                                <option value="keuangan_indie" {{ in_array($user->role, ['keuangan_indie', 'keuangan']) ? 'selected' : '' }}>Keuangan Indie</option>
                                                 <option value="subkon_pt" {{ $user->role == 'subkon_pt' ? 'selected' : '' }}>Manager Proyek</option>
                                                 <option value="subkon_eks" {{ $user->role == 'subkon_eks' ? 'selected' : '' }}>Subkon (EKS)</option>
-                                                {{-- Role Baru --}}
-                                                <option value="eco" {{ $user->role == 'eco' ? 'selected' : '' }}>Syafa Eco</option>
-                                                <option value="indie" {{ $user->role == 'indie' ? 'selected' : '' }}>Syafa Indie</option>
-                                                <option value="keuangan" {{ $user->role == 'keuangan' ? 'selected' : '' }}>Keuangan</option>
                                             </select>
                                             <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                                         </div>
@@ -305,7 +305,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">NIB/NIP</label>
                         <div class="relative group">
                             <i class="fas fa-envelope absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                            <input type="text" name="email" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Masukan NIB/NIB" required>
+                            <input type="text" name="email" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Masukan NIB/NIP" required>
                         </div>
                     </div>
 
@@ -326,14 +326,17 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Role Akun</label>
                         <div class="relative group">
                             <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                            <select name="role" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
-                                <option value="subkon_eks">Subkon (EKS)</option>
-                                <option value="subkon_pt">Manager Proyek</option>
+                            <select name="role" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
+                                <option value="" disabled selected>-- Pilih Role --</option>
                                 <option value="admin">Administrator</option>
-                                {{-- Role Baru --}}
-                                <option value="eco">Syafa Eco</option>
-                                <option value="indie">Syafa Indie</option>
-                                <option value="keuangan">Keuangan</option>
+                                <option value="kepala_kantor">Kepala Kantor</option>
+                                <option value="manager_unit">Manager Unit</option>
+                                <option value="eco">Admin Kantor (Eco)</option>
+                                <option value="keuangan_eco">Keuangan Eco</option>
+                                <option value="indie">Tim Syafa Indie</option>
+                                <option value="keuangan_indie">Keuangan Indie</option>
+                                <option value="subkon_pt">Manager Proyek</option>
+                                <option value="subkon_eks">Subkon (EKS)</option>
                             </select>
                             <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                         </div>
@@ -362,7 +365,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Spesialisasi</label>
                         <div class="relative group">
                             <i class="fas fa-hammer absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                            <input type="text" name="specialization" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Contoh: Elektrikal, Sipil...">
+                            <input type="text" name="specialization" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Contoh: Elektrikal, Keuangan...">
                         </div>
                     </div>
                 </div>

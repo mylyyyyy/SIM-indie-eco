@@ -22,12 +22,19 @@ use App\Http\Controllers\Admin\ProjectController as AdminProject;
 use App\Http\Controllers\Admin\ReportController as AdminReport;
 use App\Http\Controllers\Admin\NewsController as AdminNews;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolio;
-use App\Http\Controllers\Admin\TeamController; // <--- Team Controller
+use App\Http\Controllers\Admin\TeamController; 
 
 // Eco Controllers (Divisi Beras)
 use App\Http\Controllers\Eco\DashboardController as EcoDashboard;
 use App\Http\Controllers\Eco\NewsController as EcoNews;
 use App\Http\Controllers\Eco\PortofolioController as EcoPortfolio;
+use App\Http\Controllers\Eco\VisitPlanController;
+use App\Http\Controllers\Eco\PlasticStockController;
+use App\Http\Controllers\Eco\SoldRiceController;
+use App\Http\Controllers\Eco\StorePartnerController;
+use App\Http\Controllers\Eco\MillingReportController;
+use App\Http\Controllers\Eco\StoreRiceStockController;
+use App\Http\Controllers\Eco\VisitResultController;
 
 // Subkon & Keuangan
 use App\Http\Controllers\SubkonPT\DashboardController as SubkonPTDashboard;
@@ -103,6 +110,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('news', AdminNews::class);
     Route::resource('portfolios', AdminPortfolio::class);
     Route::resource('teams', TeamController::class); // <--- CRUD Team
+   
+
 });
 
 // B. GROUP ECO (Divisi Beras)
@@ -113,6 +122,25 @@ Route::middleware(['auth', 'role:eco'])->prefix('eco')->name('eco.')->group(func
    Route::get('/reports/export', [EcoDashboard::class, 'exportReport'])->name('reports.export');
     Route::get('/export-log', [EcoDashboard::class, 'exportLog'])->name('stock.export');
     Route::resource('portfolios', EcoPortfolio::class);
+    Route::resource('visit-plans', VisitPlanController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('visit-plans/export/pdf', [VisitPlanController::class, 'exportPdf'])->name('visit-plans.export');
+
+    Route::resource('plastic-stocks', PlasticStockController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('plastic-stocks/export/pdf', [PlasticStockController::class, 'exportPdf'])->name('plastic-stocks.export');
+
+    Route::resource('sold-rices', SoldRiceController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('sold-rices/export/pdf', [SoldRiceController::class, 'exportPdf'])->name('sold-rices.export');
+
+    Route::resource('store-partners', StorePartnerController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('store-partners/export/pdf', [StorePartnerController::class, 'exportPdf'])->name('store-partners.export');
+Route::resource('milling-reports', MillingReportController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('milling-reports/export/pdf', [MillingReportController::class, 'exportPdf'])->name('milling-reports.export');
+Route::resource('store-rice-stocks', StoreRiceStockController::class)->except(['create', 'edit', 'update', 'show']);
+    Route::get('store-rice-stocks/export/pdf', [StoreRiceStockController::class, 'exportPdf'])->name('store-rice-stocks.export');
+Route::resource('visit-results', VisitResultController::class)->except(['create', 'edit', 'update', 'show']);
+
+
+
 });
 
 // C. GROUP INDIE
@@ -152,3 +180,42 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/user-detail/{id}', [AdminUser::class, 'showApi'])->name('api.user.detail');
     Route::get('/riwayat-login', [LoginHistoryController::class, 'index'])->name('login-history.index');
 });
+
+//KEUANGAN ECO
+Route::middleware(['auth', 'role:keuangan_eco'])->prefix('keuangan-eco')->name('keuangan_eco.')->group(function () {
+    Route::get('/visit-results', [VisitResultController::class, 'indexKeuangan'])->name('visit-results.index');
+    Route::get('/visit-results/export/excel', [VisitResultController::class, 'exportExcel'])->name('visit-results.export');
+});
+
+
+
+// ... kode-kode route lainnya ...
+
+// === TAMBAHKAN INI DI BARIS PALING BAWAH ===
+
+Route::get('/portal-masuk', function () {
+    // 1. Cek: Apakah user SUDAH login?
+    if (Illuminate\Support\Facades\Auth::check()) {
+        $role = Illuminate\Support\Facades\Auth::user()->role;
+        
+        // Jika SUDAH login, langsung lempar ke dashboard masing-masing
+        if ($role == 'admin') return redirect()->route('admin.dashboard');
+        if ($role == 'eco') return redirect()->route('eco.dashboard');
+        if ($role == 'indie') return redirect()->route('indie.dashboard');
+        if ($role == 'subkon_pt') return redirect()->route('subkon-pt.dashboard');
+        if ($role == 'subkon_eks') return redirect()->route('subkon-eks.dashboard');
+        
+        // Role Keuangan
+        if ($role == 'keuangan_eco') return redirect()->route('keuangan_eco.visit-results.index');
+        if ($role == 'keuangan' || $role == 'keuangan_indie') return redirect()->route('keuangan.dashboard');
+
+        // Role yang belum punya dashboard
+        if ($role == 'kepala_kantor' || $role == 'manager_unit') return redirect('/'); 
+        
+        return redirect('/'); // Default
+    } 
+    
+    // 2. Jika BELUM login, tampilkan halaman Login
+    return view('auth.login'); 
+
+})->name('portal.masuk');

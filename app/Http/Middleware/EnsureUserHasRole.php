@@ -4,41 +4,30 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasRole
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Menggunakan ...$roles agar bisa mengecek banyak role sekaligus (contoh: role:keuangan,keuangan_indie)
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         // 1. Cek apakah user sudah login
-        if (!$request->user()) {
-            abort(403, 'ANDA TIDAK MEMILIKI AKSES.');
+        if (!Auth::check()) {
+            return redirect('/login');
         }
-        
-        // Debugging: Log the user's role and the required role
-        \Log::info('EnsureUserHasRole Middleware:', [
-            'user_role' => $request->user() ? $request->user()->role : null,
-            'required_role' => $role,
-        ]);
 
-        // 2. Cek role - jika middleware $role adalah 'admin', terima semua role admin
-        // Jika role spesifik diminta, cek role exact match
-        if ($role === 'admin') {
-            // Izinkan semua role yang memiliki 'admin' di dalamnya, termasuk 'super_admin'
-            $allowedRoles = ['super_admin', 'admin_humas', 'admin_registrasi', 'admin_umum', 'admin'];
-            if (!in_array($request->user()->role, $allowedRoles)) {
-                abort(403, 'ANDA TIDAK MEMILIKI AKSES.');
-            }
-        } else {
-            // Untuk role spesifik lainnya, lakukan exact match
-            if ($request->user()->role !== $role) {
-                abort(403, 'ANDA TIDAK MEMILIKI AKSES.');
-            }
+        // 2. Ambil role user saat ini
+        $userRole = Auth::user()->role;
+
+        // 3. Cek apakah role user ada di dalam daftar yang diizinkan route
+        // (Fungsi in_array mengecek: apakah role user ada di dalam daftar $roles?)
+        if (! in_array($userRole, $roles)) {
+            // Jika tidak ada, tolak akses
+            abort(403, 'ANDA TIDAK MEMILIKI AKSES.');
         }
 
         return $next($request);

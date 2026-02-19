@@ -12,51 +12,67 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-  public function login(Request $request)
+    public function login(Request $request)
     {
-        // 1. Validasi
+        // 1. Validasi Input
         $credentials = $request->validate([
-            // HAPUS 'email' DARI ARRAY VALIDASI
-            // Cukup 'required' saja agar menerima string apapun (NIP, Username, Email)
+            // 'email' di sini digunakan sebagai identifier (bisa NIP, username, atau email)
             'email' => ['required', 'string'], 
             'password' => ['required'],
         ]);
 
-        // 2. Ingat Saya
+        // 2. Fitur "Ingat Saya"
         $remember = $request->boolean('remember');
 
         // 3. Attempt Login
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
+            // Ambil role user yang sedang login
             $role = Auth::user()->role;
 
-            // Redirect sesuai role
+            // 4. Redirect berdasarkan Role
             switch ($role) {
                 case 'admin':
                     return redirect()->intended(route('admin.dashboard'));
+                
+                case 'eco':
+                    return redirect()->intended(route('eco.dashboard'));
+                
+                case 'indie':
+                    return redirect()->intended(route('indie.dashboard'));
+                
+                case 'kepala_kantor':
+                    // Ubah route ini jika dashboard kepala kantor punya nama berbeda
+                    return redirect()->intended('/kepala-kantor/dashboard');
+                
+                case 'manager_unit':
+                    // Ubah route ini jika dashboard manager unit punya nama berbeda
+                    return redirect()->intended('/manager-unit/dashboard');
+                
+                case 'keuangan_eco':
+                case 'keuangan_indie':
+                case 'keuangan': // Menjaga kompabilitas dengan role lama (FNC-123)
+                    return redirect()->intended(route('keuangan.dashboard'));
+                
                 case 'subkon_pt':
                     return redirect()->intended(route('subkon-pt.dashboard'));
+                
                 case 'subkon_eks':
                     return redirect()->intended(route('subkon-eks.dashboard'));
-                    case 'keuangan':
-                    return redirect()->intended(route('keuangan.dashboard'));
-                    case 'eco':
-                    return redirect()->intended(route('eco.dashboard'));
-                    case 'indie':
-                    return redirect()->intended(route('indie.dashboard'));
+                
                 default:
+                    // Jika role tidak ada di daftar atas, paksa logout demi keamanan
                     Auth::logout();
-                    return back()->withErrors(['email' => 'Role akun tidak dikenali.']);
+                    return back()->withErrors(['email' => 'Hak akses (Role) Anda tidak dikenali sistem.']);
             }
         }
 
-        // 4. Jika Gagal Login
+        // 5. Jika Gagal Login (Email/Password salah)
         return back()->withErrors([
             'email' => 'NIB/NIP atau kata sandi yang Anda masukkan salah.',
         ])->onlyInput('email');
     }
-      
 
     public function logout(Request $request)
     {

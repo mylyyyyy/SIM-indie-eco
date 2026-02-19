@@ -90,6 +90,7 @@
                     <p class="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-2">Internal Management System</p>
                 </a>
             </div>
+            
 
             {{-- FORM CARD --}}
             <div class="w-full p-8 sm:p-10 login-card rounded-[2rem] relative overflow-hidden animate__animated animate__fadeInUp border-t border-white/10">
@@ -165,6 +166,7 @@
                         </span>
                     </button>
                 </form>
+                
             </div>
 
             {{-- FOOTER --}}
