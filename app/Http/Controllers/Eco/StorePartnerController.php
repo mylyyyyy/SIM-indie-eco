@@ -7,13 +7,17 @@ use App\Models\StorePartner;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class StorePartnerController extends Controller
 {
     public function index()
     {
-        // Menampilkan data terbaru
-        $partners = StorePartner::latest()->get();
+        $cabangEco = Auth::user()->company_name;
+        $partners = StorePartner::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest()->get();
+                    
         return view('eco.operasional.store-partner.index', compact('partners'));
     }
 
@@ -31,39 +35,38 @@ class StorePartnerController extends Controller
         ]);
 
         $data = $request->all();
+        $data['user_id'] = Auth::id(); // Simpan ID User
 
-        // Proses Upload Foto jika ada
         if ($request->hasFile('foto_toko')) {
             $file = $request->file('foto_toko');
             $filename = time() . '_' . $file->getClientOriginalName();
-            // Simpan ke folder public/uploads/stores
             $file->move(public_path('uploads/stores'), $filename);
             $data['foto_toko'] = $filename;
         }
 
         StorePartner::create($data);
-
         return redirect()->back()->with('success', 'Data Mitra Toko berhasil ditambahkan!');
     }
 
     public function destroy(StorePartner $storePartner)
     {
-        // Hapus foto fisik jika ada
         if ($storePartner->foto_toko) {
             $imagePath = public_path('uploads/stores/' . $storePartner->foto_toko);
             if (File::exists($imagePath)) {
                 File::delete($imagePath);
             }
         }
-        
         $storePartner->delete();
         return redirect()->back()->with('success', 'Data Mitra Toko berhasil dihapus!');
     }
 
     public function exportPdf()
     {
-        $partners = StorePartner::orderBy('nama_toko', 'asc')->get();
-        // Menggunakan kertas A4 format Landscape agar muat banyak kolom
+        $cabangEco = Auth::user()->company_name;
+        $partners = StorePartner::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->orderBy('nama_toko', 'asc')->get();
+                    
         $pdf = Pdf::loadView('eco.operasional.store-partner.pdf', compact('partners'))->setPaper('a4', 'landscape');
         return $pdf->download('Rekap_Mitra_Toko_' . date('Y-m-d') . '.pdf');
     }

@@ -4,24 +4,26 @@ namespace App\Http\Controllers\Eco;
 
 use App\Http\Controllers\Controller;
 use App\Models\VisitPlan;
-// use App\Models\StorePartner; // <-- Baris ini bisa dihapus/komentar karena tidak dipakai lagi untuk dropdown
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class VisitPlanController extends Controller
 {
     public function index()
     {
-        $plans = VisitPlan::latest()->get();
-        
-        // Kita tidak perlu lagi mengambil data $stores karena inputnya manual
+        $cabangEco = Auth::user()->company_name;
+        $plans = VisitPlan::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest()->get();
+                    
         return view('eco.operasional.visit-plan.index', compact('plans'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama_toko' => 'required|string|max:255', // Validasi string biasa
+            'nama_toko' => 'required|string|max:255', 
             'alamat' => 'required|string',
             'stok_awal' => 'required|numeric',
             'harga' => 'required|numeric',
@@ -30,7 +32,10 @@ class VisitPlanController extends Controller
             'tambah_pack' => 'required|numeric',
         ]);
 
-        VisitPlan::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id(); // Simpan ID User
+        VisitPlan::create($data);
+        
         return redirect()->back()->with('success', 'Plan Kunjungan berhasil ditambahkan!');
     }
 
@@ -40,10 +45,13 @@ class VisitPlanController extends Controller
         return redirect()->back()->with('success', 'Data dihapus!');
     }
 
-    // Fungsi Download PDF
     public function exportPdf()
     {
-        $plans = VisitPlan::latest()->get();
+        $cabangEco = Auth::user()->company_name;
+        $plans = VisitPlan::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest()->get();
+                    
         $pdf = Pdf::loadView('eco.operasional.visit-plan.pdf', compact('plans'))->setPaper('a4', 'landscape');
         return $pdf->download('Plan_Kunjungan_' . date('Y-m-d') . '.pdf');
     }

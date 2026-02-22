@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\EcoLocation;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -13,9 +14,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->get();
-        return view('admin.users.index', compact('users'));
+        // Mengambil data lokasi/cabang yang aktif saja (atau semua, sesuai kebutuhan)
+        $locations = EcoLocation::where('status', 'active')->get(); 
+        
+        return view('admin.users.index', compact('users', 'locations'));
     }
-
     public function store(Request $request)
     {
         // 1. PERBAIKAN VALIDASI (Penambahan Role Baru)

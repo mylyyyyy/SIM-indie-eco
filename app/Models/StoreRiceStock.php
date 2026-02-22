@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class StoreRiceStock extends Model {
     use HasFactory;
-    protected $fillable = ['tanggal', 'nama_admin', 'nama_toko', 'stok_2_5kg', 'stok_5kg'];
+    protected $fillable = ['user_id','tanggal', 'nama_admin', 'nama_toko', 'stok_2_5kg', 'stok_5kg'];
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
 }

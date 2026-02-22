@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\MillingReport;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class MillingReportController extends Controller
 {
     public function index()
     {
-        $reports = MillingReport::latest('tanggal')->get();
+        $cabangEco = Auth::user()->company_name;
+        $reports = MillingReport::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest('tanggal')->get();
+                    
         return view('eco.operasional.milling-report.index', compact('reports'));
     }
 
@@ -24,7 +29,9 @@ class MillingReportController extends Controller
             'jumlah_pack' => 'required|integer|min:0',
         ]);
 
-        MillingReport::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id(); // Simpan ID User
+        MillingReport::create($data);
 
         return redirect()->back()->with('success', 'Laporan Selep berhasil ditambahkan!');
     }
@@ -37,7 +44,11 @@ class MillingReportController extends Controller
 
     public function exportPdf()
     {
-        $reports = MillingReport::orderBy('tanggal', 'desc')->get();
+        $cabangEco = Auth::user()->company_name;
+        $reports = MillingReport::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->orderBy('tanggal', 'desc')->get();
+                    
         $pdf = Pdf::loadView('eco.operasional.milling-report.pdf', compact('reports'))->setPaper('a4', 'portrait');
         return $pdf->download('Laporan_Selep_' . date('Y-m-d') . '.pdf');
     }

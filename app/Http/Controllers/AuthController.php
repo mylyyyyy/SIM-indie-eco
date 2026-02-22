@@ -31,7 +31,7 @@ class AuthController extends Controller
             // Ambil role user yang sedang login
             $role = Auth::user()->role;
 
-            // 4. Redirect berdasarkan Role
+           // 4. Redirect berdasarkan Role
             switch ($role) {
                 case 'admin':
                     return redirect()->intended(route('admin.dashboard'));
@@ -50,11 +50,18 @@ class AuthController extends Controller
                     // Ubah route ini jika dashboard manager unit punya nama berbeda
                     return redirect()->intended('/manager-unit/dashboard');
                 
+                // ============================================
+                // PERBAIKAN DI SINI: Pisahkan Keuangan Eco
+                // ============================================
                 case 'keuangan_eco':
+                    // Mengarah ke resources\views\keuangan-eco\visit-result\index.blade.php
+                    return redirect()->intended(route('keuangan_eco.visit-results.index'));
+                
                 case 'keuangan_indie':
                 case 'keuangan': // Menjaga kompabilitas dengan role lama (FNC-123)
                     return redirect()->intended(route('keuangan.dashboard'));
-                
+                // ============================================
+
                 case 'subkon_pt':
                     return redirect()->intended(route('subkon-pt.dashboard'));
                 

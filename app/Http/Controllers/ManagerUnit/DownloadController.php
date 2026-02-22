@@ -7,14 +7,28 @@ use App\Models\LhkpReport;
 use App\Models\LhReport;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth; // Wajib import Auth
 
 class DownloadController extends Controller
 {
     public function dashboard()
     {
-        // Ambil semua data untuk ditampilkan di tabel
-        $lhkps = LhkpReport::latest()->get();
-        $lhs = LhReport::latest()->get();
+        // Ambil nama cabang dari Manager Unit yang sedang login
+        $cabangManager = Auth::user()->company_name;
+
+        // 1. FILTER LHKP berdasarkan cabang
+        $lhkps = LhkpReport::whereHas('user', function($query) use ($cabangManager) {
+                    $query->where('company_name', $cabangManager);
+                })
+                ->latest()
+                ->get();
+
+        // 2. FILTER LH (Laporan Harian Kepala Kantor) berdasarkan cabang yang sama
+        $lhs = LhReport::whereHas('user', function($query) use ($cabangManager) {
+                    $query->where('company_name', $cabangManager);
+                })
+                ->latest()
+                ->get();
 
         return view('manager-unit.dashboard', compact('lhkps', 'lhs'));
     }
@@ -23,7 +37,6 @@ class DownloadController extends Controller
     public function downloadLhkp($id)
     {
         $lhkp = LhkpReport::findOrFail($id);
-        // Pastikan Anda sudah membuat file view PDF-nya di langkah sebelumnya
         $pdf = Pdf::loadView('manager-unit.pdf.lhkp', compact('lhkp'))->setPaper('a4', 'portrait');
         return $pdf->download('LHKP_'.$lhkp->nama_pegawai.'.pdf');
     }
@@ -33,12 +46,10 @@ class DownloadController extends Controller
     {
         $lh = LhReport::findOrFail($id);
         
-        // Cek apakah data masih berupa string JSON, atau sudah jadi array
         $lh->kegiatan_list = is_string($lh->rincian_kegiatan) 
                                 ? json_decode($lh->rincian_kegiatan, true) 
                                 : $lh->rincian_kegiatan; 
         
-        // Pastikan formatnya selalu array untuk menghindari error di PDF
         if (!is_array($lh->kegiatan_list)) {
             $lh->kegiatan_list = [];
         }

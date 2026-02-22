@@ -39,14 +39,12 @@
 
     <div class="min-h-screen flex bg-slate-50/50" x-data="{ sidebarOpen: false }">
         
-        {{-- ================= SIDEBAR (DOMINAN GELAP/HITAM ELEGAN) ================= --}}
-        {{-- Background diubah ke sangat gelap (slate-950 ke atas) dengan border halus --}}
+        {{-- ================= SIDEBAR ================= --}}
         <aside class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0b1120] text-slate-300 transition-all duration-300 transform shadow-[20px_0_40px_rgba(0,0,0,0.15)] border-r border-slate-800/50 flex flex-col"
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
             
-            {{-- Header Sidebar (Logo Asli Dikembalikan) --}}
+            {{-- Header Sidebar (Logo) --}}
             <div class="flex items-center gap-4 h-20 px-6 bg-[#0f172a] border-b border-slate-800/80 shrink-0">
-                {{-- Menggunakan asset('img/logo.png') asli --}}
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-10 h-10 bg-white p-1.5 rounded-lg shadow-sm object-contain">
                 <div class="flex flex-col">
                     <span class="text-lg font-black tracking-tight text-white leading-tight drop-shadow-md">SYAFA GROUP</span>
@@ -61,8 +59,6 @@
                 @if(Auth::user()->role == 'admin')
                     <div class="mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Utama</div>
                     
-                    {{-- Item Menu Aktif: Background Biru Solid yang Tegas --}}
-                    {{-- Item Menu Tidak Aktif: Hover halus ke abu-abu gelap --}}
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-home w-6 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard</span>
@@ -108,10 +104,8 @@
                         <i class="fas fa-warehouse w-6 text-center {{ request()->routeIs('eco.dashboard') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Stok</span>
                     </a>
-                    <a href="{{ route('eco.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.lhkp.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('eco.lhkp.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Input LHKP</span>
-                    </a>
+                    
+                    {{-- DIHAPUS DARI SINI: MENU LHKP --}}
 
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Operasional Toko</div>
 
@@ -161,10 +155,6 @@
                          <i class="fas fa-file-signature w-6 text-center text-amber-500 group-hover:text-amber-300"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Input Laporan (LH)</span>
                     </a>
-                    {{-- <a href="{{ route('kepala_kantor.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-file-signature w-6 text-center text-amber-500 group-hover:text-amber-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Input Laporan (LH)</span>
-                    </a> --}}
                 @endif
 
 
@@ -174,9 +164,14 @@
                     
                     <a href="{{ route('manager_unit.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('manager_unit.dashboard') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Dashboard Evaluasi (Download LHKP & LH)</span>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Evaluasi</span>
                     </a>
-                   
+                    
+                    {{-- DITAMBAHKAN DI SINI: MENU INPUT LHKP --}}
+                    <a href="{{ route('manager_unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.lhkp.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('manager_unit.lhkp.*') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Input LHKP</span>
+                    </a>
                 @endif
 
 
@@ -253,15 +248,18 @@
                 @endif
 
 
-                {{-- ================= MENU PENGATURAN AKUN (SEMUA USER) ================= --}}
+               {{-- ================= MENU PENGATURAN AKUN ================= --}}
                 <div class="mt-8 mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Pengaturan</div>
 
-                <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('profile.edit') ? 'bg-slate-700 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                    <i class="fas fa-user-cog w-6 text-center {{ request()->routeIs('profile.edit') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
-                    <span class="ml-3 font-semibold text-sm">Edit Profil</span>
-                </a>
+                {{-- HANYA ADMIN YANG BISA EDIT PROFIL --}}
+                @if(Auth::user()->role == 'admin')
+                    <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('profile.edit') ? 'bg-slate-700 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-user-cog w-6 text-center {{ request()->routeIs('profile.edit') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Edit Profil</span>
+                    </a>
+                @endif
 
-                {{-- BUTTON LOGOUT SIDEBAR --}}
+                {{-- BUTTON LOGOUT SIDEBAR (TETAP UNTUK SEMUA USER) --}}
                 <div class="mt-4 pt-4">
                     <form method="POST" action="{{ route('logout') }}" id="sidebar-logout-form">
                         @csrf

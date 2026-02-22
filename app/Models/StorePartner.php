@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class StorePartner extends Model {
     use HasFactory;
-    protected $fillable = ['tanggal_update', 'kantor_cabang', 'kode_toko', 'nama_toko', 'nama_pemilik', 'foto_toko', 'no_telp', 'catatan_status'];
-}
+    protected $fillable = ['user_id','tanggal_update', 'kantor_cabang', 'kode_toko', 'nama_toko', 'nama_pemilik', 'foto_toko', 'no_telp', 'catatan_status'];
+public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
+    }

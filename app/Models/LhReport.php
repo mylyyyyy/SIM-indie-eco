@@ -14,4 +14,9 @@ class LhReport extends Model
     protected $casts = [
         'rincian_kegiatan' => 'array',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
 }

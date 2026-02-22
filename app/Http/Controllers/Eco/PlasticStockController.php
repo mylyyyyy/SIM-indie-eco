@@ -7,26 +7,29 @@ use App\Models\PlasticStock;
 use App\Models\StorePartner;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class PlasticStockController extends Controller
 {
     public function index()
     {
-        $stocks = PlasticStock::latest()->get();
+        $cabangEco = Auth::user()->company_name;
+        $stocks = PlasticStock::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest()->get();
         
-        // Ambil data toko aktif untuk dropdown
         $stores = StorePartner::where('catatan_status', 'aktif')
-                              ->orderBy('nama_toko', 'asc')
-                              ->get();
+                              ->whereHas('user', function($q) use ($cabangEco) {
+                                  $q->where('company_name', $cabangEco);
+                              })->orderBy('nama_toko', 'asc')->get();
 
         return view('eco.operasional.plastic-stock.index', compact('stocks', 'stores'));
     }
 
     public function store(Request $request)
     {
-        // 1. Validasi dasar
         $request->validate([
-            'tempat_select' => 'required', // Dropdown wajib dipilih
+            'tempat_select' => 'required',
             'tanggal' => 'required|date',
             'jenis_plastik' => 'required|string|max:255',
             'stok_awal' => 'required|numeric|min:0',
@@ -34,22 +37,16 @@ class PlasticStockController extends Controller
         ]);
 
         $data = $request->except(['tempat_select', 'tempat_manual']);
+        $data['user_id'] = Auth::id(); // Simpan ID User
 
-        // 2. Logika Penentuan Tempat / Toko
         if ($request->tempat_select == 'Lainnya') {
-            // Jika pilih "Lainnya", input manual wajib diisi
-            $request->validate([
-                'tempat_manual' => 'required|string|max:255',
-            ]);
+            $request->validate(['tempat_manual' => 'required|string|max:255']);
             $data['tempat'] = $request->tempat_manual;
         } else {
-            // Jika pilih dari list, gunakan value dropdown
             $data['tempat'] = $request->tempat_select;
         }
 
-        // 3. Simpan ke database
         PlasticStock::create($data);
-
         return redirect()->back()->with('success', 'Laporan stok plastik berhasil ditambahkan!');
     }
 
@@ -61,7 +58,11 @@ class PlasticStockController extends Controller
 
     public function exportPdf()
     {
-        $stocks = PlasticStock::orderBy('tanggal', 'desc')->get();
+        $cabangEco = Auth::user()->company_name;
+        $stocks = PlasticStock::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->orderBy('tanggal', 'desc')->get();
+                    
         $pdf = Pdf::loadView('eco.operasional.plastic-stock.pdf', compact('stocks'))->setPaper('a4', 'portrait');
         return $pdf->download('Laporan_Stok_Plastik_' . date('Y-m-d') . '.pdf');
     }

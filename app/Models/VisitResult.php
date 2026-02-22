@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class VisitResult extends Model {
     use HasFactory;
-    protected $fillable = ['hari', 'tanggal', 'nama_toko', 'alamat', 'titip_sisa_awal_pack', 'harga_rp', 'laku_pack', 'sisa_pack', 'tambah_pack', 'total_pack', 'keterangan_bayar'];
+    protected $fillable = ['user_id','hari', 'tanggal', 'nama_toko', 'alamat', 'titip_sisa_awal_pack', 'harga_rp', 'laku_pack', 'sisa_pack', 'tambah_pack', 'total_pack', 'keterangan_bayar'];
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
 }

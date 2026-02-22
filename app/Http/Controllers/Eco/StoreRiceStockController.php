@@ -7,14 +7,21 @@ use App\Models\StoreRiceStock;
 use App\Models\StorePartner;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class StoreRiceStockController extends Controller
 {
     public function index()
     {
-        $stocks = StoreRiceStock::latest('tanggal')->get();
-        // Ambil data toko untuk dropdown
-        $stores = StorePartner::where('catatan_status', 'aktif')->orderBy('nama_toko', 'asc')->get();
+        $cabangEco = Auth::user()->company_name;
+        $stocks = StoreRiceStock::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->latest('tanggal')->get();
+                    
+        $stores = StorePartner::where('catatan_status', 'aktif')
+                              ->whereHas('user', function($q) use ($cabangEco) {
+                                  $q->where('company_name', $cabangEco);
+                              })->orderBy('nama_toko', 'asc')->get();
         
         return view('eco.operasional.store-rice-stock.index', compact('stocks', 'stores'));
     }
@@ -29,7 +36,9 @@ class StoreRiceStockController extends Controller
             'stok_5kg' => 'required|integer|min:0',
         ]);
 
-        StoreRiceStock::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id(); // Simpan ID User
+        StoreRiceStock::create($data);
 
         return redirect()->back()->with('success', 'Data stok beras toko berhasil disimpan!');
     }
@@ -42,7 +51,11 @@ class StoreRiceStockController extends Controller
 
     public function exportPdf()
     {
-        $stocks = StoreRiceStock::orderBy('tanggal', 'desc')->get();
+        $cabangEco = Auth::user()->company_name;
+        $stocks = StoreRiceStock::whereHas('user', function($query) use ($cabangEco) {
+                        $query->where('company_name', $cabangEco);
+                    })->orderBy('tanggal', 'desc')->get();
+                    
         $pdf = Pdf::loadView('eco.operasional.store-rice-stock.pdf', compact('stocks'))->setPaper('a4', 'portrait');
         return $pdf->download('Stok_Beras_Toko_' . date('Y-m-d') . '.pdf');
     }
