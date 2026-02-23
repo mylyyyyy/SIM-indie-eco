@@ -50,7 +50,7 @@
                 <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
                     <tr>
                         <th class="px-6 py-4">Pengguna</th>
-                        <th class="px-6 py-4">Role & Cabang</th>
+                        <th class="px-6 py-4">Role & Cabang/Wilayah</th>
                         <th class="px-6 py-4">Kontak</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
@@ -65,15 +65,16 @@
                             <div class="flex items-center gap-3">
                                 @php
                                     $bgClass = match($user->role) {
-                                        'admin'          => 'from-purple-500 to-indigo-600',
-                                        'kepala_kantor'  => 'from-amber-500 to-red-500',
-                                        'manager_unit'   => 'from-indigo-400 to-purple-600',
-                                        'eco'            => 'from-emerald-500 to-teal-600',
-                                        'indie'          => 'from-pink-500 to-rose-600',
-                                        'keuangan_eco'   => 'from-teal-400 to-cyan-600',
-                                        'keuangan_indie' => 'from-blue-400 to-sky-600',
-                                        'subkon_pt'      => 'from-blue-500 to-blue-600',
-                                        default          => 'from-orange-400 to-orange-500', 
+                                        'admin'           => 'from-purple-500 to-indigo-600',
+                                        'manager_wilayah' => 'from-indigo-600 to-blue-700',
+                                        'kepala_kantor'   => 'from-amber-500 to-red-500',
+                                        'manager_unit'    => 'from-indigo-400 to-purple-600',
+                                        'eco'             => 'from-emerald-500 to-teal-600',
+                                        'indie'           => 'from-pink-500 to-rose-600',
+                                        'keuangan_eco'    => 'from-teal-400 to-cyan-600',
+                                        'keuangan_indie'  => 'from-blue-400 to-sky-600',
+                                        'subkon_pt'       => 'from-blue-500 to-blue-600',
+                                        default           => 'from-orange-400 to-orange-500', 
                                     };
                                 @endphp
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $bgClass }} text-white flex items-center justify-center font-bold text-lg shadow-md ring-2 ring-white">
@@ -86,11 +87,13 @@
                             </div>
                         </td>
 
-                        {{-- Kolom 2: Role --}}
+                        {{-- Kolom 2: Role & Cabang/Wilayah --}}
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
                                 @if($user->role == 'admin')
                                     <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 uppercase tracking-wide">Administrator</span>
+                                @elseif($user->role == 'manager_wilayah')
+                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">Manager Wilayah</span>
                                 @elseif($user->role == 'kepala_kantor')
                                     <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 uppercase tracking-wide">Kepala Kantor</span>
                                 @elseif($user->role == 'manager_unit')
@@ -110,12 +113,22 @@
                                 @endif
 
                                 <span class="text-xs font-medium text-slate-500 mt-1 flex items-center gap-1">
-                                    <i class="far fa-building"></i> {{ $user->company_name ?? '-' }}
+                                    <i class="far fa-building"></i> 
+                                    @if($user->role == 'manager_wilayah')
+                                        Wilayah: {{ $user->wilayah ?? '-' }}
+                                    @elseif($user->role == 'admin')
+                                        Pusat / Semua Cabang
+                                    @else
+                                        {{ $user->company_name ?? '-' }}
+                                        @if($user->wilayah)
+                                            (Wilayah: {{ $user->wilayah }})
+                                        @endif
+                                    @endif
                                 </span>
                             </div>
                         </td>
 
-                        {{-- Kolom 3: Kontak (Spesialisasi Dihapus) --}}
+                        {{-- Kolom 3: Kontak --}}
                         <td class="px-6 py-4">
                             <span class="text-xs flex items-center gap-2"><i class="fas fa-phone w-4 text-slate-400"></i> {{ $user->phone ?? '-' }}</span>
                         </td>
@@ -162,10 +175,10 @@
         </div>
     </div>
 
-    {{-- ================= KUMPULAN MODAL EDIT (DIPINDAHKAN KE LUAR TABEL AGAR VALID HTML & CSS TIDAK RUSAK) ================= --}}
+    {{-- ================= KUMPULAN MODAL EDIT ================= --}}
     @foreach($users as $user)
         <x-modal name="edit-user-modal-{{ $user->id }}" focusable>
-            <form method="POST" action="{{ route('admin.users.update', $user->id) }}" class="bg-white rounded-2xl flex flex-col max-h-[90vh] shadow-2xl">
+            <form method="POST" action="{{ route('admin.users.update', $user->id) }}" class="bg-white rounded-2xl flex flex-col max-h-[90vh] shadow-2xl" x-data="{ selectedRole: '{{ $user->role }}' }">
                 @csrf @method('PUT')
 
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-5 flex justify-between items-center shrink-0 rounded-t-2xl">
@@ -214,23 +227,24 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Role Akun</label>
                             <div class="relative group">
                                 <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                                <select name="role" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
-                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Administrator</option>
-                                    <option value="kepala_kantor" {{ $user->role == 'kepala_kantor' ? 'selected' : '' }}>Kepala Kantor</option>
-                                    <option value="manager_unit" {{ $user->role == 'manager_unit' ? 'selected' : '' }}>Manager Unit</option>
-                                    <option value="eco" {{ $user->role == 'eco' ? 'selected' : '' }}>Admin Kantor (Eco)</option>
-                                    <option value="keuangan_eco" {{ $user->role == 'keuangan_eco' ? 'selected' : '' }}>Keuangan Eco</option>
-                                    <option value="indie" {{ $user->role == 'indie' ? 'selected' : '' }}>dmin Kantor (Indie)</option>
-                                    <option value="keuangan_indie" {{ in_array($user->role, ['keuangan_indie', 'keuangan']) ? 'selected' : '' }}>Keuangan Indie</option>
-                                    <option value="subkon_pt" {{ $user->role == 'subkon_pt' ? 'selected' : '' }}>Manager Proyek</option>
-                                    <option value="subkon_eks" {{ $user->role == 'subkon_eks' ? 'selected' : '' }}>Subkon (EKS)</option>
+                                <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
+                                    <option value="admin">Administrator</option>
+                                    <option value="manager_wilayah">Manager Wilayah</option>
+                                    <option value="kepala_kantor">Kepala Kantor</option>
+                                    <option value="manager_unit">Manager Unit</option>
+                                    <option value="eco">Admin Kantor (Eco)</option>
+                                    <option value="keuangan_eco">Keuangan Eco</option>
+                                    <option value="indie">Admin Kantor (Indie)</option>
+                                    <option value="keuangan_indie">Keuangan Indie</option>
+                                    <option value="subkon_pt">Manager Proyek</option>
+                                    <option value="subkon_eks">Subkon (EKS)</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                             </div>
                         </div>
 
-                        {{-- Cabang / Lokasi --}}
-                        <div>
+                        {{-- Cabang / Lokasi (Sembunyikan HANYA untuk Admin & Manager Wilayah) --}}
+                        <div x-show="selectedRole !== 'admin' && selectedRole !== 'manager_wilayah'" x-transition>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Cabang / Lokasi</label>
                             <div class="relative group">
                                 <i class="fas fa-building absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
@@ -238,22 +252,43 @@
                                     <option value="" {{ empty($user->company_name) ? 'selected' : '' }}>-- Pilih Cabang --</option>
                                     <option value="Kantor Pusat" {{ $user->company_name == 'Kantor Pusat' ? 'selected' : '' }}>Kantor Pusat</option>
                                     
-                                    @foreach($locations as $location)
-                                        <option value="{{ $location->name }}" {{ $user->company_name == $location->name ? 'selected' : '' }}>
-                                            {{ $location->name }}
-                                        </option>
-                                    @endforeach
+                                    {{-- OPTGROUP UNTUK ECO --}}
+                                    <optgroup label="🟢 DIVISI ECO" class="text-emerald-600 font-bold bg-emerald-50">
+                                        @foreach($locations->where('type', '!=', 'indie') as $location)
+                                            <option value="{{ $location->name }}" class="text-slate-700 bg-white font-medium" {{ $user->company_name == $location->name ? 'selected' : '' }}>
+                                                {{ $location->name }} ({{ ucfirst($location->type) }})
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+
+                                    {{-- OPTGROUP UNTUK INDIE --}}
+                                    <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">
+                                        @foreach($locations->where('type', 'indie') as $location)
+                                            <option value="{{ $location->name }}" class="text-slate-700 bg-white font-medium" {{ $user->company_name == $location->name ? 'selected' : '' }}>
+                                                {{ $location->name }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
                                 </select>
                                 <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                             </div>
                         </div>
 
+                        {{-- Wilayah / Regional (MUNCUL UNTUK SEMUA KECUALI ADMIN) --}}
+                        <div x-show="selectedRole !== 'admin'" x-transition class="col-span-2 md:col-span-1">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Wilayah / Regional</label>
+                            <div class="relative group">
+                                <i class="fas fa-map-marker-alt absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                                <input type="text" name="wilayah" value="{{ $user->wilayah ?? '' }}" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Contoh: Malang">
+                            </div>
+                        </div>
+
                         {{-- Telepon --}}
-                        <div class="col-span-2">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">No. Telepon</label>
                             <div class="relative group">
                                 <i class="fas fa-phone absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                                <input type="text" name="phone" value="{{ $user->phone }}" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all">
+                                <input type="text" name="phone" value="{{ $user->phone }}" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="08...">
                             </div>
                         </div>
                         
@@ -273,9 +308,9 @@
         </x-modal>
     @endforeach
 
-    {{-- ================= MODAL TAMBAH (IDENTIK DENGAN EDIT) ================= --}}
+    {{-- ================= MODAL TAMBAH ================= --}}
     <x-modal name="add-user-modal" focusable>
-        <form method="POST" action="{{ route('admin.users.store') }}" class="bg-white rounded-2xl flex flex-col max-h-[90vh] shadow-2xl">
+        <form method="POST" action="{{ route('admin.users.store') }}" class="bg-white rounded-2xl flex flex-col max-h-[90vh] shadow-2xl" x-data="{ selectedRole: '' }">
             @csrf
             
             <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-5 flex justify-between items-center shrink-0 rounded-t-2xl">
@@ -325,9 +360,10 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Role Akun</label>
                         <div class="relative group">
                             <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                            <select name="role" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
+                            <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
                                 <option value="" disabled selected>-- Pilih Role --</option>
                                 <option value="admin">Administrator</option>
+                                <option value="manager_wilayah">Manager Wilayah</option>
                                 <option value="kepala_kantor">Kepala Kantor</option>
                                 <option value="manager_unit">Manager Unit</option>
                                 <option value="eco">Admin Kantor (Eco)</option>
@@ -341,24 +377,48 @@
                         </div>
                     </div>
 
-                    {{-- Cabang / Lokasi --}}
-                    <div>
+                    {{-- Cabang / Lokasi (Sembunyikan HANYA untuk Admin & Manager Wilayah) --}}
+                    <div x-show="selectedRole !== 'admin' && selectedRole !== 'manager_wilayah'" x-transition>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Cabang / Lokasi</label>
                         <div class="relative group">
                             <i class="fas fa-building absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
                             <select name="company_name" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
                                 <option value="" selected>-- Pilih Cabang --</option>
                                 <option value="Kantor Pusat">Kantor Pusat</option>
-                                @foreach($locations as $location)
-                                    <option value="{{ $location->name }}">{{ $location->name }}</option>
-                                @endforeach
+                                
+                                {{-- OPTGROUP UNTUK ECO --}}
+                                <optgroup label="🟢 DIVISI ECO" class="text-emerald-600 font-bold bg-emerald-50">
+                                    @foreach($locations->where('type', '!=', 'indie') as $location)
+                                        <option value="{{ $location->name }}" class="text-slate-700 bg-white font-medium">
+                                            {{ $location->name }} ({{ ucfirst($location->type) }})
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+
+                                {{-- OPTGROUP UNTUK INDIE --}}
+                                <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">
+                                    @foreach($locations->where('type', 'indie') as $location)
+                                        <option value="{{ $location->name }}" class="text-slate-700 bg-white font-medium">
+                                            {{ $location->name }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
                             </select>
                             <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                         </div>
                     </div>
 
+                    {{-- Wilayah / Regional (MUNCUL UNTUK SEMUA KECUALI ADMIN) --}}
+                    <div x-show="selectedRole !== 'admin'" x-transition class="col-span-2 md:col-span-1">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Wilayah / Regional</label>
+                        <div class="relative group">
+                            <i class="fas fa-map-marker-alt absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                            <input type="text" name="wilayah" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all" placeholder="Contoh: Malang">
+                        </div>
+                    </div>
+
                     {{-- Telepon --}}
-                    <div class="col-span-2">
+                    <div class="col-span-2 md:col-span-1">
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">No. Telepon</label>
                         <div class="relative group">
                             <i class="fas fa-phone absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
@@ -374,7 +434,7 @@
                 <button type="button" x-on:click="$dispatch('close')" class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors focus:outline-none">
                     Batal
                 </button>
-                <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 transition-all flex items-center gap-2 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <i class="fas fa-save"></i> Simpan Data
                 </button>
             </div>

@@ -156,6 +156,16 @@ Route::middleware(['auth', 'role:subkon_pt'])->prefix('internal')->name('subkon-
     Route::post('/penilaian', [RatingController::class, 'store'])->name('rating.store');
     Route::get('/monitoring', [ProjectController::class, 'monitoring'])->name('monitoring');
     Route::patch('/laporan/{id}/status', [SubkonPTDashboard::class, 'updateStatus'])->name('reports.status');
+    Route::get('/lh-download', [App\Http\Controllers\SubkonPt\LhDownloadController::class, 'index'])->name('lh-download.index');
+    
+    // 1. ROUTE EXPORT PDF WAJIB DI ATAS RESOURCE
+    Route::get('/lhkp/export-pdf', [App\Http\Controllers\SubkonPt\LhkpController::class, 'exportPdf'])->name('lhkp.export-pdf');
+    
+    // 2. TAMBAHKAN ->except(['show']) AGAR TIDAK ERROR "Call to undefined method show()"
+    Route::resource('lhkp', App\Http\Controllers\SubkonPt\LhkpController::class)->except(['show', 'create', 'edit']);
+    
+    // 3. Route Download LH Satuan
+    Route::get('/lh/{id}/download', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLh'])->name('lh.download');
 });
 
 Route::middleware(['auth', 'role:subkon_eks'])->prefix('vendor')->name('subkon-eks.')->group(function () {
@@ -164,6 +174,8 @@ Route::middleware(['auth', 'role:subkon_eks'])->prefix('vendor')->name('subkon-e
     Route::resource('report-payments', ReportPayment::class);
     Route::get('/penilaian/cetak/{id}', [RatingController::class, 'printPDF'])->name('rating.print');
     Route::get('/laporan/{id}/cetak', [SubkonEksReport::class, 'print'])->name('reports.print');
+
+    Route::resource('lh', App\Http\Controllers\SubkonEks\LhController::class);
 });
 
 Route::middleware(['auth', 'role:keuangan_indie'])->prefix('finance')->name('keuangan.')->group(function () {
@@ -235,7 +247,7 @@ Route::middleware(['auth', 'role:kepala_kantor'])->prefix('kepala-kantor')->name
 // ====================================================
 // 3. GRUP MANAGER UNIT (Baru - Download Center)
 // ====================================================
-Route::middleware(['auth', 'role:manager_unit'])->prefix('manager-unit')->name('manager_unit.')->group(function () {
+Route::middleware(['auth', 'role:manager_unit,manager_wilayah'])->prefix('manager-unit')->name('manager_unit.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'dashboard'])->name('dashboard');
     // LHKP
     Route::resource('lhkp', \App\Http\Controllers\ManagerUnit\LhkpController::class)->except(['create', 'edit', 'show']);

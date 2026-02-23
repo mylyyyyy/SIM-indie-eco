@@ -158,16 +158,15 @@
                 @endif
 
 
-                {{-- KHUSUS MANAGER UNIT --}}
-                @if(Auth::user()->role == 'manager_unit')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-purple-500 uppercase tracking-widest mt-2">Manager Unit</div>
+               {{-- KHUSUS MANAGER UNIT & MANAGER WILAYAH --}}
+                @if(Auth::user()->role == 'manager_unit' || Auth::user()->role == 'manager_wilayah')
+                    <div class="mb-2 px-4 text-[10px] font-bold text-purple-500 uppercase tracking-widest mt-2">Pimpinan / Manager</div>
                     
                     <a href="{{ route('manager_unit.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('manager_unit.dashboard') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Evaluasi</span>
                     </a>
                     
-                    {{-- DITAMBAHKAN DI SINI: MENU INPUT LHKP --}}
                     <a href="{{ route('manager_unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.lhkp.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('manager_unit.lhkp.*') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Input LHKP</span>
@@ -219,28 +218,43 @@
                 @endif
 
 
-                {{-- KHUSUS SUBKON PT --}}
+              {{-- KHUSUS MANAGER PROYEK (SUBKON PT) --}}
                 @if(Auth::user()->role == 'subkon_pt')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest mt-2">Monitoring</div>
+                    <div class="mb-2 px-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest mt-2">Evaluasi Proyek</div>
+                    
                     <a href="{{ route('subkon-pt.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-chart-pie w-6 text-center {{ request()->routeIs('subkon-pt.dashboard') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
                     </a>
+
+                    {{-- MENU BARU: UNDUH LH --}}
+                    <a href="{{ route('subkon-pt.lh-download.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.lh-download.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-file-download w-6 text-center {{ request()->routeIs('subkon-pt.lh-download.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Unduh LH Lapangan</span>
+                    </a>
+
+                    <a href="{{ route('subkon-pt.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.lhkp.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-clipboard-list w-6 text-center {{ request()->routeIs('subkon-pt.lhkp.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Input LHKP Indie</span>
+                    </a>
                 @endif
 
 
-                {{-- KHUSUS SUBKON EKS (VENDOR) --}}
+                {{-- KHUSUS SUBKON EKS (VENDOR / PELAKSANA LAPANGAN) --}}
                 @if(Auth::user()->role == 'subkon_eks')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-sky-500 uppercase tracking-widest mt-2">Pekerjaan</div>
+                    <div class="mb-2 px-4 text-[10px] font-bold text-sky-500 uppercase tracking-widest mt-2">Pekerjaan Lapangan</div>
+                    
                     <a href="{{ route('subkon-eks.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.dashboard') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-briefcase w-6 text-center {{ request()->routeIs('subkon-eks.dashboard') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Proyek Saya</span>
                     </a>
                     
-                    <a href="{{ route('subkon-eks.reports.create') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.reports.create') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-file-upload w-6 text-center {{ request()->routeIs('subkon-eks.reports.create') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Input Laporan</span>
+                    {{-- MENU INPUT LH UNTUK SUBKON EKS --}}
+                    <a href="{{ route('subkon-eks.lh.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.lh.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-file-signature w-6 text-center {{ request()->routeIs('subkon-eks.lh.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Input Laporan Harian (LH)</span>
                     </a>
+
                     <a href="{{ route('subkon-eks.report-payments.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.report-payments.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-invoice-dollar w-6 text-center {{ request()->routeIs('subkon-eks.report-payments.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Klaim Pembayaran</span>

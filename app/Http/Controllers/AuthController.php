@@ -47,7 +47,7 @@ class AuthController extends Controller
                     return redirect()->intended('/kepala-kantor/dashboard');
                 
                 case 'manager_unit':
-                    // Ubah route ini jika dashboard manager unit punya nama berbeda
+                case 'manager_wilayah': // <--- TAMBAHKAN INI
                     return redirect()->intended('/manager-unit/dashboard');
                 
                 // ============================================

@@ -14,20 +14,26 @@ class EcoLocationController extends Controller
         return view('admin.locations.index', compact('locations'));
     }
 
-    public function store(Request $request)
+   public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:mill,warehouse,shop',
-            'current_stock' => 'required|integer|min:0',
+            // PERBAIKAN: Tambahkan 'indie' ke dalam validasi ini
+            'type' => 'required|in:mill,warehouse,shop,indie', 
+            'current_stock' => 'nullable|integer|min:0',
             'status' => 'required|in:active,inactive',
         ]);
 
-        EcoLocation::create($request->all());
+        $data = $request->all();
+        // Jika tipenya indie, pastikan stoknya 0
+        if ($request->type == 'indie') {
+            $data['current_stock'] = 0;
+        }
+
+        EcoLocation::create($data);
 
         return redirect()->route('admin.locations.index')->with('success', 'Cabang berhasil ditambahkan!');
     }
-
     
     public function destroy($id)
     {
@@ -41,21 +47,25 @@ class EcoLocationController extends Controller
         return view('admin.locations.edit', compact('location'));
     }
 
-    // UPDATE REDIRECT SETELAH UPDATE
     public function update(Request $request, $id)
     {
         $location = EcoLocation::findOrFail($id);
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:mill,warehouse,shop',
-            'current_stock' => 'required|integer|min:0',
+            // PERBAIKAN: Tambahkan 'indie' ke dalam validasi ini
+            'type' => 'required|in:mill,warehouse,shop,indie',
+            'current_stock' => 'nullable|integer|min:0',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $location->update($request->all());
+        $data = $request->all();
+        if ($request->type == 'indie') {
+            $data['current_stock'] = 0;
+        }
 
-        // Redirect kembali ke index
+        $location->update($data);
+
         return redirect()->route('admin.locations.index')->with('success', 'Data cabang berhasil diperbarui!');
     }
 }

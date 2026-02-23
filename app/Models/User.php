@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         'role',           // <--- Wajib ada
         'company_name',   // <--- Wajib ada
-        'phone',          // <--- Wajib ada (jika ada di DB)
+        'phone',  
+        'wilayah',        // <--- Wajib ada (jika ada di DB)
         'specialization', // <--- Wajib ada (jika ada di DB)
         'address',
     ];

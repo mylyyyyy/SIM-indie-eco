@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\Auth; // Wajib import Auth
 
 class LhkpController extends Controller
 {
-    public function index()
+   public function index()
     {
-        // Ambil nama cabang dari Manager Unit yang sedang login
-        $cabangManager = Auth::user()->company_name;
+        $user = Auth::user();
 
-        // FILTER: Tampilkan LHKP yang dikelola oleh user di cabang yang sama
-        $lhkps = LhkpReport::whereHas('user', function($query) use ($cabangManager) {
-                    $query->where('company_name', $cabangManager);
-                })
-                ->latest()
-                ->get();
-                
+        if ($user->role === 'manager_wilayah') {
+            // FILTER: Ambil semua LHKP dari user yang berada di WILAYAH yang sama
+            $lhkps = LhkpReport::whereHas('user', function($query) use ($user) {
+                        $query->where('wilayah', $user->wilayah);
+                    })->latest()->get();
+        } else {
+            // FILTER: Ambil LHKP dari user yang berada di CABANG yang sama (Manager Unit)
+            $lhkps = LhkpReport::whereHas('user', function($query) use ($user) {
+                        $query->where('company_name', $user->company_name);
+                    })->latest()->get();
+        }
+
         return view('manager-unit.lhkp.index', compact('lhkps'));
     }
 

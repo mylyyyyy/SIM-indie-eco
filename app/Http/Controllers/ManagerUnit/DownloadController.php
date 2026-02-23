@@ -11,24 +11,27 @@ use Illuminate\Support\Facades\Auth; // Wajib import Auth
 
 class DownloadController extends Controller
 {
-    public function dashboard()
+  public function dashboard()
     {
-        // Ambil nama cabang dari Manager Unit yang sedang login
-        $cabangManager = Auth::user()->company_name;
+        $user = Auth::user();
 
-        // 1. FILTER LHKP berdasarkan cabang
-        $lhkps = LhkpReport::whereHas('user', function($query) use ($cabangManager) {
-                    $query->where('company_name', $cabangManager);
-                })
-                ->latest()
-                ->get();
+        if ($user->role === 'manager_wilayah') {
+            $lhkps = LhkpReport::whereHas('user', function($query) use ($user) {
+                        $query->where('wilayah', $user->wilayah);
+                    })->latest()->get();
 
-        // 2. FILTER LH (Laporan Harian Kepala Kantor) berdasarkan cabang yang sama
-        $lhs = LhReport::whereHas('user', function($query) use ($cabangManager) {
-                    $query->where('company_name', $cabangManager);
-                })
-                ->latest()
-                ->get();
+            $lhs = LhReport::whereHas('user', function($query) use ($user) {
+                        $query->where('wilayah', $user->wilayah);
+                    })->latest()->get();
+        } else {
+            $lhkps = LhkpReport::whereHas('user', function($query) use ($user) {
+                        $query->where('company_name', $user->company_name);
+                    })->latest()->get();
+
+            $lhs = LhReport::whereHas('user', function($query) use ($user) {
+                        $query->where('company_name', $user->company_name);
+                    })->latest()->get();
+        }
 
         return view('manager-unit.dashboard', compact('lhkps', 'lhs'));
     }

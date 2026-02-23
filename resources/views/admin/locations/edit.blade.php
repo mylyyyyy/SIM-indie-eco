@@ -1,4 +1,6 @@
 <x-admin-layout>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    
     <div class="max-w-4xl mx-auto">
         {{-- Header & Back Button --}}
         <div class="flex items-center gap-4 mb-8">
@@ -12,7 +14,7 @@
         </div>
 
         {{-- Form Card --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden" x-data="{ tipe_divisi: '{{ $location->type }}' }">
             <div class="bg-slate-50/50 px-8 py-4 border-b border-slate-100 flex items-center gap-2">
                 <i class="fas fa-edit text-blue-600"></i>
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Formulir Perubahan Data</span>
@@ -21,20 +23,35 @@
             <form action="{{ route('admin.locations.update', $location->id) }}" method="POST" class="p-8">
                 @csrf @method('PUT')
 
-                {{-- Default Value Tipe = Shop (Hidden) --}}
-                <input type="hidden" name="type" value="shop">
-
                 <div class="space-y-6">
                     {{-- Nama Cabang --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Cabang <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Cabang / Daerah <span class="text-red-500">*</span></label>
                         <input type="text" name="name" value="{{ $location->name }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 transition-all font-semibold text-slate-700" required>
                     </div>
 
-                    {{-- Stok (Grid dihapus agar full width) --}}
+                    {{-- Pilih Divisi / Tipe --}}
                     <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Divisi & Tipe <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <select name="type" x-model="tipe_divisi" class="w-full px-4 py-3 border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 appearance-none bg-slate-50">
+                                <optgroup label="Divisi Eco">
+                                    <option value="shop" {{ $location->type == 'shop' ? 'selected' : '' }}>Eco - Toko</option>
+                                    <option value="warehouse" {{ $location->type == 'warehouse' ? 'selected' : '' }}>Eco - Gudang</option>
+                                    <option value="mill" {{ $location->type == 'mill' ? 'selected' : '' }}>Eco - Pabrik Selep</option>
+                                </optgroup>
+                                <optgroup label="Divisi Indie">
+                                    <option value="indie" {{ $location->type == 'indie' ? 'selected' : '' }}>Syafa Indie (Proyek/Infrastruktur)</option>
+                                </optgroup>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-4 text-slate-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    {{-- Stok (Hanya Muncul Jika Bukan Indie) --}}
+                    <div x-show="tipe_divisi !== 'indie'" x-transition>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Saat Ini (Kg)</label>
-                        <input type="number" name="current_stock" value="{{ $location->current_stock }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 font-mono" required>
+                        <input type="number" name="current_stock" value="{{ $location->current_stock }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 font-mono">
                     </div>
 
                     {{-- Status --}}

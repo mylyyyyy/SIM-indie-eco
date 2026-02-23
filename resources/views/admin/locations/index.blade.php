@@ -5,7 +5,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
             <h2 class="text-3xl font-black text-slate-800 tracking-tight">Kelola Data Cabang</h2>
-            <p class="text-slate-500 font-medium">Daftar lokasi gudang, pabrik, dan toko mitra.</p>
+            <p class="text-slate-500 font-medium">Daftar lokasi cabang Divisi Eco & Indie.</p>
         </div>
         {{-- Tombol Tambah --}}
         <button x-data @click="$dispatch('open-modal', 'add-location-modal')" 
@@ -29,9 +29,9 @@
             <table class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
                     <tr>
-                        <th class="px-6 py-4">Nama Cabang</th>
-                        <th class="px-6 py-4">Tipe</th> {{-- Kolom Tipe Tetap Ada --}}
-                        <th class="px-6 py-4">Stok Saat Ini</th>
+                        <th class="px-6 py-4">Nama Cabang / Daerah</th>
+                        <th class="px-6 py-4">Divisi & Tipe</th> 
+                        <th class="px-6 py-4">Stok (Khusus Eco)</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
@@ -43,16 +43,25 @@
                             <span class="font-bold text-slate-800 text-base">{{ $item->name }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            {{-- Menampilkan Badge Tipe --}}
                             @if($item->type == 'mill') 
-                                <span class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-purple-200"><i class="fas fa-industry"></i> Pabrik</span>
+                                <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-emerald-200"><i class="fas fa-industry"></i> Eco (Pabrik)</span>
                             @elseif($item->type == 'warehouse') 
-                                <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-blue-200"><i class="fas fa-warehouse"></i> Gudang</span>
-                            @else 
-                                <span class="inline-flex items-center gap-1.5 bg-orange-100 text-orange-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-orange-200"><i class="fas fa-store"></i> Toko</span>
+                                <span class="inline-flex items-center gap-1.5 bg-teal-100 text-teal-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-teal-200"><i class="fas fa-warehouse"></i> Eco (Gudang)</span>
+                            @elseif($item->type == 'shop') 
+                                <span class="inline-flex items-center gap-1.5 bg-orange-100 text-orange-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-orange-200"><i class="fas fa-store"></i> Eco (Toko)</span>
+                            @elseif($item->type == 'indie') 
+                                <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-indigo-200"><i class="fas fa-city"></i> Divisi Indie</span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-slate-200">{{ $item->type }}</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 font-mono font-bold text-slate-700">{{ number_format($item->current_stock) }} <span class="text-slate-400 text-xs font-sans">kg</span></td>
+                        <td class="px-6 py-4 font-mono font-bold text-slate-700">
+                            @if($item->type == 'indie')
+                                <span class="text-slate-400 text-xs font-sans">-</span>
+                            @else
+                                {{ number_format($item->current_stock) }} <span class="text-slate-400 text-xs font-sans">kg</span>
+                            @endif
+                        </td>
                         <td class="px-6 py-4">
                             @if($item->status == 'active')
                                 <span class="inline-flex items-center gap-1.5 text-emerald-600 font-bold text-xs bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Aktif</span>
@@ -85,9 +94,9 @@
         </div>
     </div>
 
-    {{-- MODAL TAMBAH --}}
+    {{-- MODAL TAMBAH (Dengan Logika Tipe Divisi) --}}
     <x-modal name="add-location-modal" focusable>
-        <form action="{{ route('admin.locations.store') }}" method="POST" class="bg-white rounded-2xl flex flex-col max-h-[90vh]">
+        <form action="{{ route('admin.locations.store') }}" method="POST" class="bg-white rounded-2xl flex flex-col max-h-[90vh]" x-data="{ tipe_divisi: 'shop' }">
             @csrf
             
             {{-- Modal Header --}}
@@ -103,19 +112,35 @@
             {{-- Modal Body --}}
             <div class="p-6 overflow-y-auto custom-scrollbar">
                 <div class="space-y-5">
+                    
                     {{-- Input Nama --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Cabang <span class="text-red-500">*</span></label>
-                        <input type="text" name="name" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 transition-all placeholder:text-slate-300" placeholder="Contoh: Toko Berkah Jaya Pusat" required>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Cabang / Daerah <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 transition-all placeholder:text-slate-300" placeholder="Contoh: Cabang Malang" required>
                     </div>
 
-                    {{-- Default Value Tipe = Shop (Hidden) --}}
-                    <input type="hidden" name="type" value="shop">
-
-                    {{-- Input Stok (Full Width karena tipe dihapus) --}}
+                    {{-- Pilih Divisi / Tipe --}}
                     <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Divisi & Tipe <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <select name="type" x-model="tipe_divisi" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 appearance-none bg-slate-50">
+                                <optgroup label="Divisi Eco">
+                                    <option value="shop">Eco - Toko</option>
+                                    <option value="warehouse">Eco - Gudang</option>
+                                    <option value="mill">Eco - Pabrik Selep</option>
+                                </optgroup>
+                                <optgroup label="Divisi Indie">
+                                    <option value="indie">Syafa Indie (Proyek/Infrastruktur)</option>
+                                </optgroup>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-3 text-slate-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    {{-- Input Stok (HANYA MUNCUL JIKA BUKAN INDIE) --}}
+                    <div x-show="tipe_divisi !== 'indie'" x-transition>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Stok Awal (Kg)</label>
-                        <input type="number" name="current_stock" value="0" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500" required>
+                        <input type="number" name="current_stock" value="0" class="w-full border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                     {{-- Input Status --}}

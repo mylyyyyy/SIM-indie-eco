@@ -19,26 +19,26 @@ class UserController extends Controller
         
         return view('admin.users.index', compact('users', 'locations'));
     }
+
     public function store(Request $request)
     {
-        // 1. PERBAIKAN VALIDASI (Penambahan Role Baru)
+        // 1. PERBAIKAN VALIDASI (Penambahan Role Baru: manager_wilayah)
         $request->validate([
             'name' => 'required|string|max:255',
             // Ganti 'email' menjadi 'string' agar NIP/NIB bisa masuk (tanpa @)
             'email' => 'required|string|max:255|unique:users', 
-            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,keuangan_eco,keuangan_indie',
+            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie',
             'password' => 'required|string|min:8',
         ]);
 
-        // 2. PERBAIKAN SIMPAN DATA
+        // 2. PERBAIKAN SIMPAN DATA (Hapus specialization, Tambah wilayah)
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            // Pastikan kolom ini benar-benar ada di Database Anda
             'company_name' => $request->company_name,
-            'specialization' => $request->specialization,
+            'wilayah' => $request->wilayah, // <--- Kolom Wilayah Ditambahkan
             'phone' => $request->phone,
         ]);
 
@@ -54,7 +54,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             // Hapus validasi 'email', ganti string
             'email' => ['required', 'string', Rule::unique('users')->ignore($user->id)],
-            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,keuangan_eco,keuangan_indie',
+            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie',
         ]);
 
         $data = [
@@ -62,7 +62,7 @@ class UserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'company_name' => $request->company_name,
-            'specialization' => $request->specialization,
+            'wilayah' => $request->wilayah, // <--- Kolom Wilayah Ditambahkan
             'phone' => $request->phone,
         ];
 
