@@ -55,17 +55,15 @@
             {{-- Menu Items --}}
             <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto sidebar-scroll pb-24">
                 
-                {{-- KHUSUS ADMIN PUSAT --}}
+                {{-- ================= KHUSUS ADMIN PUSAT ================= --}}
                 @if(Auth::user()->role == 'admin')
                     <div class="mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Utama</div>
-                    
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-home w-6 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard</span>
                     </a>
                     
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Master Data</div>
-                    
                     <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-users w-6 text-center {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Data Pengguna</span>
@@ -84,7 +82,6 @@
                     </a>
 
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Publikasi & Log</div>
-
                     <a href="{{ route('admin.news.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('admin.news.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-newspaper w-6 text-center {{ request()->routeIs('admin.news.*') ? 'text-white' : 'text-slate-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Berita & Artikel</span>
@@ -96,19 +93,15 @@
                 @endif
 
 
-                {{-- KHUSUS ECO (ADMIN KANTOR - DIVISI BERAS & LINGKUNGAN) --}}
+                {{-- ================= KHUSUS ECO (DIVISI BERAS) ================= --}}
                 @if(Auth::user()->role == 'eco')
                     <div class="mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-2">Dashboard & Laporan</div>
-                    
                     <a href="{{ route('eco.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-warehouse w-6 text-center {{ request()->routeIs('eco.dashboard') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Stok</span>
                     </a>
-                    
-                    {{-- DIHAPUS DARI SINI: MENU LHKP --}}
 
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Operasional Toko</div>
-
                     <a href="{{ route('eco.visit-plans.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.visit-plans.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-route w-6 text-center {{ request()->routeIs('eco.visit-plans.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Plan Kunjungan</span>
@@ -139,7 +132,6 @@
                     </a>
 
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Publikasi</div>
-
                     <a href="{{ route('eco.portfolios.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.portfolios.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-images w-6 text-center {{ request()->routeIs('eco.portfolios.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Portofolio Eco</span>
@@ -147,34 +139,29 @@
                 @endif
 
 
-                {{-- KHUSUS KEPALA KANTOR --}}
+                {{-- KEPALA KANTOR ECO --}}
                 @if(Auth::user()->role == 'kepala_kantor')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-amber-500 uppercase tracking-widest mt-2">Kepala Kantor</div>
-                    
+                    <div class="mb-2 px-4 text-[10px] font-bold text-amber-500 uppercase tracking-widest mt-2">Kepala Kantor Eco</div>
                     <a href="{{ route('kepala_kantor.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('kepala_kantor.dashboard') ? 'bg-amber-600 text-white shadow-md shadow-amber-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                          <i class="fas fa-file-signature w-6 text-center text-amber-500 group-hover:text-amber-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Dashboard Input Laporan (LH)</span>
+                        <span class="ml-3 font-semibold text-sm">Input Laporan Harian (LH)</span>
                     </a>
                 @endif
 
-
-               {{-- KHUSUS MANAGER UNIT & MANAGER WILAYAH --}}
+                {{-- MANAGER UNIT & WILAYAH ECO --}}
                 @if(Auth::user()->role == 'manager_unit' || Auth::user()->role == 'manager_wilayah')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-purple-500 uppercase tracking-widest mt-2">Pimpinan / Manager</div>
-                    
-                    <a href="{{ route('manager_unit.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('manager_unit.dashboard') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
+                    <div class="mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-2">Manager Eco</div>
+                    <a href="{{ route('manager_unit.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('manager_unit.dashboard') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Evaluasi</span>
                     </a>
-                    
-                    <a href="{{ route('manager_unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.lhkp.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('manager_unit.lhkp.*') ? 'text-white' : 'text-purple-500 group-hover:text-purple-300' }}"></i>
+                    <a href="{{ route('manager_unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('manager_unit.lhkp.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('manager_unit.lhkp.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Input LHKP</span>
                     </a>
                 @endif
 
-
-                {{-- KHUSUS KEUANGAN ECO --}}
+                {{-- KEUANGAN ECO --}}
                 @if(Auth::user()->role == 'keuangan_eco')
                     <div class="mb-2 px-4 text-[10px] font-bold text-teal-500 uppercase tracking-widest mt-2">Keuangan Eco</div>
                     <a href="{{ route('keuangan_eco.visit-results.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan_eco.visit-results.*') ? 'bg-teal-600 text-white shadow-md shadow-teal-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
@@ -184,10 +171,157 @@
                 @endif
 
 
-                {{-- KHUSUS KEUANGAN INDIE --}}
+                {{-- ======================================================== --}}
+                {{-- KHUSUS DIVISI INDIE (STRUKTUR BARU SESUAI REQUEST)       --}}
+                {{-- ======================================================== --}}
+
+              {{-- A. MANAGER UNIT INDIE --}}
+                @if(Auth::user()->role == 'manager_unit_indie')
+                    <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Manager Unit (Indie)</div>
+                    
+                    <a href="{{ route('indie.manager-unit.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.manager-unit.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('indie.manager-unit.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-file-signature w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Laporan Harian</span>
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-calendar-week w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Laporan Mingguan</span>
+                    </a>
+                    
+                    <a href="{{ route('indie.manager-unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.manager-unit.lhkp.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-user-check w-6 text-center {{ request()->routeIs('indie.manager-unit.lhkp.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Evaluasi Pegawai (LHKP)</span>
+                    </a>
+                @endif
+
+                {{-- B. KEPALA KANTOR INDIE --}}
+                @if(Auth::user()->role == 'kepala_kantor_indie')
+                    <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Kepala Kantor (Indie)</div>
+                    
+{{-- UPDATE LINK DASHBOARD --}}
+                    <a href="{{ route('indie.kepala-kantor.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-building w-6 text-center {{ request()->routeIs('indie.kepala-kantor.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Kantor</span>
+                    </a>
+                    
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Modul Laporan</div>
+
+                    <a href="{{ route('indie.kepala-kantor.lap-operasional.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lap-operasional.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-building w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-operasional.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Operasional Kantor</span>
+</a>
+                    <a href="{{ route('indie.kepala-kantor.logbook-surat.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.logbook-surat.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-envelope-open-text w-6 text-center {{ request()->routeIs('indie.kepala-kantor.logbook-surat.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Logbook Surat</span>
+</a>
+                   <a href="{{ route('indie.kepala-kantor.opex.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.opex.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-money-check-alt w-6 text-center {{ request()->routeIs('indie.kepala-kantor.opex.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Rekap Anggaran (Opex)</span>
+</a>
+                    <a href="{{ route('indie.kepala-kantor.lap-presensi.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lap-presensi.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-user-clock w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-presensi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Presensi Pegawai</span>
+</a>
+                    {{-- UPDATE LINK EVALUASI KINERJA (LHKP) --}}
+                    <a href="{{ route('indie.kepala-kantor.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lhkp.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lhkp.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Evaluasi Kinerja SDM</span>
+                    <a href="{{ route('indie.kepala-kantor.inventaris.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.inventaris.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-boxes w-6 text-center {{ request()->routeIs('indie.kepala-kantor.inventaris.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Inventaris & Aset Kantor</span>
+</a>
+                   <a href="{{ route('indie.kepala-kantor.kepatuhan-sop.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.kepatuhan-sop.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-clipboard-check w-6 text-center {{ request()->routeIs('indie.kepala-kantor.kepatuhan-sop.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Kepatuhan SOP</span>
+</a>
+                @endif
+
+                {{-- C. ADMIN KANTOR INDIE --}}
+                @if(Auth::user()->role == 'indie')
+                    <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Admin Kantor (Indie)</div>
+                    
+                    <a href="{{ route('indie.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-home w-6 text-center {{ request()->routeIs('indie.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Admin</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-book w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Buku Kas Harian</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-receipt w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Arsip Bukti Transaksi</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-money-bill-wave w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Rekap Transfer Masuk</span>
+                    </a>
+
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Publikasi</div>
+                    <a href="{{ route('indie.news.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.news.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-newspaper w-6 text-center {{ request()->routeIs('indie.news.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Portal Berita</span>
+                    </a>
+                    <a href="{{ route('indie.portfolios.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.portfolios.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-images w-6 text-center {{ request()->routeIs('indie.portfolios.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Portofolio Indie</span>
+                    </a>
+                @endif
+
+                {{-- D. ADMIN LAPANGAN INDIE --}}
+                @if(Auth::user()->role == 'admin_lapangan_indie') 
+                    <div class="mb-2 px-4 text-[10px] font-bold text-sky-500 uppercase tracking-widest mt-2">Admin Lapangan</div>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-hard-hat w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Lapangan</span>
+                    </a>
+
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-sky-400 uppercase tracking-widest">Modul Proyek</div>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-wallet w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Keuangan Lapangan</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-truck-loading w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Survey Bahan</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-tasks w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Progres Fisik Harian</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-user-check w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Log Absensi Proyek</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-cloud-sun-rain w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Cuaca Harian</span>
+                    </a>
+                @endif
+
+                {{-- E. ATASAN / MONITORING INDIE --}}
+                @if(Auth::user()->role == 'monitoring_indie') 
+                    <div class="mb-2 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Monitoring & Evaluasi</div>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-chart-line w-6 text-center text-slate-500 group-hover:text-slate-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-check-double w-6 text-center text-slate-500 group-hover:text-slate-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Approval Laporan</span>
+                    </a>
+                @endif
+
+                {{-- KEUANGAN INDIE --}}
                 @if(Auth::user()->role == 'keuangan_indie')
                     <div class="mb-2 px-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest mt-2">Keuangan Indie</div>
-                    
                     <a href="{{ route('keuangan.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-invoice-dollar w-6 text-center {{ request()->routeIs('keuangan.dashboard') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Verifikasi Laporan</span>
@@ -195,52 +329,55 @@
                 @endif
 
 
-                {{-- KHUSUS INDIE (DIVISI INFRASTRUKTUR & GEDUNG) --}}
-                @if(Auth::user()->role == 'indie')
-                    <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Operasional</div>
-                    
-                    <a href="{{ route('indie.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-city w-6 text-center {{ request()->routeIs('indie.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Dashboard Proyek</span>
-                    </a>
+                {{-- ======================================================== --}}
+                {{-- KHUSUS MITRA KERJA (SUBKON PT & SUBKON EKS)              --}}
+                {{-- ======================================================== --}}
 
-                    <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Publikasi</div>
-
-                    <a href="{{ route('indie.news.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.news.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-newspaper w-6 text-center {{ request()->routeIs('indie.news.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Portal Berita</span>
-                    </a>
-
-                    <a href="{{ route('indie.portfolios.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.portfolios.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-images w-6 text-center {{ request()->routeIs('indie.portfolios.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Portofolio Indie</span>
-                    </a>
-                @endif
-
-
-              {{-- KHUSUS MANAGER PROYEK (SUBKON PT) --}}
+                {{-- MANAGER PROYEK (SUBKON PT) --}}
                 @if(Auth::user()->role == 'subkon_pt')
                     <div class="mb-2 px-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest mt-2">Evaluasi Proyek</div>
                     
                     <a href="{{ route('subkon-pt.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-chart-pie w-6 text-center {{ request()->routeIs('subkon-pt.dashboard') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Proyek</span>
                     </a>
 
-                    {{-- MENU BARU: UNDUH LH --}}
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Manajemen Laporan</div>
                     <a href="{{ route('subkon-pt.lh-download.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.lh-download.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-download w-6 text-center {{ request()->routeIs('subkon-pt.lh-download.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Unduh LH Lapangan</span>
                     </a>
-
                     <a href="{{ route('subkon-pt.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.lhkp.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-clipboard-list w-6 text-center {{ request()->routeIs('subkon-pt.lhkp.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
-                        <span class="ml-3 font-semibold text-sm">Input LHKP Indie</span>
+                        <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('subkon-pt.lhkp.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Input LHKP Proyek</span>
+                    </a>
+
+                    {{-- MENU BARU BERDASARKAN INSTRUKSI INDIE --}}
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Laporan Progres Proyek</div>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-calendar-check w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Mingguan & Bulanan</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-users-cog w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Rekap Absensi Naker</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-tools w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Inventaris Material</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-camera-retro w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Foto Progres (Weekly)</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
+                        <i class="fas fa-chart-line w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Progres Bulanan</span>
                     </a>
                 @endif
 
 
-                {{-- KHUSUS SUBKON EKS (VENDOR / PELAKSANA LAPANGAN) --}}
+                {{-- PELAKSANA LAPANGAN (SUBKON EKS) --}}
                 @if(Auth::user()->role == 'subkon_eks')
                     <div class="mb-2 px-4 text-[10px] font-bold text-sky-500 uppercase tracking-widest mt-2">Pekerjaan Lapangan</div>
                     
@@ -249,12 +386,11 @@
                         <span class="ml-3 font-semibold text-sm">Proyek Saya</span>
                     </a>
                     
-                    {{-- MENU INPUT LH UNTUK SUBKON EKS --}}
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-sky-400 uppercase tracking-widest">Modul Laporan</div>
                     <a href="{{ route('subkon-eks.lh.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.lh.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-signature w-6 text-center {{ request()->routeIs('subkon-eks.lh.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Input Laporan Harian (LH)</span>
                     </a>
-
                     <a href="{{ route('subkon-eks.report-payments.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-eks.report-payments.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-invoice-dollar w-6 text-center {{ request()->routeIs('subkon-eks.report-payments.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Klaim Pembayaran</span>
@@ -262,7 +398,7 @@
                 @endif
 
 
-               {{-- ================= MENU PENGATURAN AKUN ================= --}}
+                {{-- ================= MENU PENGATURAN AKUN ================= --}}
                 <div class="mt-8 mb-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Pengaturan</div>
 
                 {{-- HANYA ADMIN YANG BISA EDIT PROFIL --}}
@@ -289,9 +425,7 @@
             {{-- Sidebar Footer (User Profile dengan Logo Asli) --}}
             <div class="h-20 bg-[#0f172a] border-t border-slate-800/80 absolute bottom-0 w-full flex items-center px-6 shrink-0 z-50">
                 <div class="flex items-center gap-3 w-full">
-                    {{-- Menggunakan asset('img/logo.png') asli --}}
                     <img src="{{ asset('img/logo.png') }}" alt="User" class="w-10 h-10 rounded-full p-1 bg-white shadow-sm object-contain border border-slate-700 shrink-0">
-                    
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-bold text-white truncate">{{ Auth::user()->name }}</p>
                         <p class="text-[10px] text-slate-400 truncate capitalize tracking-wide">{{ str_replace('_', ' ', Auth::user()->role) }}</p>
@@ -334,7 +468,6 @@
                         <p class="text-sm font-bold text-slate-700 leading-tight">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-slate-500">{{ Auth::user()->email }}</p>
                     </div>
-                    {{-- Menggunakan asset('img/logo.png') asli --}}
                     <img src="{{ asset('img/logo.png') }}" alt="User" class="w-10 h-10 rounded-full p-1 bg-white shadow-sm object-contain border border-slate-200 shrink-0">
                 </div>
             </header>

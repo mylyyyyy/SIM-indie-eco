@@ -63,20 +63,26 @@
                         {{-- Kolom 1: Avatar & Nama --}}
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                @php
-                                    $bgClass = match($user->role) {
-                                        'admin'           => 'from-purple-500 to-indigo-600',
-                                        'manager_wilayah' => 'from-indigo-600 to-blue-700',
-                                        'kepala_kantor'   => 'from-amber-500 to-red-500',
-                                        'manager_unit'    => 'from-indigo-400 to-purple-600',
-                                        'eco'             => 'from-emerald-500 to-teal-600',
-                                        'indie'           => 'from-pink-500 to-rose-600',
-                                        'keuangan_eco'    => 'from-teal-400 to-cyan-600',
-                                        'keuangan_indie'  => 'from-blue-400 to-sky-600',
-                                        'subkon_pt'       => 'from-blue-500 to-blue-600',
-                                        default           => 'from-orange-400 to-orange-500', 
-                                    };
-                                @endphp
+                               @php
+    $bgClass = match($user->role) {
+        'admin'                => 'from-purple-500 to-indigo-600',
+        'manager_wilayah'      => 'from-emerald-600 to-teal-700',
+        'manager_unit'         => 'from-emerald-500 to-teal-600',
+        'kepala_kantor'        => 'from-emerald-400 to-teal-500',
+        'eco'                  => 'from-emerald-400 to-green-500',
+        'keuangan_eco'         => 'from-teal-400 to-cyan-500',
+        
+        'manager_unit_indie'   => 'from-indigo-600 to-blue-700',
+        'kepala_kantor_indie'  => 'from-indigo-500 to-blue-600',
+        'indie'                => 'from-indigo-400 to-blue-500',
+        'admin_lapangan_indie' => 'from-blue-400 to-sky-500',
+        'monitoring_indie'     => 'from-slate-700 to-slate-900',
+        'keuangan_indie'       => 'from-sky-400 to-cyan-500',
+        
+        'subkon_pt'            => 'from-amber-500 to-orange-600',
+        default                => 'from-orange-400 to-red-500', // subkon_eks
+    };
+@endphp
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $bgClass }} text-white flex items-center justify-center font-bold text-lg shadow-md ring-2 ring-white">
                                     {{ substr($user->name, 0, 1) }}
                                 </div>
@@ -227,18 +233,32 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Role Akun</label>
                             <div class="relative group">
                                 <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                                <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none">
-                                    <option value="admin">Administrator</option>
-                                    <option value="manager_wilayah">Manager Wilayah</option>
-                                    <option value="kepala_kantor">Kepala Kantor</option>
-                                    <option value="manager_unit">Manager Unit</option>
-                                    <option value="eco">Admin Kantor (Eco)</option>
-                                    <option value="keuangan_eco">Keuangan Eco</option>
-                                    <option value="indie">Admin Kantor (Indie)</option>
-                                    <option value="keuangan_indie">Keuangan Indie</option>
-                                    <option value="subkon_pt">Manager Proyek</option>
-                                    <option value="subkon_eks">Subkon (EKS)</option>
-                                </select>
+                              <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
+    <option value="" disabled selected>-- Pilih Role --</option>
+    <option value="admin">Administrator Pusat</option>
+    
+    <optgroup label="🟢 DIVISI ECO" class="text-emerald-600 font-bold bg-emerald-50">
+        <option value="manager_wilayah" class="text-slate-700 bg-white font-medium">Manager Wilayah (Eco)</option>
+        <option value="manager_unit" class="text-slate-700 bg-white font-medium">Manager Unit (Eco)</option>
+        <option value="kepala_kantor" class="text-slate-700 bg-white font-medium">Kepala Kantor (Eco)</option>
+        <option value="eco" class="text-slate-700 bg-white font-medium">Admin Kantor (Eco)</option>
+        <option value="keuangan_eco" class="text-slate-700 bg-white font-medium">Keuangan (Eco)</option>
+    </optgroup>
+
+    <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">
+        <option value="manager_unit_indie" class="text-slate-700 bg-white font-medium">Manager Unit (Indie)</option>
+        <option value="kepala_kantor_indie" class="text-slate-700 bg-white font-medium">Kepala Kantor (Indie)</option>
+        <option value="indie" class="text-slate-700 bg-white font-medium">Admin Kantor (Indie)</option>
+        <option value="admin_lapangan_indie" class="text-slate-700 bg-white font-medium">Admin Lapangan (Indie)</option>
+        <option value="monitoring_indie" class="text-slate-700 bg-white font-medium">Atasan / Monitoring (Indie)</option>
+        <option value="keuangan_indie" class="text-slate-700 bg-white font-medium">Keuangan (Indie)</option>
+    </optgroup>
+
+    <optgroup label="🏗️ MITRA KERJA" class="text-amber-600 font-bold bg-amber-50">
+        <option value="subkon_pt" class="text-slate-700 bg-white font-medium">Manager Proyek (Subkon PT)</option>
+        <option value="subkon_eks" class="text-slate-700 bg-white font-medium">Pelaksana Lapangan (Subkon EKS)</option>
+    </optgroup>
+</select>
                                 <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                             </div>
                         </div>
@@ -360,19 +380,32 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Role Akun</label>
                         <div class="relative group">
                             <i class="fas fa-id-badge absolute left-4 top-3.5 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                            <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
-                                <option value="" disabled selected>-- Pilih Role --</option>
-                                <option value="admin">Administrator</option>
-                                <option value="manager_wilayah">Manager Wilayah</option>
-                                <option value="kepala_kantor">Kepala Kantor</option>
-                                <option value="manager_unit">Manager Unit</option>
-                                <option value="eco">Admin Kantor (Eco)</option>
-                                <option value="keuangan_eco">Keuangan Eco</option>
-                                <option value="indie">Admin Kantor (Indie)</option>
-                                <option value="keuangan_indie">Keuangan Indie</option>
-                                <option value="subkon_pt">Manager Proyek</option>
-                                <option value="subkon_eks">Subkon (EKS)</option>
-                            </select>
+                           <select name="role" x-model="selectedRole" class="w-full pl-12 pr-4 py-3 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-600 bg-slate-50/50 transition-all appearance-none" required>
+    <option value="" disabled selected>-- Pilih Role --</option>
+    <option value="admin">Administrator Pusat</option>
+    
+    <optgroup label="🟢 DIVISI ECO" class="text-emerald-600 font-bold bg-emerald-50">
+        <option value="manager_wilayah" class="text-slate-700 bg-white font-medium">Manager Wilayah (Eco)</option>
+        <option value="manager_unit" class="text-slate-700 bg-white font-medium">Manager Unit (Eco)</option>
+        <option value="kepala_kantor" class="text-slate-700 bg-white font-medium">Kepala Kantor (Eco)</option>
+        <option value="eco" class="text-slate-700 bg-white font-medium">Admin Kantor (Eco)</option>
+        <option value="keuangan_eco" class="text-slate-700 bg-white font-medium">Keuangan (Eco)</option>
+    </optgroup>
+
+    <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">
+        <option value="manager_unit_indie" class="text-slate-700 bg-white font-medium">Manager Unit (Indie)</option>
+        <option value="kepala_kantor_indie" class="text-slate-700 bg-white font-medium">Kepala Kantor (Indie)</option>
+        <option value="indie" class="text-slate-700 bg-white font-medium">Admin Kantor (Indie)</option>
+        <option value="admin_lapangan_indie" class="text-slate-700 bg-white font-medium">Admin Lapangan (Indie)</option>
+        <option value="monitoring_indie" class="text-slate-700 bg-white font-medium">Atasan / Monitoring (Indie)</option>
+        <option value="keuangan_indie" class="text-slate-700 bg-white font-medium">Keuangan (Indie)</option>
+    </optgroup>
+
+    <optgroup label="🏗️ MITRA KERJA" class="text-amber-600 font-bold bg-amber-50">
+        <option value="subkon_pt" class="text-slate-700 bg-white font-medium">Manager Proyek (Subkon PT)</option>
+        <option value="subkon_eks" class="text-slate-700 bg-white font-medium">Pelaksana Lapangan (Subkon EKS)</option>
+    </optgroup>
+</select>
                             <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                         </div>
                     </div>

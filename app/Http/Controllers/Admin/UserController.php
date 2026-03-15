@@ -22,12 +22,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // 1. PERBAIKAN VALIDASI (Penambahan Role Baru: manager_wilayah)
+        
         $request->validate([
             'name' => 'required|string|max:255',
-            // Ganti 'email' menjadi 'string' agar NIP/NIB bisa masuk (tanpa @)
+            
             'email' => 'required|string|max:255|unique:users', 
-            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie',
+           'role' => 'required|in:admin,subkon_pt,
+           subkon_eks,
+           eco,indie,
+           keuangan,
+           kepala_kantor,
+           manager_unit,
+           manager_wilayah,
+           keuangan_eco,
+           keuangan_indie,
+           manager_unit_indie,
+           kepala_kantor_indie,
+           admin_lapangan_indie,
+           monitoring_indie',
             'password' => 'required|string|min:8',
         ]);
 

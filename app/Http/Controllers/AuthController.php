@@ -14,68 +14,59 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // 1. Validasi Input
         $credentials = $request->validate([
-            // 'email' di sini digunakan sebagai identifier (bisa NIP, username, atau email)
             'email' => ['required', 'string'], 
             'password' => ['required'],
         ]);
 
-        // 2. Fitur "Ingat Saya"
         $remember = $request->boolean('remember');
 
-        // 3. Attempt Login
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-
-            // Ambil role user yang sedang login
             $role = Auth::user()->role;
 
-           // 4. Redirect berdasarkan Role
             switch ($role) {
                 case 'admin':
                     return redirect()->intended(route('admin.dashboard'));
                 
+                // ===== KELOMPOK ECO =====
                 case 'eco':
                     return redirect()->intended(route('eco.dashboard'));
-                
-                case 'indie':
-                    return redirect()->intended(route('indie.dashboard'));
-                
                 case 'kepala_kantor':
-                    // Ubah route ini jika dashboard kepala kantor punya nama berbeda
                     return redirect()->intended('/kepala-kantor/dashboard');
-                
                 case 'manager_unit':
-                case 'manager_wilayah': // <--- TAMBAHKAN INI
+                case 'manager_wilayah': 
                     return redirect()->intended('/manager-unit/dashboard');
-                
-                // ============================================
-                // PERBAIKAN DI SINI: Pisahkan Keuangan Eco
-                // ============================================
                 case 'keuangan_eco':
-                    // Mengarah ke resources\views\keuangan-eco\visit-result\index.blade.php
                     return redirect()->intended(route('keuangan_eco.visit-results.index'));
-                
-                case 'keuangan_indie':
-                case 'keuangan': // Menjaga kompabilitas dengan role lama (FNC-123)
-                    return redirect()->intended(route('keuangan.dashboard'));
-                // ============================================
 
+                // ===== KELOMPOK INDIE =====
+                case 'indie': // Admin Kantor Indie
+                    return redirect()->intended(route('indie.dashboard'));
+                case 'manager_unit_indie':
+                    return redirect()->intended('/indie/manager-unit/dashboard');
+                case 'kepala_kantor_indie':
+                    return redirect()->intended('/indie/kepala-kantor/dashboard');
+                case 'admin_lapangan_indie':
+                    return redirect()->intended('/indie/admin-lapangan/dashboard');
+                case 'monitoring_indie':
+                    return redirect()->intended('/indie/monitoring/dashboard');
+                case 'keuangan_indie':
+                case 'keuangan': 
+                    return redirect()->intended(route('keuangan.dashboard'));
+
+                // ===== KELOMPOK SUBKON =====
                 case 'subkon_pt':
                     return redirect()->intended(route('subkon-pt.dashboard'));
-                
                 case 'subkon_eks':
                     return redirect()->intended(route('subkon-eks.dashboard'));
                 
                 default:
-                    // Jika role tidak ada di daftar atas, paksa logout demi keamanan
                     Auth::logout();
                     return back()->withErrors(['email' => 'Hak akses (Role) Anda tidak dikenali sistem.']);
             }
         }
 
-        // 5. Jika Gagal Login (Email/Password salah)
         return back()->withErrors([
             'email' => 'NIB/NIP atau kata sandi yang Anda masukkan salah.',
         ])->onlyInput('email');

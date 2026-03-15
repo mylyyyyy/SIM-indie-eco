@@ -256,3 +256,40 @@ Route::middleware(['auth', 'role:manager_unit,manager_wilayah'])->prefix('manage
     Route::get('/lhkp/{id}/pdf', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLhkp'])->name('lhkp.pdf');
     Route::get('/lh/{id}/pdf', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLh'])->name('lh.pdf');
 });
+
+// ==========================================
+// ROUTE KHUSUS DIVISI INDIE
+// ==========================================
+
+Route::middleware(['auth', 'role:manager_unit_indie'])->prefix('indie/manager-unit')->name('indie.manager-unit.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Indie\ManagerUnit\DashboardController::class, 'index'])->name('dashboard');
+    
+    // LHKP
+    Route::get('/lhkp/export-pdf', [App\Http\Controllers\Indie\ManagerUnit\LhkpController::class, 'exportPdf'])->name('lhkp.export-pdf');
+    Route::resource('lhkp', App\Http\Controllers\Indie\ManagerUnit\LhkpController::class)->except(['create', 'show', 'edit']);
+});
+
+// ==========================================
+// KEPALA KANTOR INDIE
+// ==========================================
+Route::middleware(['auth', 'role:kepala_kantor_indie'])->prefix('indie/kepala-kantor')->name('indie.kepala-kantor.')->group(function () {
+    
+    Route::get('/dashboard', [App\Http\Controllers\Indie\KepalaKantor\DashboardController::class, 'index'])->name('dashboard');
+    
+    // Modul Evaluasi Kinerja (LHKP)
+    Route::get('/lhkp/export-pdf', [App\Http\Controllers\Indie\KepalaKantor\LhkpController::class, 'exportPdf'])->name('lhkp.export-pdf');
+    Route::resource('lhkp', App\Http\Controllers\Indie\KepalaKantor\LhkpController::class)->except(['create', 'show', 'edit']);
+// ROUTE BARU: Modul Lap Operasional
+    Route::resource('lap-operasional', App\Http\Controllers\Indie\KepalaKantor\LapOperasionalController::class)->except(['create', 'show', 'edit', 'update']);
+Route::resource('logbook-surat', App\Http\Controllers\Indie\KepalaKantor\LogbookSuratController::class)->except(['create', 'show', 'edit', 'update']);
+Route::resource('opex', App\Http\Controllers\Indie\KepalaKantor\OpexController::class)->except(['create', 'show', 'edit', 'update']);
+// ROUTE BARU: Modul Laporan Presensi
+    Route::resource('lap-presensi', App\Http\Controllers\Indie\KepalaKantor\LapPresensiController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('inventaris', App\Http\Controllers\Indie\KepalaKantor\InventarisController::class)->except(['create', 'show', 'edit', 'update']);
+// ROUTE BARU: Modul Laporan Kepatuhan SOP
+    Route::resource('kepatuhan-sop', App\Http\Controllers\Indie\KepalaKantor\SopController::class)->except(['create', 'show', 'edit', 'update']);
+    
+
+
+});
