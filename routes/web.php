@@ -147,6 +147,9 @@ Route::middleware(['auth', 'role:indie'])->prefix('indie')->name('indie.')->grou
     Route::resource('news', IndieNews::class);
     Route::get('/export-projects', [IndieDashboard::class, 'exportPdf'])->name('projects.export');
     Route::resource('portfolios', IndiePortfolio::class);
+    Route::resource('buku-kas', App\Http\Controllers\Indie\AdminKantor\BukuKasController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('arsip-transaksi', App\Http\Controllers\Indie\AdminKantor\ArsipTransaksiController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('transfer-masuk', App\Http\Controllers\Indie\AdminKantor\TransferMasukController::class)->except(['create', 'show', 'edit', 'update']);
 });
 
 // D. GROUP SUBKON & KEUANGAN

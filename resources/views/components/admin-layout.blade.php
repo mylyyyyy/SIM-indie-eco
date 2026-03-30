@@ -250,18 +250,18 @@
                         <i class="fas fa-home w-6 text-center {{ request()->routeIs('indie.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Admin</span>
                     </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-book w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Buku Kas Harian</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-receipt w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Arsip Bukti Transaksi</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-money-bill-wave w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Rekap Transfer Masuk</span>
-                    </a>
+                    <a href="{{ route('indie.buku-kas.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.buku-kas.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-book w-6 text-center {{ request()->routeIs('indie.buku-kas.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Buku Kas Harian</span>
+</a>
+                   <a href="{{ route('indie.arsip-transaksi.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.arsip-transaksi.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-receipt w-6 text-center {{ request()->routeIs('indie.arsip-transaksi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Arsip Bukti Transaksi</span>
+</a>
+                   <a href="{{ route('indie.transfer-masuk.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.transfer-masuk.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('indie.transfer-masuk.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Rekap Transfer Masuk</span>
+</a>
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Publikasi</div>
                     <a href="{{ route('indie.news.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.news.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
