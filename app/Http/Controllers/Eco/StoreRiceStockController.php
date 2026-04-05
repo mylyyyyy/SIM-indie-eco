@@ -14,6 +14,7 @@ class StoreRiceStockController extends Controller
     public function index()
     {
         $cabangEco = Auth::user()->company_name;
+        
         $stocks = StoreRiceStock::whereHas('user', function($query) use ($cabangEco) {
                         $query->where('company_name', $cabangEco);
                     })->latest('tanggal')->get();
@@ -38,9 +39,44 @@ class StoreRiceStockController extends Controller
 
         $data = $request->all();
         $data['user_id'] = Auth::id(); // Simpan ID User
+        
         StoreRiceStock::create($data);
 
+        // CATATAN OTOMASI: Jika ada pengurangan/penambahan Master Stok Beras Kantor, 
+        // Anda bisa meletakkan kode pengurangannya di sini.
+
         return redirect()->back()->with('success', 'Data stok beras toko berhasil disimpan!');
+    }
+
+    // =========================================
+    // FITUR BARU: UPDATE DATA STOK
+    // =========================================
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'nama_toko' => 'required|string|max:255',
+            'stok_2_5kg' => 'required|integer|min:0',
+            'stok_5kg' => 'required|integer|min:0',
+        ]);
+
+        $stock = StoreRiceStock::findOrFail($id);
+
+        /* * LOGIKA AUTO UPDATE TOTAL STOK (Sesuai BRD):
+         * Jika Anda memiliki tabel Master Stok, hitung selisihnya di sini.
+         * Contoh:
+         * $selisih_2_5kg = $request->stok_2_5kg - $stock->stok_2_5kg;
+         * MasterStok::where('cabang', Auth::user()->company_name)->decrement('stok_2_5kg', $selisih_2_5kg);
+         */
+
+        $stock->update([
+            'tanggal' => $request->tanggal,
+            'nama_toko' => $request->nama_toko,
+            'stok_2_5kg' => $request->stok_2_5kg,
+            'stok_5kg' => $request->stok_5kg,
+        ]);
+
+        return redirect()->back()->with('success', 'Data stok beras berhasil diperbarui!');
     }
 
     public function destroy(StoreRiceStock $storeRiceStock)
@@ -51,6 +87,11 @@ class StoreRiceStockController extends Controller
 
     public function exportPdf()
     {
+        // PENCEGAHAN AKSES DOWNLOAD DARI URL UNTUK ADMIN KANTOR
+        if(Auth::user()->role == 'admin_kantor_eco') {
+            abort(403, 'Anda tidak memiliki akses untuk mengunduh laporan ini.');
+        }
+
         $cabangEco = Auth::user()->company_name;
         $stocks = StoreRiceStock::whereHas('user', function($query) use ($cabangEco) {
                         $query->where('company_name', $cabangEco);

@@ -10,7 +10,7 @@ class SoldRice extends Model {
     use HasFactory;
     // Tentukan nama tabel manual karena plural bahasa inggrisnya bisa ambigu
     protected $table = 'sold_rices'; 
-    protected $fillable = ['user_id','tempat', 'tanggal', 'nama_toko', 'kunjungan_ke', 'ukuran'];
+    protected $fillable = ['user_id','tempat', 'tanggal', 'nama_toko', 'kunjungan_ke', 'ukuran', 'jumlah_pack'];
 public function user()
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');

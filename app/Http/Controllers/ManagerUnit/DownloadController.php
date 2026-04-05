@@ -7,11 +7,11 @@ use App\Models\LhkpReport;
 use App\Models\LhReport;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Auth; // Wajib import Auth
+use Illuminate\Support\Facades\Auth; 
 
 class DownloadController extends Controller
 {
-  public function dashboard()
+    public function dashboard()
     {
         $user = Auth::user();
 
@@ -20,7 +20,9 @@ class DownloadController extends Controller
                         $query->where('wilayah', $user->wilayah);
                     })->latest()->get();
 
-            $lhs = LhReport::whereHas('user', function($query) use ($user) {
+            // WAJIB ditambahkan with('fotos') agar foto Base64-nya ikut terbawa
+            $lhs = LhReport::with('fotos')
+                    ->whereHas('user', function($query) use ($user) {
                         $query->where('wilayah', $user->wilayah);
                     })->latest()->get();
         } else {
@@ -28,7 +30,9 @@ class DownloadController extends Controller
                         $query->where('company_name', $user->company_name);
                     })->latest()->get();
 
-            $lhs = LhReport::whereHas('user', function($query) use ($user) {
+            // WAJIB ditambahkan with('fotos') agar foto Base64-nya ikut terbawa
+            $lhs = LhReport::with('fotos')
+                    ->whereHas('user', function($query) use ($user) {
                         $query->where('company_name', $user->company_name);
                     })->latest()->get();
         }
@@ -47,7 +51,8 @@ class DownloadController extends Controller
     // Fungsi Download PDF LH
     public function downloadLh($id)
     {
-        $lh = LhReport::findOrFail($id);
+        // Pastikan load relasi foto untuk keperluan PDF (jika Anda ingin menampilkan foto di dalam PDF)
+        $lh = LhReport::with('fotos')->findOrFail($id);
         
         $lh->kegiatan_list = is_string($lh->rincian_kegiatan) 
                                 ? json_decode($lh->rincian_kegiatan, true) 

@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LhReport extends Model
 {
-    use HasFactory;
-    protected $guarded = ['id'];
+    // Tambahkan nama_cabang ke dalam fillable
+    protected $fillable = [
+        'user_id', 'nama_cabang', 'tanggal', 'rincian_kegiatan', 'dokumentasi' 
+    ];
+
+    // Tambahkan relasi ini
+    public function fotos()
+    {
+        return $this->hasMany(LhReportFoto::class, 'lh_report_id');
+    }
+
 
     // Penting: Casting JSON agar otomatis jadi Array saat diambil
     protected $casts = [

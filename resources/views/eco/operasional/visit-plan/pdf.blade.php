@@ -133,20 +133,24 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th width="5%">No</th>
-                <th width="20%">Nama Toko</th>
-                <th width="30%">Alamat</th>
-                <th width="10%">Stok Awal<br>(Pack)</th>
-                <th width="11%">Harga (Rp)</th>
-                <th width="8%">Laku<br>(Pack)</th>
-                <th width="8%">Sisa<br>(Pack)</th>
-                <th width="8%">Tambah<br>(Pack)</th>
+                <th width="4%">No</th>
+                {{-- TAMBAHAN HEADER TANGGAL PLAN --}}
+                <th width="12%">Tgl Plan</th>
+                <th width="18%">Nama Toko</th>
+                <th width="28%">Alamat</th>
+                <th width="8%">Awal</th>
+                <th width="12%">Harga (Rp)</th>
+                <th width="6%">Laku</th>
+                <th width="6%">Sisa</th>
+                <th width="6%">Tambah</th>
             </tr>
         </thead>
         <tbody>
             @forelse($plans as $index => $plan)
             <tr>
                 <td>{{ $index + 1 }}</td>
+                {{-- MENCETAK TANGGAL DARI CREATED_AT --}}
+                <td>{{ $plan->created_at->format('d/m/Y') }}</td>
                 <td class="text-left font-bold">{{ $plan->nama_toko }}</td>
                 <td class="text-left">{{ $plan->alamat }}</td>
                 <td>{{ $plan->stok_awal }}</td>
@@ -157,7 +161,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="8" style="padding: 20px; color: #64748b; font-style: italic;">Belum ada data rencana kunjungan.</td>
+                <td colspan="9" style="padding: 20px; color: #64748b; font-style: italic;">Belum ada data rencana kunjungan.</td>
             </tr>
             @endforelse
         </tbody>

@@ -39,6 +39,8 @@ class AuthController extends Controller
                     return redirect()->intended('/manager-unit/dashboard');
                 case 'keuangan_eco':
                     return redirect()->intended(route('keuangan_eco.visit-results.index'));
+                case 'monitoring_eco':
+                    return redirect()->intended('monitoring-eco/dashboard');
 
                 // ===== KELOMPOK INDIE =====
                 case 'indie': // Admin Kantor Indie

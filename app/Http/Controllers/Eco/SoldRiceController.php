@@ -34,10 +34,11 @@ class SoldRiceController extends Controller
             'nama_toko_select' => 'required', 
             'kunjungan_ke' => 'required|in:1,2,3,4,5,6',
             'ukuran' => 'required|in:2.5kg,5kg',
+            'jumlah_pack' => 'required|integer|min:1', 
         ]);
 
         $data = $request->all();
-        $data['user_id'] = Auth::id(); // Simpan ID User
+        $data['user_id'] = Auth::id();
 
         if ($request->nama_toko_select == 'Lainnya') {
             $request->validate(['nama_toko_manual' => 'required|string|max:255']);
@@ -50,6 +51,35 @@ class SoldRiceController extends Controller
         return redirect()->back()->with('success', 'Data beras terjual berhasil disimpan!');
     }
 
+    // =====================================
+    // FITUR BARU: UPDATE DATA PENJUALAN
+    // =====================================
+    public function update(Request $request, $id)
+    {
+        $soldRice = SoldRice::findOrFail($id);
+
+        $request->validate([
+            'tempat' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'nama_toko_select' => 'required', 
+            'kunjungan_ke' => 'required|in:1,2,3,4,5,6',
+            'ukuran' => 'required|in:2.5kg,5kg',
+            'jumlah_pack' => 'required|integer|min:1', 
+        ]);
+
+        $data = $request->except(['_token', '_method', 'nama_toko_select', 'nama_toko_manual']);
+
+        if ($request->nama_toko_select == 'Lainnya') {
+            $request->validate(['nama_toko_manual' => 'required|string|max:255']);
+            $data['nama_toko'] = $request->nama_toko_manual;
+        } else {
+            $data['nama_toko'] = $request->nama_toko_select;
+        }
+
+        $soldRice->update($data);
+        return redirect()->back()->with('success', 'Data penjualan beras berhasil diperbarui!');
+    }
+
     public function destroy(SoldRice $soldRice)
     {
         $soldRice->delete();
@@ -58,6 +88,10 @@ class SoldRiceController extends Controller
 
     public function exportPdf()
     {
+        if(Auth::user()->role == 'admin_kantor_eco') {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengunduh laporan PDF.');
+        }
+
         $cabangEco = Auth::user()->company_name;
         $soldRices = SoldRice::whereHas('user', function($query) use ($cabangEco) {
                         $query->where('company_name', $cabangEco);

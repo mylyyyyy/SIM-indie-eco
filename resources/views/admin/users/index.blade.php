@@ -71,7 +71,7 @@
         'kepala_kantor'        => 'from-emerald-400 to-teal-500',
         'eco'                  => 'from-emerald-400 to-green-500',
         'keuangan_eco'         => 'from-teal-400 to-cyan-500',
-        
+        'monitoring_eco'     => 'from-slate-700 to-slate-900',
         'manager_unit_indie'   => 'from-indigo-600 to-blue-700',
         'kepala_kantor_indie'  => 'from-indigo-500 to-blue-600',
         'indie'                => 'from-indigo-400 to-blue-500',
@@ -243,6 +243,8 @@
         <option value="kepala_kantor" class="text-slate-700 bg-white font-medium">Kepala Kantor (Eco)</option>
         <option value="eco" class="text-slate-700 bg-white font-medium">Admin Kantor (Eco)</option>
         <option value="keuangan_eco" class="text-slate-700 bg-white font-medium">Keuangan (Eco)</option>
+        <option value="monitoring_eco" class="text-slate-700 bg-white font-medium">Atasan / Monitoring (Eco)</option>
+       
     </optgroup>
 
     <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">
@@ -390,6 +392,8 @@
         <option value="kepala_kantor" class="text-slate-700 bg-white font-medium">Kepala Kantor (Eco)</option>
         <option value="eco" class="text-slate-700 bg-white font-medium">Admin Kantor (Eco)</option>
         <option value="keuangan_eco" class="text-slate-700 bg-white font-medium">Keuangan (Eco)</option>
+        <option value="monitoring_eco" class="text-slate-700 bg-white font-medium">Atasan / Monitoring (Eco)</option>
+        
     </optgroup>
 
     <optgroup label="🔵 DIVISI INDIE" class="text-indigo-600 font-bold bg-indigo-50">

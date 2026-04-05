@@ -4,16 +4,16 @@ namespace App\Http\Controllers\KepalaKantor;
 
 use App\Http\Controllers\Controller;
 use App\Models\LhReport;
+use App\Models\LhReportFoto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File; 
-use Illuminate\Support\Facades\Auth; // Wajib import Auth
+use Illuminate\Support\Facades\Auth;
 
 class LhController extends Controller
 {
     public function index()
     {
-        // FILTER: Hanya ambil laporan yang dibuat oleh user (Kepala Kantor) ini saja
-        $lhs = LhReport::where('user_id', Auth::id())
+        $lhs = LhReport::with('fotos')
+                ->where('user_id', Auth::id())
                 ->latest()
                 ->limit(20)
                 ->get(); 
@@ -27,74 +27,82 @@ class LhController extends Controller
             'tanggal' => 'required|date',
             'kegiatan' => 'required|array',
             'kegiatan.*' => 'required|string',
-            'dokumentasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' 
+            'dokumentasi.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' 
         ], [
-            'dokumentasi.image' => 'File lampiran harus berupa gambar.',
-            'dokumentasi.mimes' => 'Format gambar harus berupa jpeg, png, jpg, atau gif.',
-            'dokumentasi.max' => 'Ukuran gambar maksimal adalah 2MB.'
+            'dokumentasi.*.image' => 'File lampiran harus berupa gambar.',
+            'dokumentasi.*.mimes' => 'Format gambar harus berupa jpeg, png, jpg, atau gif.',
+            'dokumentasi.*.max' => 'Ukuran setiap gambar maksimal adalah 2MB.'
         ]);
 
-        $data = [
-            'user_id' => Auth::id(), // SIMPAN ID USER YANG LOGIN
+        // 1. Simpan Data Utama
+        $laporan = LhReport::create([
+            'user_id' => Auth::id(), 
+            'nama_cabang' => Auth::user()->company_name ?? 'Pusat', 
             'tanggal' => $request->tanggal,
             'rincian_kegiatan' => json_encode(array_values(array_filter($request->kegiatan))), 
-        ];
+        ]);
 
+        // 2. Simpan Multiple Foto sebagai Base64 ke Database
         if ($request->hasFile('dokumentasi')) {
-            $file = $request->file('dokumentasi');
-            $filename = time() . '_lh.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/lh'), $filename);
-            $data['dokumentasi'] = $filename;
+            foreach ($request->file('dokumentasi') as $file) {
+                $mimeType = $file->getMimeType(); 
+                $base64Data = base64_encode(file_get_contents($file->getRealPath()));
+                $base64String = 'data:' . $mimeType . ';base64,' . $base64Data;
+                
+                LhReportFoto::create([
+                    'lh_report_id' => $laporan->id,
+                    'path_foto' => $base64String // Menyimpan string Base64 yang panjang
+                ]);
+            }
         }
 
-        LhReport::create($data);
-
-        return redirect()->back()->with('success', 'Laporan Harian berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Laporan Harian beserta dokumentasi berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
     {
-        // Pastikan hanya bisa mengedit laporannya sendiri
-        $lh = LhReport::where('user_id', Auth::id())->findOrFail($id);
+        $lh = LhReport::with('fotos')->where('user_id', Auth::id())->findOrFail($id);
 
         $request->validate([
             'tanggal' => 'required|date',
             'kegiatan' => 'required|array',
             'kegiatan.*' => 'required|string',
-            'dokumentasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' 
+            'dokumentasi.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' 
         ]);
 
-        $data = [
+        $lh->update([
             'tanggal' => $request->tanggal,
-            'rincian_kegiatan' => json_encode(array_values(array_filter($request->kegiatan))), 
-        ];
+            'rincian_kegiatan' => json_encode(array_values(array_filter($request->kegiatan))),
+        ]);
 
+        // Jika user upload foto baru saat update
         if ($request->hasFile('dokumentasi')) {
-            if ($lh->dokumentasi && File::exists(public_path('uploads/lh/' . $lh->dokumentasi))) {
-                File::delete(public_path('uploads/lh/' . $lh->dokumentasi));
-            }
-            $file = $request->file('dokumentasi');
-            $filename = time() . '_lh_update.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/lh'), $filename);
-            $data['dokumentasi'] = $filename;
-        }
+            // Hapus data foto lama di database
+            $lh->fotos()->delete();
 
-        $lh->update($data);
+            // Masukkan foto baru (Base64)
+            foreach ($request->file('dokumentasi') as $file) {
+                $mimeType = $file->getMimeType(); 
+                $base64Data = base64_encode(file_get_contents($file->getRealPath()));
+                $base64String = 'data:' . $mimeType . ';base64,' . $base64Data;
+
+                LhReportFoto::create([
+                    'lh_report_id' => $lh->id,
+                    'path_foto' => $base64String
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', 'Laporan berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        // Pastikan hanya bisa menghapus laporannya sendiri
         $lh = LhReport::where('user_id', Auth::id())->findOrFail($id);
-
-        if ($lh->dokumentasi && File::exists(public_path('uploads/lh/' . $lh->dokumentasi))) {
-            File::delete(public_path('uploads/lh/' . $lh->dokumentasi));
-        }
-
+        // Karena tidak pakai Storage fisik, cukup delete laporan utama. 
+        // Data foto base64 di tabel relasi akan otomatis terhapus berkat ON DELETE CASCADE.
         $lh->delete();
 
-        return redirect()->back()->with('success', 'Laporan berhasil dihapus!');
+        return redirect()->back()->with('success', 'Laporan beserta seluruh dokumentasinya berhasil dihapus!');
     }
 }

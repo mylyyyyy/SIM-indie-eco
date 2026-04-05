@@ -131,6 +131,13 @@
                         <span class="ml-3 font-semibold text-sm">Stok Plastik</span>
                     </a>
 
+                    {{-- MENU BARU: PEMASUKAN ECO --}}
+                    <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Keuangan Kantor</div>
+                    <a href="{{ route('eco.incomes.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.incomes.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-money-check-alt w-6 text-center {{ request()->routeIs('eco.incomes.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Pemasukan</span>
+                    </a>
+
                     <div class="mt-6 mb-2 px-4 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Publikasi</div>
                     <a href="{{ route('eco.portfolios.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('eco.portfolios.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-images w-6 text-center {{ request()->routeIs('eco.portfolios.*') ? 'text-white' : 'text-emerald-500 group-hover:text-emerald-300' }}"></i>
@@ -164,9 +171,25 @@
                 {{-- KEUANGAN ECO --}}
                 @if(Auth::user()->role == 'keuangan_eco')
                     <div class="mb-2 px-4 text-[10px] font-bold text-teal-500 uppercase tracking-widest mt-2">Keuangan Eco</div>
+                    
+                    {{-- MENU BARU: DASHBOARD PEMASUKAN --}}
+                    <a href="{{ route('keuangan.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan.dashboard') ? 'bg-teal-600 text-white shadow-md shadow-teal-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('keuangan.dashboard') ? 'text-white' : 'text-teal-500 group-hover:text-teal-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Pemasukan Kantor</span>
+                    </a>
+
                     <a href="{{ route('keuangan_eco.visit-results.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan_eco.visit-results.*') ? 'bg-teal-600 text-white shadow-md shadow-teal-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-excel w-6 text-center {{ request()->routeIs('keuangan_eco.visit-results.*') ? 'text-white' : 'text-teal-500 group-hover:text-teal-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Hasil Kunjungan (Excel)</span>
+                    </a>
+                @endif
+
+                {{-- ================= FITUR BARU: MONITORING ECO ================= --}}
+                @if(Auth::user()->role == 'monitoring_eco')
+                    <div class="mb-2 px-4 text-[10px] font-bold text-violet-500 uppercase tracking-widest mt-2">Pengawas Eco</div>
+                    <a href="{{ route('monitoring_eco.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('monitoring_eco.dashboard') ? 'bg-violet-600 text-white shadow-md shadow-violet-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-eye w-6 text-center {{ request()->routeIs('monitoring_eco.dashboard') ? 'text-white' : 'text-violet-500 group-hover:text-violet-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
                     </a>
                 @endif
 
@@ -204,7 +227,6 @@
                 @if(Auth::user()->role == 'kepala_kantor_indie')
                     <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Kepala Kantor (Indie)</div>
                     
-{{-- UPDATE LINK DASHBOARD --}}
                     <a href="{{ route('indie.kepala-kantor.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-building w-6 text-center {{ request()->routeIs('indie.kepala-kantor.dashboard') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Kantor</span>
@@ -213,33 +235,33 @@
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Modul Laporan</div>
 
                     <a href="{{ route('indie.kepala-kantor.lap-operasional.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lap-operasional.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-building w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-operasional.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Operasional Kantor</span>
-</a>
+                        <i class="fas fa-building w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-operasional.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Operasional Kantor</span>
+                    </a>
                     <a href="{{ route('indie.kepala-kantor.logbook-surat.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.logbook-surat.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-envelope-open-text w-6 text-center {{ request()->routeIs('indie.kepala-kantor.logbook-surat.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Logbook Surat</span>
-</a>
+                        <i class="fas fa-envelope-open-text w-6 text-center {{ request()->routeIs('indie.kepala-kantor.logbook-surat.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Logbook Surat</span>
+                    </a>
                    <a href="{{ route('indie.kepala-kantor.opex.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.opex.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-money-check-alt w-6 text-center {{ request()->routeIs('indie.kepala-kantor.opex.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Rekap Anggaran (Opex)</span>
-</a>
+                        <i class="fas fa-money-check-alt w-6 text-center {{ request()->routeIs('indie.kepala-kantor.opex.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Rekap Anggaran (Opex)</span>
+                    </a>
                     <a href="{{ route('indie.kepala-kantor.lap-presensi.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lap-presensi.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-user-clock w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-presensi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Presensi Pegawai</span>
-</a>
-                    {{-- UPDATE LINK EVALUASI KINERJA (LHKP) --}}
+                        <i class="fas fa-user-clock w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lap-presensi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Presensi Pegawai</span>
+                    </a>
                     <a href="{{ route('indie.kepala-kantor.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.lhkp.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-id-badge w-6 text-center {{ request()->routeIs('indie.kepala-kantor.lhkp.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Evaluasi Kinerja SDM</span>
+                    </a>
                     <a href="{{ route('indie.kepala-kantor.inventaris.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.inventaris.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-boxes w-6 text-center {{ request()->routeIs('indie.kepala-kantor.inventaris.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Inventaris & Aset Kantor</span>
-</a>
+                        <i class="fas fa-boxes w-6 text-center {{ request()->routeIs('indie.kepala-kantor.inventaris.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Inventaris & Aset Kantor</span>
+                    </a>
                    <a href="{{ route('indie.kepala-kantor.kepatuhan-sop.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.kepala-kantor.kepatuhan-sop.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-clipboard-check w-6 text-center {{ request()->routeIs('indie.kepala-kantor.kepatuhan-sop.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Kepatuhan SOP</span>
-</a>
+                        <i class="fas fa-clipboard-check w-6 text-center {{ request()->routeIs('indie.kepala-kantor.kepatuhan-sop.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Kepatuhan SOP</span>
+                    </a>
                 @endif
 
                 {{-- C. ADMIN KANTOR INDIE --}}
@@ -251,17 +273,17 @@
                         <span class="ml-3 font-semibold text-sm">Dashboard Admin</span>
                     </a>
                     <a href="{{ route('indie.buku-kas.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.buku-kas.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-book w-6 text-center {{ request()->routeIs('indie.buku-kas.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Buku Kas Harian</span>
-</a>
+                        <i class="fas fa-book w-6 text-center {{ request()->routeIs('indie.buku-kas.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Buku Kas Harian</span>
+                    </a>
                    <a href="{{ route('indie.arsip-transaksi.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.arsip-transaksi.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-receipt w-6 text-center {{ request()->routeIs('indie.arsip-transaksi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Arsip Bukti Transaksi</span>
-</a>
+                        <i class="fas fa-receipt w-6 text-center {{ request()->routeIs('indie.arsip-transaksi.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Arsip Bukti Transaksi</span>
+                    </a>
                    <a href="{{ route('indie.transfer-masuk.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.transfer-masuk.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('indie.transfer-masuk.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Rekap Transfer Masuk</span>
-</a>
+                        <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('indie.transfer-masuk.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Rekap Transfer Masuk</span>
+                    </a>
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Publikasi</div>
                     <a href="{{ route('indie.news.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.news.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
@@ -285,37 +307,37 @@
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-sky-400 uppercase tracking-widest">Modul Proyek</div>
                     <a href="{{ route('indie.admin-lapangan.keuangan.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.keuangan.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-wallet w-6 text-center {{ request()->routeIs('indie.admin-lapangan.keuangan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-      <span class="ml-3 font-semibold text-sm">Lap. Keuangan Lapangan</span>
-       
+                        <i class="fas fa-wallet w-6 text-center {{ request()->routeIs('indie.admin-lapangan.keuangan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Keuangan Lapangan</span>
                     </a>
                    <a href="{{ route('indie.admin-lapangan.survey-bahan.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.survey-bahan.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-truck-loading w-6 text-center {{ request()->routeIs('indie.admin-lapangan.survey-bahan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Survey Bahan</span>
-</a>
+                        <i class="fas fa-truck-loading w-6 text-center {{ request()->routeIs('indie.admin-lapangan.survey-bahan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Survey Bahan</span>
+                    </a>
                    <a href="{{ route('indie.admin-lapangan.progres-fisik.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.progres-fisik.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-tasks w-6 text-center {{ request()->routeIs('indie.admin-lapangan.progres-fisik.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Progres Fisik Harian</span>
-</a>
+                        <i class="fas fa-tasks w-6 text-center {{ request()->routeIs('indie.admin-lapangan.progres-fisik.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Progres Fisik Harian</span>
+                    </a>
                     <a href="{{ route('indie.admin-lapangan.absensi-proyek.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.absensi-proyek.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-user-check w-6 text-center {{ request()->routeIs('indie.admin-lapangan.absensi-proyek.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Log Absensi Proyek</span>
-</a>
+                        <i class="fas fa-user-check w-6 text-center {{ request()->routeIs('indie.admin-lapangan.absensi-proyek.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Log Absensi Proyek</span>
+                    </a>
                     <a href="{{ route('indie.admin-lapangan.laporan-cuaca.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.laporan-cuaca.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-    <i class="fas fa-cloud-sun-rain w-6 text-center {{ request()->routeIs('indie.admin-lapangan.laporan-cuaca.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
-    <span class="ml-3 font-semibold text-sm">Lap. Cuaca Harian</span>
-</a>
+                        <i class="fas fa-cloud-sun-rain w-6 text-center {{ request()->routeIs('indie.admin-lapangan.laporan-cuaca.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Lap. Cuaca Harian</span>
+                    </a>
                 @endif
 
                 {{-- E. ATASAN / MONITORING INDIE --}}
                 @if(Auth::user()->role == 'monitoring_indie') 
-                    <div class="mb-2 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Monitoring & Evaluasi</div>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-chart-line w-6 text-center text-slate-500 group-hover:text-slate-300"></i>
+                  <div class="mb-2 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Monitoring & Evaluasi</div>
+                    
+                    <a href="{{ route('indie.monitoring.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.monitoring.dashboard') ? 'bg-slate-700 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-chart-line w-6 text-center {{ request()->routeIs('indie.monitoring.dashboard') ? 'text-white' : 'text-slate-500 group-hover:text-slate-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
                     </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-check-double w-6 text-center text-slate-500 group-hover:text-slate-300"></i>
+                    <a href="{{ route('indie.monitoring.evaluasi.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.monitoring.evaluasi.*') ? 'bg-slate-700 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-check-double w-6 text-center {{ request()->routeIs('indie.monitoring.evaluasi.*') ? 'text-white' : 'text-slate-500 group-hover:text-slate-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Approval Laporan</span>
                     </a>
                 @endif
@@ -353,7 +375,6 @@
                         <span class="ml-3 font-semibold text-sm">Input LHKP Proyek</span>
                     </a>
 
-                    {{-- MENU BARU BERDASARKAN INSTRUKSI INDIE --}}
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Laporan Progres Proyek</div>
                     <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
                         <i class="fas fa-calendar-check w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
@@ -450,7 +471,7 @@
                     <div class="hidden md:flex flex-col">
                         <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Sistem Manajemen</span>
                         <h2 class="text-xl font-black text-slate-800 leading-tight">
-                            @if(request()->routeIs('admin.dashboard') || request()->routeIs('eco.dashboard') || request()->routeIs('indie.dashboard') || request()->routeIs('subkon-pt.dashboard') || request()->routeIs('subkon-eks.dashboard') || request()->routeIs('kepala_kantor.dashboard') || request()->routeIs('manager_unit.dashboard') || request()->routeIs('keuangan.dashboard'))
+                            @if(request()->routeIs('admin.dashboard') || request()->routeIs('eco.dashboard') || request()->routeIs('indie.dashboard') || request()->routeIs('subkon-pt.dashboard') || request()->routeIs('subkon-eks.dashboard') || request()->routeIs('kepala_kantor.dashboard') || request()->routeIs('manager_unit.dashboard') || request()->routeIs('keuangan.dashboard') || request()->routeIs('monitoring_eco.dashboard'))
                                 Dashboard Overview
                             @elseif(request()->routeIs('admin.users.*')) Manajemen Pengguna
                             @elseif(request()->routeIs('admin.projects.*')) Manajemen Proyek

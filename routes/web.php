@@ -124,20 +124,27 @@ Route::middleware(['auth', 'role:eco'])->prefix('eco')->name('eco.')->group(func
     Route::resource('portfolios', EcoPortfolio::class);
     Route::resource('visit-plans', VisitPlanController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('visit-plans/export/pdf', [VisitPlanController::class, 'exportPdf'])->name('visit-plans.export');
-
+Route::get('/incomes', [App\Http\Controllers\Eco\EcoIncomeController::class, 'index'])->name('incomes.index');
+    Route::post('/incomes', [App\Http\Controllers\Eco\EcoIncomeController::class, 'store'])->name('incomes.store');
+    Route::put('/incomes/{id}', [App\Http\Controllers\Eco\EcoIncomeController::class, 'update'])->name('incomes.update');
+    Route::delete('/incomes/{id}', [App\Http\Controllers\Eco\EcoIncomeController::class, 'destroy'])->name('incomes.destroy');
+    Route::put('plastic-stocks/{id}', [App\Http\Controllers\Eco\PlasticStockController::class, 'update'])->name('plastic-stocks.update');
     Route::resource('plastic-stocks', PlasticStockController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('plastic-stocks/export/pdf', [PlasticStockController::class, 'exportPdf'])->name('plastic-stocks.export');
-
+// Tambahkan baris ini HANYA jika Anda TIDAK menggunakan Route::resource
+Route::put('sold-rices/{id}', [App\Http\Controllers\Eco\SoldRiceController::class, 'update'])->name('sold-rices.update');
     Route::resource('sold-rices', SoldRiceController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('sold-rices/export/pdf', [SoldRiceController::class, 'exportPdf'])->name('sold-rices.export');
-
+Route::put('store-rice-stocks/{id}', [App\Http\Controllers\Eco\StoreRiceStockController::class, 'update'])->name('store-rice-stocks.update');
     Route::resource('store-partners', StorePartnerController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('store-partners/export/pdf', [StorePartnerController::class, 'exportPdf'])->name('store-partners.export');
-Route::resource('milling-reports', MillingReportController::class)->except(['create', 'edit', 'update', 'show']);
+Route::put('store-partners/{id}', [App\Http\Controllers\Eco\StorePartnerController::class, 'update'])->name('store-partners.update');
+    Route::resource('milling-reports', MillingReportController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('milling-reports/export/pdf', [MillingReportController::class, 'exportPdf'])->name('milling-reports.export');
 Route::resource('store-rice-stocks', StoreRiceStockController::class)->except(['create', 'edit', 'update', 'show']);
     Route::get('store-rice-stocks/export/pdf', [StoreRiceStockController::class, 'exportPdf'])->name('store-rice-stocks.export');
-Route::resource('visit-results', VisitResultController::class)->except(['create', 'edit', 'update', 'show']);
+Route::put('visit-results/{id}', [App\Http\Controllers\Eco\VisitResultController::class, 'update'])->name('visit-results.update');
+    Route::resource('visit-results', VisitResultController::class)->except(['create', 'edit', 'update', 'show']);
 Route::get('visit-results/export/excel', [VisitResultController::class, 'exportExcel'])->name('visit-results.export');
 });
 
@@ -196,7 +203,9 @@ Route::middleware('auth')->group(function () {
 
 //KEUANGAN ECO
 Route::middleware(['auth', 'role:keuangan_eco'])->prefix('keuangan-eco')->name('keuangan_eco.')->group(function () {
-    Route::get('/visit-results', [VisitResultController::class, 'indexKeuangan'])->name('visit-results.index');
+   
+Route::get('/dashboard', [App\Http\Controllers\KeuanganEco\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/visit-results', [VisitResultController::class, 'indexKeuangan'])->name('visit-results.index');
     Route::get('/visit-results/export/excel', [VisitResultController::class, 'exportExcel'])->name('visit-results.export');
 });
 
@@ -309,4 +318,25 @@ Route::middleware(['auth', 'role:admin_lapangan_indie'])->prefix('indie/admin-la
     Route::resource('absensi-proyek', App\Http\Controllers\Indie\AdminLapangan\AbsensiProyekController::class)->except(['create', 'show', 'edit', 'update']);
     // ROUTE BARU: Laporan Cuaca Harian
     Route::resource('laporan-cuaca', App\Http\Controllers\Indie\AdminLapangan\LaporanCuacaController::class)->except(['create', 'show', 'edit', 'update']);
+});
+
+// ==========================================
+// MONITORING / ATASAN INDIE (Role: monitoring_indie)
+// ==========================================
+Route::middleware(['auth', 'role:monitoring_indie'])->prefix('indie/monitoring')->name('indie.monitoring.')->group(function () {
+    
+    // Route Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Indie\MonitoringIndie\EvaluasiLaporanController::class, 'dashboard'])->name('dashboard');
+    
+    // Route List Laporan
+    Route::get('/evaluasi-laporan', [App\Http\Controllers\Indie\MonitoringIndie\EvaluasiLaporanController::class, 'index'])->name('evaluasi.index');
+    
+    // Route Action Approve/Revisi
+    Route::put('/evaluasi-laporan/{id}', [App\Http\Controllers\Indie\MonitoringIndie\EvaluasiLaporanController::class, 'updateStatus'])->name('evaluasi.update');
+    
+});
+// Route Khusus Role Monitoring Eco
+Route::middleware(['auth', 'role:monitoring_eco'])->prefix('monitoring-eco')->name('monitoring_eco.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\MonitoringEco\DashboardController::class, 'index'])->name('dashboard');
+    // Jika nanti ada route export PDF/Excel, bisa ditambahkan di sini
 });

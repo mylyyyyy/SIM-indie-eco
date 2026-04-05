@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Stok Jumlah Plastik</title>
+    <title>Laporan Daftar Beras Terjual</title>
     <style>
         body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 11px; color: #333; }
         .header { position: relative; text-align: center; margin-bottom: 25px; border-bottom: 3px double #1e3a8a; padding-bottom: 15px; min-height: 70px; }
@@ -44,7 +44,7 @@
             <img src="{{ $base64Logo }}" class="header-logo" alt="Logo">
         @endif
         
-        <h2>LAPORAN STOK PLASTIK / PACKING</h2>
+        <h2>LAPORAN DAFTAR BERAS TERJUAL</h2>
         <p>Divisi Operasional & Distribusi - SYAFA GROUP</p>
         <p>Dicetak pada: {{ \Carbon\Carbon::now()->format('d F Y, H:i') }} WIB</p>
     </div>
@@ -53,30 +53,40 @@
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th width="20%">Tempat</th>
                 <th width="15%">Tanggal</th>
-                <th width="25%">Jenis Plastik / Packing</th>
-                <th width="11%">Stok Awal</th>
-                <th width="12%">Stok Sisa</th>
-                <th width="12%">Terpakai</th>
+                <th width="20%">Cabang / Tempat</th>
+                <th width="30%">Nama Toko</th>
+                <th width="10%">Kunjungan</th>
+                <th width="10%">Ukuran</th>
+                <th width="10%">Terjual</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($stocks as $index => $stock)
+            @php $total_terjual = 0; @endphp
+            @forelse($soldRices as $index => $item)
+            @php $total_terjual += $item->jumlah_pack; @endphp
             <tr>
                 <td>{{ $index + 1 }}</td>
-                <td class="text-left font-bold">{{ $stock->tempat }}</td>
-                <td>{{ \Carbon\Carbon::parse($stock->tanggal)->format('d/m/Y') }}</td>
-                <td class="text-left">{{ $stock->jenis_plastik }}</td>
-                <td>{{ number_format($stock->stok_awal) }}</td>
-                <td>{{ number_format($stock->stok_sisa) }}</td>
-                <td style="font-weight: bold; color: #059669;">{{ number_format($stock->stok_awal - $stock->stok_sisa) }}</td>
+                <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                <td class="text-left font-bold">{{ $item->tempat }}</td>
+                <td class="text-left">{{ $item->nama_toko }}</td>
+                <td>Ke-{{ $item->kunjungan_ke }}</td>
+                <td>{{ $item->ukuran }}</td>
+                <td style="font-weight: bold; color: #059669;">{{ number_format($item->jumlah_pack) }} Pack</td>
             </tr>
             @empty
             <tr>
-                <td colspan="7" style="padding: 20px; color: #64748b; font-style: italic;">Belum ada data stok plastik.</td>
+                <td colspan="7" style="padding: 20px; color: #64748b; font-style: italic;">Belum ada data beras terjual.</td>
             </tr>
             @endforelse
+            
+            {{-- BARIS TOTAL --}}
+            @if($soldRices->count() > 0)
+            <tr>
+                <td colspan="6" style="text-align: right; font-weight: bold; padding-right: 15px;">TOTAL BERAS TERJUAL</td>
+                <td style="font-weight: bold; background-color: #f1f5f9;">{{ number_format($total_terjual) }} Pack</td>
+            </tr>
+            @endif
         </tbody>
     </table>
 

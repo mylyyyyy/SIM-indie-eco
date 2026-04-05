@@ -2,19 +2,30 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
             <h2 class="text-2xl font-black text-slate-800">Rekap Data Mitra Toko</h2>
-            <p class="text-sm text-slate-500">Kelola daftar toko mitra untuk keperluan distribusi.</p>
+            <p class="text-sm text-slate-500">Kelola daftar toko mitra untuk keperluan distribusi di cabang {{ Auth::user()->company_name ?? 'Pusat' }}.</p>
         </div>
+        
+        {{-- Tombol PDF disembunyikan dari Admin Kantor Eco --}}
+        @if(Auth::user()->role !== 'admin_kantor_eco')
         <div>
             <a href="{{ route('eco.store-partners.export') }}" target="_blank" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-md transition-all flex items-center gap-2">
                 <i class="fas fa-file-pdf"></i> Unduh PDF Laporan
             </a>
         </div>
+        @endif
     </div>
 
     @if(session('success'))
         <script>
-            Swal.fire({ icon: 'success', title: 'Berhasil', text: "{{ session('success') }}", timer: 2500, showConfirmButton: false });
+            Swal.fire({ icon: 'success', title: 'Berhasil', text: "{{ session('success') }}", timer: 2500, showConfirmButton: false, toast: true, position: 'top-end' });
         </script>
+    @endif
+    
+    {{-- Menampilkan Error Validasi jika gagal update/insert --}}
+    @if($errors->any())
+        <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 border border-red-100 font-medium text-sm">
+            <i class="fas fa-exclamation-triangle mr-2"></i> {{ $errors->first() }}
+        </div>
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -24,7 +35,6 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Tambah Mitra Baru</h3>
                 
-                {{-- PERHATIKAN: enctype="multipart/form-data" wajib ada untuk upload file/foto --}}
                 <form action="{{ route('eco.store-partners.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     
@@ -40,7 +50,8 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kantor Cabang</label>
-                            <input type="text" name="kantor_cabang" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" placeholder="Contoh: Sidoarjo" required>
+                            {{-- Otomatis nama cabang, atau bisa readonly --}}
+                            <input type="text" name="kantor_cabang" value="{{ Auth::user()->company_name ?? '' }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
                         </div>
                     </div>
 
@@ -69,7 +80,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Foto Toko (Opsional)</label>
-                        <input type="file" name="foto_toko" accept="image/*" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        <input type="file" name="foto_toko" accept="image/jpeg,image/png,image/jpg" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow transition-all mt-2">
@@ -96,9 +107,11 @@
                             @forelse($partners as $partner)
                             <tr class="hover:bg-slate-50">
                                 <td class="px-4 py-3 flex items-center gap-3">
-                                    {{-- Tampilkan Foto jika ada, jika tidak pakai icon --}}
+                                    {{-- Tampilkan Foto (menggunakan Base64) --}}
                                     @if($partner->foto_toko)
-                                        <img src="{{ asset('uploads/stores/' . $partner->foto_toko) }}" alt="Foto" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm">
+                                        <a href="{{ $partner->foto_toko }}" target="_blank">
+                                            <img src="{{ $partner->foto_toko }}" alt="Foto" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm hover:scale-105 transition-transform">
+                                        </a>
                                     @else
                                         <div class="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200 shadow-sm">
                                             <i class="fas fa-store"></i>
@@ -115,20 +128,98 @@
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     @if($partner->catatan_status == 'aktif')
-                                        <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold text-xs">Aktif</span>
+                                        <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold text-xs border border-emerald-100">Aktif</span>
                                     @else
-                                        <span class="bg-red-50 text-red-600 px-2 py-1 rounded font-bold text-xs">Tidak Aktif</span>
+                                        <span class="bg-red-50 text-red-600 px-2 py-1 rounded font-bold text-xs border border-red-100">Tidak Aktif</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center">
-                                    <form action="{{ route('eco.store-partners.destroy', $partner->id) }}" method="POST" onsubmit="return confirm('Hapus toko mitra ini?');">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-1.5 rounded">
-                                            <i class="fas fa-trash text-xs"></i>
+                                    <div class="flex items-center justify-center gap-1">
+                                        {{-- Tombol Buka Modal Edit --}}
+                                        <button x-data @click="$dispatch('open-modal', 'edit-partner-{{ $partner->id }}')" class="text-amber-500 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-100 p-1.5 rounded transition-colors" title="Edit Data">
+                                            <i class="fas fa-edit text-xs"></i>
                                         </button>
-                                    </form>
+
+                                        <form action="{{ route('eco.store-partners.destroy', $partner->id) }}" method="POST" onsubmit="return confirm('Hapus toko mitra ini?');">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-100 p-1.5 rounded transition-colors" title="Hapus Toko">
+                                                <i class="fas fa-trash text-xs"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
+
+                            {{-- MODAL EDIT TOKO --}}
+                            <x-modal name="edit-partner-{{ $partner->id }}" focusable>
+                                <form action="{{ route('eco.store-partners.update', $partner->id) }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl flex flex-col max-h-[90vh]">
+                                    @csrf @method('PUT')
+                                    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 flex justify-between items-center rounded-t-2xl shrink-0">
+                                        <h3 class="text-white font-bold text-lg">Edit Toko: {{ $partner->nama_toko }}</h3>
+                                        <button type="button" x-on:click="$dispatch('close')" class="text-emerald-100 hover:text-white transition-colors"><i class="fas fa-times text-xl"></i></button>
+                                    </div>
+                                    <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-left">
+                                        
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal Update</label>
+                                                <input type="date" name="tanggal_update" value="{{ $partner->tanggal_update }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Status Toko</label>
+                                                <select name="catatan_status" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 bg-white" required>
+                                                    <option value="aktif" {{ $partner->catatan_status == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                                    <option value="tidak aktif" {{ $partner->catatan_status == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kode Toko</label>
+                                                <input type="text" name="kode_toko" value="{{ $partner->kode_toko }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kantor Cabang</label>
+                                                <input type="text" name="kantor_cabang" value="{{ $partner->kantor_cabang }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Toko</label>
+                                            <input type="text" name="nama_toko" value="{{ $partner->nama_toko }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Pemilik</label>
+                                                <input type="text" name="nama_pemilik" value="{{ $partner->nama_pemilik }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500" required>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">No. Telepon</label>
+                                                <input type="text" name="no_telp" value="{{ $partner->no_telp }}" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500">
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Update Foto Toko</label>
+                                            @if($partner->foto_toko)
+                                                <div class="flex items-center gap-3 mb-2">
+                                                    <img src="{{ $partner->foto_toko }}" class="w-10 h-10 rounded object-cover shadow-sm border border-slate-200">
+                                                    <span class="text-[10px] text-slate-400 italic">Upload baru untuk mengganti foto ini.</span>
+                                                </div>
+                                            @endif
+                                            <input type="file" name="foto_toko" accept="image/jpeg,image/png,image/jpg" class="w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-white file:border-slate-200 file:border hover:file:bg-slate-100">
+                                        </div>
+
+                                    </div>
+                                    <div class="px-6 py-4 bg-slate-50 flex justify-end gap-3 rounded-b-2xl border-t border-slate-100">
+                                        <button type="button" x-on:click="$dispatch('close')" class="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-bold">Batal</button>
+                                        <button type="submit" class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700">Update Mitra</button>
+                                    </div>
+                                </form>
+                            </x-modal>
+
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center py-8 text-slate-400">Belum ada data toko mitra.</td>
