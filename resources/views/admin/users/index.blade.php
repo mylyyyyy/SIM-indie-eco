@@ -95,31 +95,47 @@
 
                         {{-- Kolom 2: Role & Cabang/Wilayah --}}
                         <td class="px-6 py-4">
-                            <div class="flex flex-col">
+                            <div class="flex flex-col items-start gap-1">
                                 @if($user->role == 'admin')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 uppercase tracking-wide">Administrator</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 uppercase tracking-wide">Administrator</span>
+                                
+                                {{-- DIVISI ECO --}}
                                 @elseif($user->role == 'manager_wilayah')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">Manager Wilayah</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">Manager Wilayah (Eco)</span>
                                 @elseif($user->role == 'kepala_kantor')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 uppercase tracking-wide">Kepala Kantor</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">Kepala Kantor (Eco)</span>
                                 @elseif($user->role == 'manager_unit')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wide">Manager Unit</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">Manager Unit (Eco)</span>
                                 @elseif($user->role == 'eco')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">Admin Kantor (Eco)</span>
-                                @elseif($user->role == 'indie')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-pink-100 text-pink-700 border border-pink-200 uppercase tracking-wide">Admin Kantor (Indie)</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wide">Admin Kantor (Eco)</span>
                                 @elseif($user->role == 'keuangan_eco')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-700 border border-teal-200 uppercase tracking-wide">Keuangan Eco</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-700 border border-teal-200 uppercase tracking-wide">Keuangan Eco</span>
+                                @elseif($user->role == 'monitoring_eco')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 uppercase tracking-wide">Pengawas Eco</span>
+                                
+                                {{-- DIVISI INDIE --}}
+                                @elseif($user->role == 'manager_unit_indie')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wide">Manager Unit (Indie)</span>
+                                @elseif($user->role == 'kepala_kantor_indie')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wide">Kepala Kantor (Indie)</span>
+                                @elseif($user->role == 'indie')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wide">Admin Kantor (Indie)</span>
+                                @elseif($user->role == 'admin_lapangan_indie')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-sky-100 text-sky-700 border border-sky-200 uppercase tracking-wide">Admin Lapangan (Indie)</span>
+                                @elseif($user->role == 'monitoring_indie')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 uppercase tracking-wide">Pengawas Indie</span>
                                 @elseif($user->role == 'keuangan_indie' || $user->role == 'keuangan')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wide">Keuangan Indie</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-sky-100 text-sky-700 border border-sky-200 uppercase tracking-wide">Keuangan Indie</span>
+                                
+                                {{-- MITRA KERJA --}}
                                 @elseif($user->role == 'subkon_pt')
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase tracking-wide">Manager Proyek</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 uppercase tracking-wide">Manager Proyek</span>
                                 @else
-                                    <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wide">Subkon (EKS)</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wide">Subkon (EKS)</span>
                                 @endif
 
-                                <span class="text-xs font-medium text-slate-500 mt-1 flex items-center gap-1">
-                                    <i class="far fa-building"></i> 
+                                <span class="text-[10px] font-medium text-slate-500 flex items-center gap-1 mt-1">
+                                    <i class="far fa-building w-3 text-center"></i> 
                                     @if($user->role == 'manager_wilayah')
                                         Wilayah: {{ $user->wilayah ?? '-' }}
                                     @elseif($user->role == 'admin')
@@ -127,11 +143,12 @@
                                     @else
                                         {{ $user->company_name ?? '-' }}
                                         @if($user->wilayah)
-                                            (Wilayah: {{ $user->wilayah }})
+                                            <span class="text-slate-400 italic">(Wilayah: {{ $user->wilayah }})</span>
                                         @endif
                                     @endif
                                 </span>
                             </div>
+                        
                         </td>
 
                         {{-- Kolom 3: Kontak --}}
@@ -261,6 +278,7 @@
         <option value="subkon_eks" class="text-slate-700 bg-white font-medium">Pelaksana Lapangan (Subkon EKS)</option>
     </optgroup>
 </select>
+
                                 <i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none"></i>
                             </div>
                         </div>

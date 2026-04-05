@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->get();
-        // Mengambil data lokasi/cabang yang aktif saja (atau semua, sesuai kebutuhan)
+        // Mengambil data lokasi/cabang yang aktif saja
         $locations = EcoLocation::where('status', 'active')->get(); 
         
         return view('admin.users.index', compact('users', 'locations'));
@@ -22,35 +22,23 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'name' => 'required|string|max:255',
-            
             'email' => 'required|string|max:255|unique:users', 
-           'role' => 'required|in:admin,subkon_pt,
-           subkon_eks,
-           eco,indie,
-           keuangan,
-           kepala_kantor,
-           manager_unit,
-           manager_wilayah,
-           keuangan_eco,
-           keuangan_indie,
-           manager_unit_indie,
-           kepala_kantor_indie,
-           admin_lapangan_indie,
-           monitoring_indie',
+            
+            // PERBAIKAN: Semua role sudah terdaftar di sini tanpa ada spasi atau baris baru (newline) yang merusak format
+            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie,manager_unit_indie,kepala_kantor_indie,admin_lapangan_indie,monitoring_indie,monitoring_eco',
+            
             'password' => 'required|string|min:8',
         ]);
 
-        // 2. PERBAIKAN SIMPAN DATA (Hapus specialization, Tambah wilayah)
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'company_name' => $request->company_name,
-            'wilayah' => $request->wilayah, // <--- Kolom Wilayah Ditambahkan
+            'wilayah' => $request->wilayah,
             'phone' => $request->phone,
         ]);
 
@@ -61,12 +49,12 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Validasi Role Baru saat Update
         $request->validate([
             'name' => 'required|string|max:255',
-            // Hapus validasi 'email', ganti string
             'email' => ['required', 'string', Rule::unique('users')->ignore($user->id)],
-            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie',
+            
+            // PERBAIKAN: Daftar role disamakan dengan fungsi store (semua role Indie & Eco dimasukkan)
+            'role' => 'required|in:admin,subkon_pt,subkon_eks,eco,indie,keuangan,kepala_kantor,manager_unit,manager_wilayah,keuangan_eco,keuangan_indie,manager_unit_indie,kepala_kantor_indie,admin_lapangan_indie,monitoring_indie,monitoring_eco',
         ]);
 
         $data = [
@@ -74,7 +62,7 @@ class UserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'company_name' => $request->company_name,
-            'wilayah' => $request->wilayah, // <--- Kolom Wilayah Ditambahkan
+            'wilayah' => $request->wilayah, 
             'phone' => $request->phone,
         ];
 
