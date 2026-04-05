@@ -296,3 +296,17 @@ Route::resource('opex', App\Http\Controllers\Indie\KepalaKantor\OpexController::
 
 
 });
+
+Route::middleware(['auth', 'role:admin_lapangan_indie'])->prefix('indie/admin-lapangan')->name('indie.admin-lapangan.')->group(function () {
+    
+    Route::get('/dashboard', [App\Http\Controllers\Indie\AdminLapangan\KeuanganLapanganController::class, 'dashboard'])->name('dashboard');
+    Route::resource('keuangan', App\Http\Controllers\Indie\AdminLapangan\KeuanganLapanganController::class)->except(['create', 'show', 'edit', 'update']);
+    
+    // ROUTE BARU: Laporan Survey Bahan
+    Route::resource('survey-bahan', App\Http\Controllers\Indie\AdminLapangan\SurveyBahanController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('progres-fisik', App\Http\Controllers\Indie\AdminLapangan\ProgresFisikController::class)->except(['create', 'show', 'edit', 'update']);
+    // ROUTE BARU: Log Absensi Proyek
+    Route::resource('absensi-proyek', App\Http\Controllers\Indie\AdminLapangan\AbsensiProyekController::class)->except(['create', 'show', 'edit', 'update']);
+    // ROUTE BARU: Laporan Cuaca Harian
+    Route::resource('laporan-cuaca', App\Http\Controllers\Indie\AdminLapangan\LaporanCuacaController::class)->except(['create', 'show', 'edit', 'update']);
+});

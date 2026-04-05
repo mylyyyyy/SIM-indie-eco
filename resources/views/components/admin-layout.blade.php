@@ -284,26 +284,27 @@
                     </a>
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-sky-400 uppercase tracking-widest">Modul Proyek</div>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-wallet w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Keuangan Lapangan</span>
+                    <a href="{{ route('indie.admin-lapangan.keuangan.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.keuangan.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-wallet w-6 text-center {{ request()->routeIs('indie.admin-lapangan.keuangan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+      <span class="ml-3 font-semibold text-sm">Lap. Keuangan Lapangan</span>
+       
                     </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-truck-loading w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Survey Bahan</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-tasks w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Progres Fisik Harian</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-user-check w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Log Absensi Proyek</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-cloud-sun-rain w-6 text-center text-sky-500 group-hover:text-sky-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Cuaca Harian</span>
-                    </a>
+                   <a href="{{ route('indie.admin-lapangan.survey-bahan.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.survey-bahan.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-truck-loading w-6 text-center {{ request()->routeIs('indie.admin-lapangan.survey-bahan.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Survey Bahan</span>
+</a>
+                   <a href="{{ route('indie.admin-lapangan.progres-fisik.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.progres-fisik.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-tasks w-6 text-center {{ request()->routeIs('indie.admin-lapangan.progres-fisik.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Progres Fisik Harian</span>
+</a>
+                    <a href="{{ route('indie.admin-lapangan.absensi-proyek.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.absensi-proyek.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-user-check w-6 text-center {{ request()->routeIs('indie.admin-lapangan.absensi-proyek.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Log Absensi Proyek</span>
+</a>
+                    <a href="{{ route('indie.admin-lapangan.laporan-cuaca.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.admin-lapangan.laporan-cuaca.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-cloud-sun-rain w-6 text-center {{ request()->routeIs('indie.admin-lapangan.laporan-cuaca.*') ? 'text-white' : 'text-sky-500 group-hover:text-sky-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Cuaca Harian</span>
+</a>
                 @endif
 
                 {{-- E. ATASAN / MONITORING INDIE --}}
