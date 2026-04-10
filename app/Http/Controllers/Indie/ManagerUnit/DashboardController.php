@@ -3,25 +3,39 @@
 namespace App\Http\Controllers\Indie\ManagerUnit;
 
 use App\Http\Controllers\Controller;
-use App\Models\LhkpReport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+// INI YANG SEBELUMNYA KURANG (IMPORT MODEL):
+use App\Models\LhkpReport;
+use App\Models\SubkonPtDailyReport;
+use App\Models\SubkonPtWeeklyReport;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+        
+        // 1. Ambil data LHKP (Gunakan kolom 'tempat')
+        $lhkp_count = LhkpReport::where('tempat', $user->company_name)->count();
+        
+        $recent_lhkps = LhkpReport::where('tempat', $user->company_name)
+                            ->orderBy('tanggal', 'desc')
+                            ->take(5)
+                            ->get();
 
-        // Hitung statistik LHKP di cabang manager tersebut
-        $lhkp_count = LhkpReport::whereHas('user', function($query) use ($user) {
-            $query->where('company_name', $user->company_name);
-        })->count();
+        // 2. HITUNG JUMLAH LAPORAN HARIAN DARI SEMUA SUBKON
+        $daily_report_count = SubkonPtDailyReport::count();
 
-        // Ambil 5 LHKP terbaru untuk ditampilkan di tabel dashboard
-        $recent_lhkps = LhkpReport::whereHas('user', function($query) use ($user) {
-            $query->where('company_name', $user->company_name);
-        })->latest()->limit(5)->get();
+        // 3. HITUNG JUMLAH LAPORAN MINGGUAN DARI SEMUA SUBKON
+        $weekly_report_count = SubkonPtWeeklyReport::count();
 
-        return view('indie.manager-unit.dashboard', compact('lhkp_count', 'recent_lhkps'));
+        return view('indie.manager-unit.dashboard', compact(
+            'lhkp_count', 
+            'recent_lhkps',
+            'daily_report_count',
+            'weekly_report_count'
+        ));
     }
 }

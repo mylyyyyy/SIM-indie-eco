@@ -10,6 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        
         $user = Auth::user();
 
         // Hitung statistik LHKP di cabang kepala kantor tersebut

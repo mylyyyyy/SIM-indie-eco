@@ -160,7 +160,7 @@ Route::middleware(['auth', 'role:indie'])->prefix('indie')->name('indie.')->grou
 });
 
 // D. GROUP SUBKON & KEUANGAN
-Route::middleware(['auth', 'role:subkon_pt'])->prefix('internal')->name('subkon-pt.')->group(function () {
+Route::middleware(['auth', 'role:subkon_pt,manager_unit_indie'])->prefix('internal')->name('subkon-pt.')->group(function () {
     Route::get('/dashboard', [SubkonPTDashboard::class, 'index'])->name('dashboard');
     Route::get('/penilaian/create/{target_id}', [RatingController::class, 'create'])->name('rating.create');
     Route::post('/penilaian', [RatingController::class, 'store'])->name('rating.store');
@@ -170,13 +170,29 @@ Route::middleware(['auth', 'role:subkon_pt'])->prefix('internal')->name('subkon-
     
     // 1. ROUTE EXPORT PDF WAJIB DI ATAS RESOURCE
     Route::get('/lhkp/export-pdf', [App\Http\Controllers\SubkonPt\LhkpController::class, 'exportPdf'])->name('lhkp.export-pdf');
-    
+    // ==========================================
+    // RUTE BARU: LAPORAN HARIAN PROYEK
+    // ==========================================
+    Route::get('/daily-reports', [App\Http\Controllers\SubkonPt\DailyReportController::class, 'index'])->name('daily-reports.index');
+    Route::post('/daily-reports', [App\Http\Controllers\SubkonPt\DailyReportController::class, 'store'])->name('daily-reports.store');
+    Route::delete('/daily-reports/{id}', [App\Http\Controllers\SubkonPt\DailyReportController::class, 'destroy'])->name('daily-reports.destroy');
     // 2. TAMBAHKAN ->except(['show']) AGAR TIDAK ERROR "Call to undefined method show()"
     Route::resource('lhkp', App\Http\Controllers\SubkonPt\LhkpController::class)->except(['show', 'create', 'edit']);
-    
+    Route::get('/reports', [App\Http\Controllers\SubkonPt\ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports', [App\Http\Controllers\SubkonPt\ReportController::class, 'store'])->name('reports.store');
+    Route::delete('/reports/{id}', [App\Http\Controllers\SubkonPt\ReportController::class, 'destroy'])->name('reports.destroy');
     // 3. Route Download LH Satuan
     Route::get('/lh/{id}/download', [App\Http\Controllers\ManagerUnit\DownloadController::class, 'downloadLh'])->name('lh.download');
-});
+Route::get('/materials', [App\Http\Controllers\SubkonPt\MaterialController::class, 'index'])->name('materials.index');
+    Route::post('/materials', [App\Http\Controllers\SubkonPt\MaterialController::class, 'store'])->name('materials.store');
+    Route::delete('/materials/{id}', [App\Http\Controllers\SubkonPt\MaterialController::class, 'destroy'])->name('materials.destroy');
+    // RUTE BARU: LAPORAN MINGGUAN PROYEK
+    // ==========================================
+    Route::get('/weekly-reports', [App\Http\Controllers\SubkonPt\WeeklyReportController::class, 'index'])->name('weekly-reports.index');
+    Route::post('/weekly-reports', [App\Http\Controllers\SubkonPt\WeeklyReportController::class, 'store'])->name('weekly-reports.store');
+    Route::delete('/weekly-reports/{id}', [App\Http\Controllers\SubkonPt\WeeklyReportController::class, 'destroy'])->name('weekly-reports.destroy');
+
+    });
 
 Route::middleware(['auth', 'role:subkon_eks'])->prefix('vendor')->name('subkon-eks.')->group(function () {
     Route::get('/dashboard', [SubkonEksDashboard::class, 'index'])->name('dashboard');
@@ -204,7 +220,7 @@ Route::middleware('auth')->group(function () {
 //KEUANGAN ECO
 Route::middleware(['auth', 'role:keuangan_eco'])->prefix('keuangan-eco')->name('keuangan_eco.')->group(function () {
    
-Route::get('/dashboard', [App\Http\Controllers\KeuanganEco\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\KeuanganEco\KeuanganDashboardController::class, 'index'])->name('dashboard');
 Route::get('/visit-results', [VisitResultController::class, 'indexKeuangan'])->name('visit-results.index');
     Route::get('/visit-results/export/excel', [VisitResultController::class, 'exportExcel'])->name('visit-results.export');
 });

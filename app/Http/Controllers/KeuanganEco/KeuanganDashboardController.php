@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EcoIncome;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class KeuanganDashboardController extends Controller
 {
     public function index(Request $request)
     {

@@ -173,8 +173,8 @@
                     <div class="mb-2 px-4 text-[10px] font-bold text-teal-500 uppercase tracking-widest mt-2">Keuangan Eco</div>
                     
                     {{-- MENU BARU: DASHBOARD PEMASUKAN --}}
-                    <a href="{{ route('keuangan.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan.dashboard') ? 'bg-teal-600 text-white shadow-md shadow-teal-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
-                        <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('keuangan.dashboard') ? 'text-white' : 'text-teal-500 group-hover:text-teal-300' }}"></i>
+                    <a href="{{ route('keuangan_eco.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('keuangan_eco.dashboard') ? 'bg-teal-600 text-white shadow-md shadow-teal-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-money-bill-wave w-6 text-center {{ request()->routeIs('keuangan_eco.dashboard') ? 'text-white' : 'text-teal-500 group-hover:text-teal-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Lap. Pemasukan Kantor</span>
                     </a>
 
@@ -198,7 +198,7 @@
                 {{-- KHUSUS DIVISI INDIE (STRUKTUR BARU SESUAI REQUEST)       --}}
                 {{-- ======================================================== --}}
 
-              {{-- A. MANAGER UNIT INDIE --}}
+        {{-- A. MANAGER UNIT INDIE --}}
                 @if(Auth::user()->role == 'manager_unit_indie')
                     <div class="mb-2 px-4 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-2">Manager Unit (Indie)</div>
                     
@@ -207,16 +207,28 @@
                         <span class="ml-3 font-semibold text-sm">Dashboard Monitoring</span>
                     </a>
                     
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-file-signature w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                    <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Modul Laporan</div>
+
+                    {{-- MENU LAPORAN HARIAN (SUDAH AKTIF) --}}
+                    <a href="{{ route('subkon-pt.daily-reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.daily-reports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-file-signature w-6 text-center {{ request()->routeIs('subkon-pt.daily-reports.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Laporan Harian</span>
                     </a>
                     
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-calendar-week w-6 text-center text-indigo-500 group-hover:text-indigo-300"></i>
+                    {{-- MENU LAPORAN MINGGUAN (SUDAH AKTIF) --}}
+                    <a href="{{ route('subkon-pt.weekly-reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.weekly-reports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-calendar-week w-6 text-center {{ request()->routeIs('subkon-pt.weekly-reports.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Laporan Mingguan</span>
                     </a>
                     
+                    <a href="{{ route('subkon-pt.reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.reports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-calendar-check w-6 text-center {{ request()->routeIs('subkon-pt.reports.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Laporan Bulanan</span>
+                    </a>
+                    <a href="{{ route('subkon-pt.materials.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.materials.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-tools w-6 text-center {{ request()->routeIs('subkon-pt.materials.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Inventaris Material</span>
+</a>
                     <a href="{{ route('indie.manager-unit.lhkp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('indie.manager-unit.lhkp.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-user-check w-6 text-center {{ request()->routeIs('indie.manager-unit.lhkp.*') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Evaluasi Pegawai (LHKP)</span>
@@ -356,7 +368,8 @@
                 {{-- KHUSUS MITRA KERJA (SUBKON PT & SUBKON EKS)              --}}
                 {{-- ======================================================== --}}
 
-                {{-- MANAGER PROYEK (SUBKON PT) --}}
+             
+{{-- MANAGER PROYEK (SUBKON PT) --}}
                 @if(Auth::user()->role == 'subkon_pt')
                     <div class="mb-2 px-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest mt-2">Evaluasi Proyek</div>
                     
@@ -364,8 +377,28 @@
                         <i class="fas fa-chart-pie w-6 text-center {{ request()->routeIs('subkon-pt.dashboard') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Dashboard Proyek</span>
                     </a>
+                    
+                    {{-- <a href="{{ route('subkon-pt.monitoring') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.monitoring') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-desktop w-6 text-center {{ request()->routeIs('subkon-pt.monitoring') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Monitoring Proyek</span>
+                    </a> --}}
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Manajemen Laporan</div>
+                    
+                    <a href="{{ route('subkon-pt.daily-reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.daily-reports.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-file-signature w-6 text-center {{ request()->routeIs('subkon-pt.daily-reports.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Laporan Harian</span>
+</a>
+<a href="{{ route('subkon-pt.materials.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.materials.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-tools w-6 text-center {{ request()->routeIs('subkon-pt.materials.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Lap. Inventaris Material</span>
+</a>
+                    
+                    <a href="{{ route('subkon-pt.weekly-reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.weekly-reports.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+    <i class="fas fa-calendar-week w-6 text-center {{ request()->routeIs('subkon-pt.weekly-reports.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+    <span class="ml-3 font-semibold text-sm">Laporan Mingguan</span>
+</a>
+
                     <a href="{{ route('subkon-pt.lh-download.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.lh-download.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
                         <i class="fas fa-file-download w-6 text-center {{ request()->routeIs('subkon-pt.lh-download.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
                         <span class="ml-3 font-semibold text-sm">Unduh LH Lapangan</span>
@@ -376,25 +409,9 @@
                     </a>
 
                     <div class="mt-4 mb-2 px-4 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Laporan Progres Proyek</div>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-calendar-check w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Mingguan & Bulanan</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-users-cog w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Rekap Absensi Naker</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-tools w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Inventaris Material</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-camera-retro w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Foto Progres (Weekly)</span>
-                    </a>
-                    <a href="#" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group text-slate-400 hover:bg-slate-800/50 hover:text-white">
-                        <i class="fas fa-chart-line w-6 text-center text-blue-500 group-hover:text-blue-300"></i>
-                        <span class="ml-3 font-semibold text-sm">Lap. Progres Bulanan</span>
+                    <a href="{{ route('subkon-pt.reports.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 group {{ request()->routeIs('subkon-pt.reports.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                        <i class="fas fa-calendar-check w-6 text-center {{ request()->routeIs('subkon-pt.reports.*') ? 'text-white' : 'text-blue-500 group-hover:text-blue-300' }}"></i>
+                        <span class="ml-3 font-semibold text-sm">Laporan Bulanan</span>
                     </a>
                 @endif
 
